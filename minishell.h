@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/10 16:37:11 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/16 12:29:27 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ typedef enum e_value
 	// ADD_NEW, // might be helpful for exporting
 	DOUBLE_Q_MARK = 34,
 	ONE_Q_MARK = 39,
-	ERR_CMD = 127,
-	ERR_TOKEN = 258,
-	ERR_NUM_ONE = 1,
-	ERR_FILE_OR_DIR = 126,
+	ERR_CMD = 127, // typically indicates that the specified command could not be found or executed by the shell.
+	ERR_TOKEN = 258, // is not a standard exit code in bash, but some applications may use it to indicate a syntax error or unexpected token in the command line.
+	ERR_NUM_ONE = 1, // can be used to indicate a generic error or failure.
+	ERR_FILE_OR_DIR = 126, //126 typically indicates that the specified file or directory cannot be found or accessed by the shell.
 }				t_value;
 
 typedef struct s_arg
@@ -85,25 +85,26 @@ typedef struct s_tmp
 typedef struct s_data
 {
 	t_cmd	*cmd;
-	t_tmp	tmp; 
+	t_tmp	tmp;     // tmp struct to help with parsing and cutting file names
 	int		num_cmd; // number of commands
 	int		num_error;  // error token ERR_TOKEN / DOUBLE_Q_MARK etc..
 	int		num_prev_error; // to give exit value a number
 	int		num_env;
-	char	**our_env;
+	char	**our_env; 
 	char	**tmp_var;
-	int		num_tmp_var; // no need
+	int		num_tmp_var; // no need just an empty tmp var 
 	char	*prev_dir; // previous directory
 	char	*cur_dir; // current directory
 	char	*home_dir; // home directory 
 	int		flag_old; // something  could be used to keep track of prev direc
 	int		empty_str; // flag for parsing to know if string is empty or not (YES,NO)
 	int		fd_pipe[2]; // your pipes no idea how to use 😇 ;)
-	int		name_file;
+	int		name_file; // not used so far
 	int		build_in; // flag to know if its a build in cmd (YES,NO)
 	// int		*pid;
 	int		n_end;
 }				t_data;
+
 /* *********************  Quotation parse  ********************* */
 void	ts_create_struct_without_qm(t_cmd *cmd);
 int		ts_count_arg_divided_qm(t_cmd *cmd, t_data *data);
@@ -115,7 +116,7 @@ int		ts_cut_qm_in_name_file(char **file);
 int		ts_count_args_without_qm(t_cmd *cmd, int i);
 int		ts_count_arg_divided_qm(t_cmd *cmd, t_data *data);
 int		ts_check_quotation_marks(t_cmd *cmd, int i, t_data *data);
-
+// void ts_quote_check(char *line);
 /* *********************  Parse  ********************* */
 int		ts_parse(t_data *data, char *line);
 void	ts_check_empty_str(t_cmd *cmd);
@@ -127,7 +128,7 @@ int		ts_check_empty_and_err_token_pipe(t_data *data, char *line);
 /* *********************  parse redir  ********************* */
 int		ts_error_parse_redir(t_data *data, char *s, int i);
 int		ts_count_redirect(t_cmd *cmd, t_data *data, int qm_o, int qm_d);
-int		ts_cycle_of_record_redir(t_cmd *cmd, t_data *data, int qm_o, int qm_d);
+int		ts_cycle_record_redir(t_cmd *cmd, t_data *data, int qm_o, int qm_d);
 int		ts_found_redirect(t_cmd *cmd, t_data *data);
 int		ts_record_redir_and_file(t_cmd *cmd, int i, int num_redir, t_data *d);
 void	ts_init_emum_redir(t_cmd *cmd, int *i_orig, int num_redir);
@@ -155,6 +156,7 @@ int		ts_record_key(char *s, int i, char **key, int *digit_key);
 void	ts_record_char(char **result, char *str, int *r, int *s);
 void	ts_record_tail(char **tmp, char **str, int t, int start_tail);
 void	ts_record_str(char **file, char *str, int start, int size_str);
+void	ts_replace_key_to_value(char **str, int key, char *value, int start);
 /* ********************* 	file name ********************* */
 int	ts_measure_size_file_name(t_data *d, char *str, int *i);
 /* ********************* 	record arr  ********************* */

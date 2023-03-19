@@ -6,11 +6,11 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 19:09:51 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/02/24 03:34:36 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/17 22:27:56 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void ts_free_str(char **str)
 {

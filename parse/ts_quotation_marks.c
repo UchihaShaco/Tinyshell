@@ -6,11 +6,11 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 18:03:37 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/02/27 11:00:29 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/17 22:28:09 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	ts_switch_qm(char c, int *qm_o, int *qm_d)
 {
@@ -109,9 +109,10 @@ void	ts_create_struct_without_qm(t_cmd *cmd)
 		{
 			while (cmd->str[i] != 34 && cmd->str[i] != 39
 				&& cmd->str[i] != '\0')
-				{i = ts_record_args_without_qm(cmd->str, &cmd->arg[num_arg], i, &num_arg);
+				{
+				i = ts_record_args_without_qm(cmd->str, &cmd->arg[num_arg], i, &num_arg);
 				// print_arg(&cmd->arg[num_arg]);
-}
+				}
 		}
 	}
 }
@@ -160,12 +161,14 @@ int	ts_count_args_without_qm(t_cmd *cmd, int i)
 	return (i);
 }
 
+
 int	ts_count_arg_divided_qm(t_cmd *cmd, t_data *data)
 {
 	int	i;
 
 	i = 0;
 	cmd->num_arg = 0;
+
 	while (cmd->str[i] != '\0')
 	{
 		if (cmd->str[i] == 34 || cmd->str[i] == 39)
@@ -185,3 +188,72 @@ int	ts_count_arg_divided_qm(t_cmd *cmd, t_data *data)
 //     printf("redir: %d\n", arg->redir);
 //     printf("empty_key: %d\n", arg->empty_key);
 // }
+/*
+static int ts_count_pipe(t_data *data, char *line, int qm_d, int qm_o)
+{
+    int i = 0;
+    int cmd_count = 0;
+    while (line[i] != '\0')
+    {
+        ts_switch_qm(line[i], &qm_o, &qm_d);
+        if (line[i] == '|' && qm_o == 1 && qm_d == 1)
+        {
+            i++;
+            if (line[i] == '|') {
+                if (cmd_count == 0) {
+                    return ts_err_token(data, 1);
+                }
+                if (line[i + 1] == '|') {
+                    return ts_err_token(data, 2);
+                }
+            } else if (line[i] == ' ') {
+                while (line[i] == ' ' && line[i] != '\0') {
+                    i++;
+                }
+                if (line[i] == '|' || line[i] == '\0') {
+                    return ts_err_token(data, 1);
+                }
+            }
+            cmd_count++;
+        }
+        i++;
+    }
+    if (cmd_count == 0 && line[0] != '\0') {
+        cmd_count = 1;
+    }
+    data->num_cmd = cmd_count;
+    return 0;
+}
+
+int ts_check_empty_and_err_token_pipe(t_data *data, char *line)
+{
+    int i = 0;
+    int qm_d = 0;
+    int qm_o = 0;
+    while (line[i] == ' ' && line[i] != '\0') {
+        i++;
+    }
+    if (line[i] == '\0') {
+        data->empty_str = YES;
+        return -1;
+    }
+    for (; line[i] != '\0'; i++) {
+        ts_switch_qm(line[i], &qm_o, &qm_d);
+        if (line[i] == '|' && qm_o == 1 && qm_d == 1) {
+            i++;
+            if (line[i] == '|') {
+                return ts_err_token(data, 1);
+            } else if (line[i] == ' ') {
+                while (line[i] == ' ' && line[i] != '\0') {
+                    i++;
+                }
+                if (line[i] == '|' || line[i] == '\0') {
+                    return ts_err_token(data, 1);
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+*/

@@ -6,11 +6,11 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 03:31:14 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/10 16:35:30 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/19 16:52:49 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	ts_record_tail(char **tmp, char **str, int t, int start_tail)
 {
@@ -60,4 +60,3 @@ void	ts_replace_key_to_value(char **str, int key, char *value, int start)
 	}
 	ts_record_tail(&tmp, str, t, start + key);
 }
-

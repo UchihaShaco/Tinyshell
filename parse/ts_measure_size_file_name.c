@@ -6,11 +6,11 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 08:04:18 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/02/28 08:04:40 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/17 22:28:07 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 static int	ts_err_name_file(t_data *data, int qm_o, int qm_d)
 {

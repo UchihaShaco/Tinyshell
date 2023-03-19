@@ -6,11 +6,11 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:56:12 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/02/28 17:59:58 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/17 22:28:11 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 void	ts_count_arg_for_array(t_cmd *cmd)
 {
 	int	i;
@@ -78,6 +78,7 @@ void	ts_connect_arg_for_array(t_cmd *cmd)
 		if ((cmd->arg[y].space == YES) || (y + 1) == cmd->num_arg)
 		{
 			len = ts_record_arg(cmd, &cmd->array_arg[y_arr], &start, len);
+			// printf("array_arg[%d] = %s\n", y_arr, cmd->array_arg[y_arr]);
 			y_arr++;
 		}
 		y++;

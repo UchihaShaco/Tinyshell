@@ -6,17 +6,17 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 23:56:09 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/02/27 13:39:30 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/17 22:35:16 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 static void	sighandler(int signum)
 {
 	(void)signum;
-	rl_on_new_line();
-	rl_redisplay();
+	// rl_on_new_line();
+	// rl_redisplay();
 	write(1, "  \b\b\n", 5);
 	rl_on_new_line();
 	// rl_replace_line("", 1);
@@ -37,7 +37,7 @@ void	ts_signal_ctrl_d(t_data *data, char **line)
 
 int	ts_get_signal(void)
 {
-	signal(SIGINT, sighandler);
+	// signal(SIGINT, sighandler);
 	signal(SIGQUIT, SIG_IGN);
 	return (0);
 }

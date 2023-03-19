@@ -129,3 +129,17 @@ void	ms_malloc_cmd(t_cmd **cmd, int size)
 		exit(EXIT_FAILURE);
 	}
 }
+int	find_last_redir(t_data *data, int i) // function to find the last redirection you might need it 
+{
+	int	j;
+
+	j = 0;
+
+	while (data->cmd[i].redir[j] != 0)
+	{
+		if (data->cmd[i].redir[j] == 3 || data->cmd[i].redir[j] == 4)
+			data->cmd[i].last_redir = j;
+		j++;
+	}
+	return (data->cmd[i].last_redir);
+}

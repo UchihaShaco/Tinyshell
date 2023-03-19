@@ -1,18 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_pipe.c                                       :+:      :+:    :+:   */
+/*   ts_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/14 18:57:52 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/02/26 15:22:58 by jalwahei         ###   ########.fr       */
+/*   Created: 2023/02/21 21:42:24 by jalwahei          #+#    #+#             */
+/*   Updated: 2023/03/17 22:27:50 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-int	print_error_pipe(int error, char *str)
+int	ts_err_token(t_data *data, int pipe)
+{
+	if (pipe == 2)
+	{
+		data->num_error = ERR_TOKEN;
+		data->num_cmd = 0;
+		ts_error(data->num_error, "||");
+		return (-1);
+	}
+	data->num_error = ERR_TOKEN;
+	data->num_cmd = 0;
+	ts_error(data->num_error, "|");
+	return (-1);
+}
+
+int	ts_error(int error, char *str)
 {
 	if (error == ERR_TOKEN && (str[0] == 34 || str[0] == 39))
 	{
@@ -38,25 +53,24 @@ int	print_error_pipe(int error, char *str)
 	return (-1);
 }
 
-int	ts_check_empty_and_err_pipe(t_data *data, char *line)
+int	ts_error_2(int error, int qm)
 {
-	int	i;
+	char	a;
 
-	i = 0;
-	while (line[i] == ' ' && line[i] != '\0')
-		i++;
-	if (line[i] == '\0')
+	a = qm;
+	if (error == ERR_TOKEN && qm == 34)
 	{
-		data->empty_str = YES;
-		return (-1);
+		ft_putstr_fd("Tinyshell: unexpected EOF while ", 2);
+		ft_putstr_fd("looking for matching '", 2);
+		write(2, &a, 1);
+		ft_putstr_fd("'\n", 2);
 	}
-	if (line[i] == '|')
+	if (error == ERR_TOKEN && qm == 39)
 	{
-		data->num_error = ERR_TOKEN;
-		data->num_cmd = 0;
-		if (line[i + 1] == '|')
-			return (print_error_pipe(data->num_error, "||"));
-		return (print_error_pipe(data->num_error, "|"));
+		ft_putstr_fd("Tinyshell: unexpected EOF while ", 2);
+		ft_putstr_fd("looking for matching '", 2);
+		write(2, &a, 1);
+		ft_putstr_fd("'\n", 2);
 	}
-	return (0);
+	return (-1);
 }

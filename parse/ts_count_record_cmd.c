@@ -6,11 +6,11 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:47:34 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/01 11:06:07 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/17 22:27:47 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	ts_get_size_one_cmd_str(char *line, int *start, int size)
 {
@@ -58,11 +58,14 @@ static int	ts_count_pipe(t_data *data, char *line, int qm_d, int qm_o)
 	int	i;
 
 	i = 0;
+	// printf("line = %s \n", line);
 	while (line[i] != '\0')
 	{
 		ts_switch_qm(line[i], &qm_o, &qm_d);
+		// printf("line[i] = %c \t qm_o = %d \t qm_d = %d \t num_cmd = %d counter = %d\n", line[i], qm_o, qm_d, data->num_cmd, i);
 		if (line[i] == '|' && qm_o == 1 && qm_d == 1)
 		{
+			// printf("line[i] = %c \n", line[i] );
 			i++;
 			if (line[i] == '|')
 				return (ts_err_token(data, 2));
@@ -75,6 +78,7 @@ static int	ts_count_pipe(t_data *data, char *line, int qm_d, int qm_o)
 				return (ts_err_token(data, 1));
 			data->num_cmd++;
 		}
+		else
 		i++;
 	}
 	return (0);
@@ -100,6 +104,15 @@ int	ts_check_empty_and_err_token_pipe(t_data *data, char *line)
 			return (ts_error(data->num_error, "||"));
 		return (ts_error(data->num_error, "|"));
 	}
+	i = 0;
+	while (line[i] != '\0')
+		i++;
+	if (line[i - 1] == '|')
+	{
+		data->num_error = ERR_TOKEN;
+		data->num_cmd = 0;
+		return (ts_error(data->num_error, "|"));
+	}
 	return (0);
 }
 
@@ -111,7 +124,7 @@ int	ts_count_and_record_cmd(t_data *data, char *line)
 	// int	qm_o;
 
 	i = 0;
-	// qm_o = 1;000
+	// qm_o = 1000;
 	// qm_d = 1;
 	data->num_cmd = 1;
 	if (ts_check_empty_and_err_token_pipe(data, line) == -1)
@@ -134,6 +147,11 @@ int	ts_count_and_record_cmd(t_data *data, char *line)
 
 	return (0);
 }
+	// if ((line[i - 1] == 34 && qm_d ==  -1 ) || (line[i - 1] == 39 && qm_o == -1))
+	// 	{
+	// 		data->num_error = ERR_TOKEN;
+	// 		return (ts_error_2(data->num_error, line[i - 1]));
+	// 	}
 // {
 //     printf("t_data {\n");
 // 	int i = 0;

@@ -6,17 +6,18 @@
 #    By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/09 11:48:59 by jalwahei          #+#    #+#              #
-#    Updated: 2023/03/10 16:34:23 by jalwahei         ###   ########.fr        #
+#    Updated: 2023/03/19 16:54:21 by jalwahei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-SRCS =	minishell.c ts_signals.c ts_malloc.c ts_count_record_cmd.c parse_pipe.c ts_find_redirect.c ts_error.c ts_free.c ts_utils.c ts_record_val.c ts_quotation_marks.c ts_record_arr.c ts_measure_size_file_name.c
+SRCS =	minishell.c parse/ts_signals.c parse/ts_malloc.c parse/ts_count_record_cmd.c parse/parse_pipe.c parse/ts_find_redirect.c parse/ts_error.c \
+	parse/ts_free.c parse/ts_record_val.c ts_utils.c parse/ts_quotation_marks.c parse/ts_record_arr.c parse/ts_measure_size_file_name.c
 
 CC = cc
 
-# CFLAGS =  -Wall -Wextra -Werror  -g -fsanitize=address
+CFLAGS = -I. -g -fsanitize=address -Wall -Wextra
 
 
 OBJS = $(SRCS:.c=.o)
@@ -26,7 +27,7 @@ lib = libft/libft.a
 
 $(NAME): $(OBJS)
 	make -C libft
-	$(CC) $(OBJS) $(lib) -I/usr/local/opt/readline/include -L/usr/local/opt/readline/lib -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(lib) -I/usr/local/opt/readline/include -L/usr/local/opt/readline/lib -l readline -o $(NAME)
 
 clean:
 	rm -f $(OBJS)

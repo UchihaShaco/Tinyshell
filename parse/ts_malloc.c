@@ -6,11 +6,11 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 04:48:38 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/02/22 19:12:55 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/17 22:28:05 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	ts_malloc_array(char ***array, int size)
 {
