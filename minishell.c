@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/19 16:54:57 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:49:23 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ts_init_data(t_data *data, char ***env, int first)
 		data->num_error = 0;
 		data->num_tmp_var = 0; // just a tmp var might be useful
 		data->tmp_var = NULL;
-		// ts_init_env(data, env);
+		ts_init_env(data, env);
 		data->name_file = NO; // not used 
 	}
 	data->num_prev_error = data->num_error;
@@ -84,8 +84,6 @@ static int ts_quote_checker(t_data *data, char *line)
 // 		}
 // 		i++;
 // 	}
-
-
 // }
 int	ts_parse(t_data *data, char *line)
 {
@@ -115,6 +113,7 @@ int	ts_parse(t_data *data, char *line)
 	i = 0;
 	return (0);
 }
+
 int	main(int argc, char **argv, char **env)
 {
 	t_data	data;
@@ -124,7 +123,7 @@ int	main(int argc, char **argv, char **env)
 	ts_init_data(&data, &env, YES);
 	while (1)
 	{
-		// ts_get_signal();
+		ts_get_signal();
 		ts_init_data(&data, &env, NO);
 		line = readline("\033[1;35mTinyShell > \033[0m");
 		ts_signal_ctrl_d(&data, &line);
@@ -132,30 +131,18 @@ int	main(int argc, char **argv, char **env)
 		// print_t_data(data);
 		add_history(line);
 		// print_t_cmd(data.cmd);
-		// 	if (data.empty_str == NO)
-		// {
+			if (data.empty_str == NO)
+		{
 			ts_record_array(&data);
+		// 	ts_execution(&data, &line); // here what it should look like i think when executing :D
 		for(int i = 0; i < data.num_cmd; i++)
 		{
 			print_t_cmd(&data.cmd[i]);
 		}
-		// printf("num_cmd = %d\n", data.num_cmd);
-		// 	ts_execution(&data, &line); // here what it should look like i think when executing :D
-		// ts_free_cycle(&data, &line); // free the memory something like this 
-		// }
-	// 	if (strcmp(input, "exit") == 0) {
-    //         break;
-	// 	}
-	// 	add_history(input);
-	// 	strcpy(cmd, input);
-	// 	pid = fork();
-	// 	if (pid == 0)
-	// 		execute_command(cmd);
-	// 	else
-	// 		wait(0);
-	// 	free(input);
-	// }
-	// return (0);
+		printf("num_cmd = %d\n", data.num_cmd);
+		// ts_free_cycle(&data, &line); // we will have to free the memory something like this 
+		}
+
 }
 }
 void print_t_cmd(t_cmd *cmd)

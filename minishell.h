@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/16 12:29:27 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:51:38 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef enum e_value
 	// YES_AFTER_PARSER, // unsused so far
 	ERR_PIPE, 
 	// ERR_MEMORY, // unsused so far 
-	ERR_Q_MARK,
+	// ERR_Q_MARK, // unsused so far
 	// ADD_TO_OLD, //might be helpful for exporting
 	// ADD_NEW, // might be helpful for exporting
 	DOUBLE_Q_MARK = 34,
@@ -91,13 +91,13 @@ typedef struct s_data
 	int		num_prev_error; // to give exit value a number
 	int		num_env;
 	char	**our_env; 
-	char	**tmp_var;
+	char	**tmp_var; // unsued empty tmp var
 	int		num_tmp_var; // no need just an empty tmp var 
 	char	*prev_dir; // previous directory
 	char	*cur_dir; // current directory
 	char	*home_dir; // home directory 
 	int		flag_old; // something  could be used to keep track of prev direc
-	int		empty_str; // flag for parsing to know if string is empty or not (YES,NO)
+	int		empty_str; // flag for main function to know o execute or no
 	int		fd_pipe[2]; // your pipes no idea how to use 😇 ;)
 	int		name_file; // not used so far
 	int		build_in; // flag to know if its a build in cmd (YES,NO)
@@ -132,8 +132,12 @@ int		ts_cycle_record_redir(t_cmd *cmd, t_data *data, int qm_o, int qm_d);
 int		ts_found_redirect(t_cmd *cmd, t_data *data);
 int		ts_record_redir_and_file(t_cmd *cmd, int i, int num_redir, t_data *d);
 void	ts_init_emum_redir(t_cmd *cmd, int *i_orig, int num_redir);
+/* *********************  parse Dollar  ********************* */
+void	ts_found_dollar_in_name_file(t_data *data, char **file);
+
 /* *********************  env  ********************* */
 void	ts_init_env(t_data *data, char ***env);
+int		ts_found_env_variable(t_data *data, t_cmd *cmd);
 /* *********************  Signals  ********************* */
 void	ts_signal_ctrl_d(t_data *data, char **line);
 int		ts_get_signal(void);
@@ -144,6 +148,9 @@ void	ts_malloc_str(char **name, int size);
 void	ts_malloc_arg(t_arg **arg, int size);
 void	ts_malloc_cmd(t_cmd **cmd, int size);
 void	ts_malloc_arr_int(int **arr_int, int size);
+/* ********************* 	signals		  ********************* */
+// apparently i need to include it in the header file to use it otherwise it wont compile  even tho i have its library included
+void	rl_replace_line(const char *text, int clear_undo); 
 /* ********************* 	error msgs  ********************* */
 int		ts_error(int error, char *str);
 int		ts_err_token(t_data *data, int pipe);
@@ -151,14 +158,13 @@ int		ts_error_2(int error, int qm);
 int		print_error_pipe(int error, char *str);
 /* ********************* 	Utils for parse  ********************* */
 void	ts_free_str(char **str);
-void	ts_replace_key_to_value(char **str, int key, char *value, int start);
 int		ts_record_key(char *s, int i, char **key, int *digit_key);
 void	ts_record_char(char **result, char *str, int *r, int *s);
 void	ts_record_tail(char **tmp, char **str, int t, int start_tail);
 void	ts_record_str(char **file, char *str, int start, int size_str);
 void	ts_replace_key_to_value(char **str, int key, char *value, int start);
 /* ********************* 	file name ********************* */
-int	ts_measure_size_file_name(t_data *d, char *str, int *i);
+int		ts_measure_size_file_name(t_data *d, char *str, int *i);
 /* ********************* 	record arr  ********************* */
 void	ts_record_array(t_data *data);
 /* ********************* 	printer of the data to test  ********************* */

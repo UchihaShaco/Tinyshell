@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 21:42:24 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/17 22:27:50 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/22 11:42:01 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,6 @@ int	ts_error(int error, char *str)
 		ft_putstr_fd("Tinyshell: syntax error near unexpected token '", 2);
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd("'\n", 2);
-	}
-	else if (error == ERR_Q_MARK)
-		write(2, "Tinyshell: skipped quotation_marks\n", 35);
-	else if (error == ERR_NUM_ONE && str[0] == '!')
-	{
-		ft_putstr_fd("Tinyshell: ", 2);
-		ft_putstr_fd(str, 2);
-		ft_putstr_fd(": event not found\n", 2);
 	}
 	return (-1);
 }

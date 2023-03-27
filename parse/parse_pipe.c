@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 18:57:52 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/17 22:27:45 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/03/21 14:57:52 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ int	print_error_pipe(int error, char *str)
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd("'\n", 2);
 	}
-	else if (error == ERR_Q_MARK)
-		write(2, "Tinyshell: skipped quotation_marks\n", 35);
 	else if (error == ERR_NUM_ONE && str[0] == '!')
 	{
 		ft_putstr_fd("Tinyshell: ", 2);
