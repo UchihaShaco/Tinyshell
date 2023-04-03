@@ -6,13 +6,45 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:47:34 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/17 22:27:47 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/01 04:23:58 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ts_get_size_one_cmd_str(char *line, int *start, int size)
+static int	ts_check_empty_and_err_token_pipe(t_data *data, char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] == ' ' && line[i] != '\0')
+		i++;
+	if (line[i] == '\0')
+	{
+		data->empty_str = YES;
+		return (-1);
+	}
+	if (line[i] == '|')
+	{
+		data->num_error = ERR_TOKEN;
+		data->num_cmd = 0;
+		if (line[i + 1] == '|')
+			return (ts_error(data->num_error, "||"));
+		return (ts_error(data->num_error, "|"));
+	}
+	i = 0;
+	while (line[i] != '\0')
+		i++;
+	if (line[i - 1] == '|')
+	{
+		data->num_error = ERR_TOKEN;
+		data->num_cmd = 0;
+		return (ts_error(data->num_error, "|"));
+	}
+	return (0);
+}
+
+static int	ts_get_size_one_cmd_str(char *line, int *start, int size)
 {
 	int	i;
 	int	qm_d;
@@ -31,7 +63,7 @@ int	ts_get_size_one_cmd_str(char *line, int *start, int size)
 	return (size);
 }
 
-int	ts_record_one_str(char **str, char *line, int *start, int *num)
+static int	ts_record_one_str(char **str, char *line, int *start, int *num)
 {
 	int	size;
 	int	i;
@@ -80,38 +112,6 @@ static int	ts_count_pipe(t_data *data, char *line, int qm_d, int qm_o)
 		}
 		else
 		i++;
-	}
-	return (0);
-}
-
-int	ts_check_empty_and_err_token_pipe(t_data *data, char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i] == ' ' && line[i] != '\0')
-		i++;
-	if (line[i] == '\0')
-	{
-		data->empty_str = YES;
-		return (-1);
-	}
-	if (line[i] == '|')
-	{
-		data->num_error = ERR_TOKEN;
-		data->num_cmd = 0;
-		if (line[i + 1] == '|')
-			return (ts_error(data->num_error, "||"));
-		return (ts_error(data->num_error, "|"));
-	}
-	i = 0;
-	while (line[i] != '\0')
-		i++;
-	if (line[i - 1] == '|')
-	{
-		data->num_error = ERR_TOKEN;
-		data->num_cmd = 0;
-		return (ts_error(data->num_error, "|"));
 	}
 	return (0);
 }

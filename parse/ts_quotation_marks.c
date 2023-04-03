@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 18:03:37 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/17 22:28:09 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/01 05:21:57 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,7 @@ int	ts_count_arg_divided_qm(t_cmd *cmd, t_data *data)
 		if (i == -1)
 			return (-1);
 	}
+
 
 	return (0);
 }

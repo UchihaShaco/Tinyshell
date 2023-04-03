@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 23:56:09 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/23 21:25:25 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/03 11:26:11 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,16 @@ static void	sighandler(int signum)
 void	ts_signal_ctrl_d(t_data *data, char **line)
 {
 	if (*line == NULL)
+	{
+		printf("\033[1;35m\bTinyshell >\033[0A");
+		printf("\033[1;0m exit\n\033[0m");
+		// ts_free_all(data, line);
+		exit(EXIT_SUCCESS);
+	}
+}
+void	ts_signal_ctrl_slash(t_data *data, char **line)
+{
+	if (*line)
 	{
 		printf("\033[1;35m\bTinyshell >\033[0A");
 		printf("\033[1;0m exit\n\033[0m");

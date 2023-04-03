@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 19:12:09 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/02/07 19:00:59 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/01 00:42:35 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }					t_list;
+
 char			*get_next_line(int fd);
 int				ft_isascii(int c);
 int				ft_isprint(int c);

@@ -1,0 +1,432 @@
+
+
+
+											THIS IS TEST CASES FROM Ahmed salem 
+
+
+
+
+
+
+case :
+-------
+Mem clean
+//CTRL C should change the exit code to 1
+minishell $> ^C
+minishell $> echo $?
+0
+​
+​
+​
+< 1 cat
+think about handling this in the execution as it's easier and cleaner
+fix in the parsing to be cat 1 instead الخروج من الخلاف مستحب
+​
+case 1:  (Bilal)
+-------
+ctr c twice shouldn't exit 
+cat <<hello | cat << green  should do the heredoc before execution
+cat << hello    then CTR C doesn't execute
+cat << hello    then CTR D execute
+cat + ctr D or + ctr cc
+​
+//revise the heredoc for the segfault with the CTR + D
+minishell $> cat << $PWD
+heredoc> PWD
+heredoc> $PWD
+heredoc> ^C
+heredoc> ^C
+heredoc> ^C
+heredoc> ^C
+heredoc> [1]    1065 segmentation fault  ./minishell
+​
+this should be the right exit codes
+bash-3.2$ wc
+^C
+bash-3.2$ echo $?
+130
+bash-3.2$ wc
+^\Quit: 3
+bash-3.2$ echo $?
+131
+​
+​
+< file cat 
+leaks
+​
+norminettes:
+Delete the forenscis, and add the flags to the printf
+(solved)
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+you can create a new direction types with defined behaviors
+to tackle those types, but this is an extra miles
+echo hi |>> f || echo hi |> f  == creates empty f
+cat |<< del == fill the heredoc with del and execute cat with no cmd  
+cat |< f == just execute cat
+​
+3)
+minishell $> ls<<l|<<k pwd
+ echo hi>kftygh|>>lpwd   
+//not syntax error
+echo hi > f>|ls  
+​
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+export
+organize the export print 
+​
+e"c"h'o'  hi
+should be recieved as echo hi
+​
+> file 
+|hi
+​
+cat << end | ls
+shouldn't print the heredoc
+​
+cat < 5 < 1
+​
+cd adslfkjnsd | echo hi
+​
+<<<<<<< HEAD
+<<<<<<< HEAD
+exit 2 3 
+<<<<<<< HEAD
+invalid reads 
+=======
+>>>>>>> parent of e83fd9e... refractoring the parse error file to 3 files
+=======
+>>>>>>> parent of e83fd9e... refractoring the parse error file to 3 files
+=======
+invalid reads
+>>>>>>> parent of 96788e7... errored quote empty space parsing
+​
+2)
+//this should give syntax, this is a valid cse , should be fixed automatically after fixing quotes issue
+minishell $> echo f'"D'D''D'DD"D'D'D'D'D"D'D'D'''''"gthryug,khg'D"'lD"D'D'D'D""'''''"'"td
+f"DDDDD"DDDDD"DDD"gthryug,khgD"lD"DDDD""""td
+​
+​
+echo hi >| f  ==  echo hi > f
+cat <> file == cat < file
+​
+cat << h > file
+add the case condition to the heredoc execution
+​
+​
+​
+//fix the segfault with multiple heredocs
+minishell $> cat << a << b << c
+minishell: syntax error near unexpected token 
+[1]    307 segmentation fault  ./minishell
+​
+3)
+//should expand the $PWD
+minishell $> cat << $PWD
+heredoc> PWD
+heredoc> $PWD
+​
+6)echo hi > f hello hello hello hello 
+double free
+​
+> f echo hi 
+leaks 
+​
+// the proplem is in the t->single_cmd[0]->cmd is filled with trash not the args[0]
+6) > echo hi
+segfault and double free
+​
+cat < file    is Broken :( :) :)
+< file 
+> file 
+<< file 
+>> file
+all segfualts
+​
+​
+​
+ minishell $> exit << l
+heredoc> trgdh
+heredoc> ersrd\
+heredoc> l
+​
+​
+4)
+//double free for the heredocs inside the child process
+minishell $> echo hi << l
+heredoc> dsfg
+heredoc> sdfgj
+heredoc> gsdf
+heredoc> f
+heredoc> 
+heredoc> dsf
+heredoc> l
+hi
+free(): double free detected in tcache 2
+minishell $> echo hi << l
+heredoc> fd
+heredoc> 
+heredoc> l
+hi
+minishell(71236,0x104b9edc0) malloc: *** error for object 0x7fa24f8040a0: pointer being freed was not allocated
+minishell(71236,0x104b9edc0) malloc: *** set a breakpoint in malloc_error_break to debug
+//this gives synta erro while it shouldn't, redirectioninto pipe should
+​
+7)
+will not handle this behavior/ or will handle it in the last iteration of 
+the project after norminette inshalla as perfection stage
+cat < 1 2 3 4 
+< 1 cat 
+​
+2)
+//the error code should be permission denied, and mac report should be  permission denied also, (important)
+//and the exit code is 126 (edge case low prioritt)
+minishell $> macreport 
+minishell: macreport: command not found
+​
+​
+//I believ no issue here by try it again later in your minishell and bash
+cat < file    cause leak
+< file cat 
+double free
+cat < f 1
+double free
+//cat < 1 2 3 4 should skip 1 and execute cat on 2 3 4 ...
+​
+minishell $> cat < file > file2    
+6)
+//it's not a syntax erro, then fix the segfault
+minishell $> echo $YTR" "DFYUITF
+minishell: syntax error near unexpected token 
+[1]    503 segmentation fault  ./minishell
+​
+​
+6) exit status update in parent executed cmds
+​
+​
+8)
+//we creatd echo before this point, the error message is wrong
+minishell $> ./echo
+minishell: ./echo: No such file or directory
+minishell $> ./ls
+minishell: ./ls: No such file or directory
+minishell $> ./echo
+minishell: ./echo: No such file or directory
+​
+9)
+//don't handle this, just make sure you don't sigfault
+minishell $> mkdir lllll
+minishell $> cd lllll
+minishell $> mkdir llll
+minishell $> cd llll
+minishell $> mkdir lll
+minishell $> cd lll
+minishell $> rm  -rf ../../../lllll 
+minishell $> pwd
+minishell $> pwd
+minishell $> pwd
+minishell $> cd ..
+bash: cd: ..: No such file or directory
+minishell $> cd .
+bash: cd: .: No such 
+​
+10)
+//some shitty characters inside the code below
+minishell $> ^N
+minishell: : command not found
+minishell $> 
+gfhjk
+minishell: 
+gfhjk: command not found
+minishell $> ^Dfhdg
+minishell: fhdg: command not found
+​
+11)
+minishell $> cat l
+// return 127 instead of 0, same with CTR D, should exit with 127"last exit code"
+minishell $> kjhbdbgfl
+minishell: kjhbdbgfl: command not found
+minishell $> exit
+[DOCKER]➜  src echo $?
+0
+​
+​
+​
+12)
+//shouldn't exit 
+minishell $> exit  3 3
+minishell: exit: too many arguments 
+​
+​
+//should throw an error then exit
+minishell $> exit 467897566789087657890876
+​
+9)
+//protect the env_parsing function to check null and not segfault
+ahsalem@lab1r4s11 minishell_code % env -i ./minishell
+zsh: segmentation fault  env -i ./minishell
+​
+Doesn't segfault
+​
+​
+​
+​
+14)
+//just fix the segfault and the exit code, check the exit codes and exit messages if exit
+minishell $> exit hjh
+minishell: exit: numeric argument required 
+[1]    1042 segmentation fault  ./minishell
+​
+13)
+//exit with a crriage, handle the invalid pointer
+minishell $> exit ^M
+minishell: exit: numeric argument required 
+free(): invalid pointer
+[1]    462 abort      ./minishell
+​
+​
+16)
+//this should expand to ls gdsfgn 
+minishell $> ""l"""s"' gdsfgn'
+minishell: ls': command not found
+15)
+minishell $> exit >> l
+// should exit minishell
+​
+17)
+//this shouldn't be syntax error, also handle the segfault, I believe there is wrong counting for quotes (high priority *************************)
+minishell $> ""ls""""""|ls""|cat|cat'|'
+minishell: syntax error near unexpected token 
+[1]    493 segmentation fault  ./minishell
+​
+18)
+//this expands to no token in bash, this is not even a command like typing ENTER
+minishell $> $G  
+minishell: : No such file or directory
+minishell $> echo $d a
+ a
+19)
+//100% fix this the syntax error (high priority ***********************)
+minishell $> ls" "ls
+minishell: syntax error near unexpected token 
+[1]    512 segmentation fault  ./minishell
+​
+20)
+//don't throw the correct error
+minishell $> export AA= "'"""
+minishell: unset: `'': not a valid identifier
+​
+minishell $> echo "hi"sdfd|dsfsdfls""
+minishell: dsfsdfls: command not found
+​
+export a=1
+export a=2    cause leaks 
+​
+​
+​
+//This isn't syntax error by any mean
+minishell $> export AA="<"
+minishell: syntax error near unexpected token 
+[1]    321 segmentation fault  ./minishell
+minishell $> export AA="|"
+minishell: syntax error near unexpected token 
+[1]    328 segmentation fault  ./minishell
+​
+cd trash/
+doesn't update the path correctly
+​
+22)
+//wierd staff with the path, dig deep in it (Very important) changing the path in the evaluation file
+minishell $> mkdir y
+minishell $> mv a.out y
+minishell $> export PATH="$PWD/y:$PATH"
+minishell $> env
+minishell $> ls
+minishell $> echo hh
+minishell $> echo $PATH
+[1]    524 segmentation fault  ./minishell
+​
+ASZ23)
+should throw error, clean, don't close the program change status code to
+export *&^%
+minishell: export: `%%': not a valid identifier
+minishell: export: `(null)': not a valid identifier
+export ^&%*& | ls
+should throw error 
+//multiple arguments with export and silent the unset error in export
+minishell $> export AA=AA BB=BB
+minishell: unset: `BB=BB': not a valid identifier
+minishell: unset: `BB=BB': not a valid identifier
+​
+3)
+//shouldn't print the quotation marks
+ echo hi >> "abcd"efg'hij'klmno""
+minishell $> echo  "abcd"efg'hij'klmno""
+abcdefg'hij'klmno
+​
+​
+2)
+minishell $> >>|l
+minishell: syntax error near unexpected token 
+[1]    316 segmentation fault  ./minishell
+​
+​
+minishell $> cd > SSS
+minishell $> echo $m
+​
+27)
+//should execute the unset and other builtins with >> < >
+minishell $> unset >> l
+minishell $> unset PATH >> l
+minishell $> ls
+1                       executing               minishell
+2                       export                  minishell.h
+Makefile                file                    mkdir
+a                       forensics_cmds.log      mv
+abcdefg'hij'klmno       kftygh                  parsing
+b                       l                       pro_parsing
+badfile                 libft                   r
+bak                     lllll                   readline.supp
+bins                    lpwd                    t
+c                       ls                      test.c
+e                       ls"                     test_files
+echo                    ls2"                    test_wc
+env                     main.c                  trash
+err.txt                 main.o                  y
+erro_handle             mem_check.sh
+minishell $> export m=4 >> l
+​
+​
+case 28:
+-------
+//should throw an error even when the a exists
+ unset a=3
+//Handling to lower
+  UNSET APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE no_proxy TERM HOSTNAME
+minishell: unset: command not found
+​
+28)
+//using unset alot missing up your path
+//also unsetting the path shouldn't affect the builtins
+//the issue is when PATH is the first variable it missup with the head of env_vars
+minishell $> unset HOME SHELL LaunchInstanceID __CF_USER_TEXT_ENCODING XPC_SERVICE_NAME SSH_AUTH_SOCK XPC_FLAGS LOGNAME TMPDIR PWD OLDPWD GIT_ASKPASS TERM PATH HOME SHELL USER
+minishell $> ls
+​
+​
+​
+ 
+(high priority *************************)
+minishell $> unset HOME SHELL LaunchInstanceID __CF_USER_TEXT_ENCODING XPC_SERVICE_NAME SSH_AUTH_SOCK XPC_FLAGS LOGNAME TMPDIR PWD OLDPWD GIT_ASKPASS TERM PATH HOME SHELL USER
+minishell $> ls
+minishell $> ls
+minishell $> ls
+minishell $> l;s
+mi...

@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 03:31:14 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/27 04:22:13 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/03 10:25:42 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	ts_search_var(t_data *data, char **value, char *key)
 			&& (data->our_env[y][size_key] == '='
 			|| data->our_env[y][size_key] == '\0'))
 		{
-			// (*value) = ft_strdup_start(data->our_env[y], start);
+			(*value) = ft_strdup_start(data->our_env[y], start);
 			return (0);
 		}
 		y++;

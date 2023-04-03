@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/27 16:49:23 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/03 10:21:16 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ts_init_data(t_data *data, char ***env, int first)
 		data->num_tmp_var = 0; // just a tmp var might be useful
 		data->tmp_var = NULL;
 		ts_init_env(data, env);
-		data->name_file = NO; // not used 
+		data->name_file = NO; // flag to check if it's a file (YES, NO)
 	}
 	data->num_prev_error = data->num_error;
 	data->num_error = 0;
@@ -43,6 +43,7 @@ void	ts_init_data(t_data *data, char ***env, int first)
 	// data->fd_pipe[0] = 0; something you need 
 	// data->fd_pipe[1] = 0; same as above
 }
+
 static int ts_quote_checker(t_data *data, char *line)
 {
 	int i = 0;
@@ -105,8 +106,8 @@ int	ts_parse(t_data *data, char *line)
 			ts_count_arg_divided_qm(&data->cmd[i], data);
 		if (data->num_error == 0 && data->cmd[i].str != NULL)
 			ts_create_struct_without_qm(&data->cmd[i]);
-		// if (data->num_error == 0 && data->cmd[i].str != NULL)
-		// 	ts_found_env_variable(data, &data->cmd[i]);
+		if (data->num_error == 0 && data->cmd[i].str != NULL)
+			ts_found_env_variable(data, &data->cmd[i]);
 		i++;
 	}
 		
@@ -127,6 +128,7 @@ int	main(int argc, char **argv, char **env)
 		ts_init_data(&data, &env, NO);
 		line = readline("\033[1;35mTinyShell > \033[0m");
 		ts_signal_ctrl_d(&data, &line);
+		// ts_signal_ctrl_slash(&data, &line);
 		ts_parse(&data, line);
 		// print_t_data(data);
 		add_history(line);
@@ -139,11 +141,11 @@ int	main(int argc, char **argv, char **env)
 		{
 			print_t_cmd(&data.cmd[i]);
 		}
-		printf("num_cmd = %d\n", data.num_cmd);
+		// printf("num_cmd = %d\n", data.num_cmd);
 		// ts_free_cycle(&data, &line); // we will have to free the memory something like this 
 		}
-
 }
+
 }
 void print_t_cmd(t_cmd *cmd)
 {

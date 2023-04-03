@@ -6,10 +6,9 @@
 #    By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/22 12:18:02 by jalwahei          #+#    #+#              #
-#    Updated: 2023/01/29 14:03:52 by jalwahei         ###   ########.fr        #
+#    Updated: 2023/04/01 07:11:51 by jalwahei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 SRCS	= \
 	ft_is_functions.c ft_strl_split.c get_next_line.c \
@@ -24,20 +23,18 @@ CFLAGS			= -Wall -Wextra -Werror
 
 NAME			= libft.a
 
-all:			$(NAME)
+all: $(NAME)
 
-$(NAME):		$(OBJS)
-				ar rcs $(NAME) $(OBJS)
+$(NAME): $(OBJS)
+	@ar rcs $(NAME) $(OBJS)
+	@echo "\033[35m \033[0m"
 
 clean:
-				$(RM) $(OBJS)
+	@$(RM) $(OBJS)
 
-fclean:			clean
-				$(RM) $(NAME)
+fclean: clean
+	@$(RM) $(NAME)
 
-re:				fclean $(NAME)
+re: fclean all
 
-bonus:			$(OBJS)
-				ar rcs $(NAME) $(OBJS)
-
-.PHONY:			all clean fclean re
+.PHONY: all clean fclean re

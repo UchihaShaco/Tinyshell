@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 21:40:55 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/27 16:51:44 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/01 06:09:09 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ int	ts_record_redir_and_file(t_cmd *cmd, int i, int num_redir, t_data *d)
 		return (-1);
 	ts_malloc_str(&cmd->file[num_redir], size_str);
 	ts_record_str(&cmd->file[num_redir], cmd->str, start, size_str);
-	// ts_found_dollar_in_name_file(d, &cmd->file[num_redir]);
+	ts_found_dollar_in_name_file(d, &cmd->file[num_redir]);
 	ts_cut_qm_in_name_file(&cmd->file[num_redir]);
 	d->tmp.size_cut = i - d->tmp.size_cut;
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/27 16:51:38 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/01 04:24:11 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,10 +121,7 @@ int		ts_check_quotation_marks(t_cmd *cmd, int i, t_data *data);
 int		ts_parse(t_data *data, char *line);
 void	ts_check_empty_str(t_cmd *cmd);
 /* ********************* Cmd Parse  ********************* */
-int		ts_get_size_one_cmd_str(char *line, int *start, int size);
-int		ts_record_one_str(char **str, char *line, int *start, int *num);
 int		ts_count_and_record_cmd(t_data *data, char *line);
-int		ts_check_empty_and_err_token_pipe(t_data *data, char *line);
 /* *********************  parse redir  ********************* */
 int		ts_error_parse_redir(t_data *data, char *s, int i);
 int		ts_count_redirect(t_cmd *cmd, t_data *data, int qm_o, int qm_d);
@@ -134,14 +131,17 @@ int		ts_record_redir_and_file(t_cmd *cmd, int i, int num_redir, t_data *d);
 void	ts_init_emum_redir(t_cmd *cmd, int *i_orig, int num_redir);
 /* *********************  parse Dollar  ********************* */
 void	ts_found_dollar_in_name_file(t_data *data, char **file);
-
+char	*ft_strdup_start(const char *s, int start);
+void	ts_found_dollar(t_data *data, char **str, int q_m, int *i_orig);
+int		ts_record_value(t_data *data, char **str, int i);
+int		ts_search_var(t_data *data, char **value, char *key);
 /* *********************  env  ********************* */
 void	ts_init_env(t_data *data, char ***env);
 int		ts_found_env_variable(t_data *data, t_cmd *cmd);
 /* *********************  Signals  ********************* */
 void	ts_signal_ctrl_d(t_data *data, char **line);
 int		ts_get_signal(void);
-
+void	ts_signal_ctrl_slash(t_data *data, char **line);
 /* *********************  Malloc  ********************* */
 void	ts_malloc_array(char ***array, int size);
 void	ts_malloc_str(char **name, int size);
