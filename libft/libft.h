@@ -22,6 +22,7 @@
 # include <string.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <stdint.h>
 
 typedef struct s_list
 {
