@@ -12,6 +12,49 @@
 
 #include "minishell.h"
 
+void	init_fd_pid(t_data *data)
+{
+	int	i;
+
+	data->fd = (int **)ft_calloc_e(data->num_cmds - 1, sizeof(int *), data);
+	i = 0;
+	while (i < data->num_cmds - 1)
+	{
+		data->fd[i] = (int *)ft_calloc_e(2, sizeof(int), data);
+		i++;
+	}
+	data->pid = (int *)ft_calloc_e(data->num_cmds, sizeof(int), data);
+}
+
+void	init_env(t_data *data, char **envp)
+{
+	t_env	**env_list;
+	t_env	*node;
+	t_env	*cur;
+	char	**split_var;
+	int		i;
+
+	i = -1;
+	env_list = (t_env **)ft_calloc(1, sizeof(t_env *));
+	cur = NULL;
+	while (envp[++i])
+	{
+		node = (t_env *)ft_calloc(1, sizeof(t_env));
+		split_var = split_env_var(envp[i], data);
+		node->key = ft_strdup_lim(split_var[0], '\0', data);
+		node->val = ft_strdup_lim(split_var[1], '\0', data);
+		node->next = NULL;
+		node->prev = cur;
+		free_strlist(split_var);
+		if (!*env_list)
+			*env_list = node;
+		else
+			cur->next = node;
+		cur = node;
+	}
+	data->env_list = env_list;
+}
+
 static void	ts_err_argc_argv(int argc, char **argv, char **env)
 {
 	if (argc != 1 || argv == NULL || env == NULL)
@@ -20,6 +63,7 @@ static void	ts_err_argc_argv(int argc, char **argv, char **env)
 		exit(127);
 	}
 }
+
 void	ts_init_data(t_data *data, char ***env, int first)
 {
 	if (first == YES)
@@ -40,8 +84,8 @@ void	ts_init_data(t_data *data, char ***env, int first)
 	data->home_dir = getenv("HOME");
 	// data->build_in = YES; // flag to check if it's a build in command (YES, NO)
 	data->num_cmd = 0;
-	// data->fd_pipe[0] = 0; something you need 
-	// data->fd_pipe[1] = 0; same as above
+	init_fd_pid(data);
+	init_env(data, *env); //what is char ***env
 }
 
 static int ts_quote_checker(t_data *data, char *line)
@@ -144,7 +188,7 @@ int	main(int argc, char **argv, char **env)
 		// printf("num_cmd = %d\n", data.num_cmd);
 		// ts_free_cycle(&data, &line); // we will have to free the memory something like this 
 		}
-}
+	}
 
 }
 void print_t_cmd(t_cmd *cmd)
