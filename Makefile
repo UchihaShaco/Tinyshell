@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+         #
+#    By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/09 11:48:59 by jalwahei          #+#    #+#              #
-#    Updated: 2023/04/01 07:07:55 by jalwahei         ###   ########.fr        #
+#    Updated: 2023/04/11 14:49:49 by hbui-vu          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SRCS =	minishell.c parse/ts_signals.c parse/ts_malloc.c parse/ts_count_record_cm
 
 CC = cc
 
-CFLAGS = -I. -g -fsanitize=address -Wall -Wextra
+CFLAGS = -I. -g # -fsanitize=address -Wall -Wextra
 
 OBJS = $(SRCS:.c=.o)
 
@@ -29,6 +29,7 @@ lib = libft/libft.a libft_h/libft_h.a
 
 $(NAME): $(OBJS)
 	@make -C libft
+	@make -C libft_h
 	@$(CC) $(CFLAGS) $(OBJS) $(lib) -I/usr/local/opt/readline/include -L/usr/local/opt/readline/lib -l readline -o $(NAME)
 	@echo "\033[35mTinyshell Ready\033[0m"
 

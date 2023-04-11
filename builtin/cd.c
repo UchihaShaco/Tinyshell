@@ -14,6 +14,7 @@ void	ft_cd(char **arg, t_data *data)
 	//change directories
 	else 
 	{
+		//execute chdir and if it errors out that write error code
 		if (chdir(arg[1]) != 0)
 		{
 			printf("-bash: cd: %s No such file or directory\n", arg[1]);

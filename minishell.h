@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/01 04:24:11 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/11 15:51:08 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ typedef struct s_cmd
 	char	*str; // saving command as a string
 	t_arg	*arg;
 	char	**array_arg;
+	char	*path;
 	int		*redir;
 	char	**file;
-	int		fd[2]; // with redir_born[2] i think it will be used for piping
-	int		redir_born[2]; // i think it will be used along with fd[2] 
+	// int		fd[2]; // i think it will be used for piping
+	// int		redir_born[2]; // i think it will be 
 	int		last_redir; // last redir in the command
 	int		num_arg;
-	int		num_array_arg; // 
-	char	*way_cmd; // path to cmd
+	int		num_array_arg; // parsing part 
 	int		count_redir; // c
 	int		bad_file; // flag for error might need in excution (yes or no)
 	int		array_empty;
@@ -97,6 +97,7 @@ typedef struct s_data
 	t_cmd	*cmd;
 	t_tmp	tmp;     // tmp struct to help with parsing and cutting file names
 	t_env	**env_list;
+	char	**env_paths;
 	int		num_cmd; // number of commands
 	int		num_error;  // error token ERR_TOKEN / DOUBLE_Q_MARK etc..
 	int		num_prev_error; // to give exit value a number
@@ -109,7 +110,7 @@ typedef struct s_data
 	char	*home_dir; // home directory 
 	int		flag_old; // something  could be used to keep track of prev direc
 	int		empty_str; // flag for main function to know o execute or no
-	int		**fd_pipe; // your pipes no idea how to use 😇 ;) --> we need to malloc this
+	int		**fd; // your pipes no idea how to use 😇 ;) --> we need to malloc this
 	int		*pid;
 	int		name_file; // not used so far
 	int		build_in; // flag to know if its a build in cmd (YES,NO)
@@ -191,7 +192,7 @@ void	ft_env(t_data *data);
 void	ft_export(char **arg, t_data *data);
 void	ft_pwd(t_data *data);
 void	ft_unset(char **arg, t_data *data);
-void	execute_builtin(char **arg, t_data *data);
+void	execute_builtin(char **arg, int	i, t_data *data);
 
 /* ENV VAR */
 t_env	*find_var_envlist(char *key, t_data *data);
@@ -207,6 +208,9 @@ void	*ft_calloc_e(size_t count, size_t size, t_data *data);
 char	*ft_strdup_lim(const char *s1, char c, t_data *data);
 void	free_strlist(char **str);
 char	**split_env_var(char *str, t_data *data);
+void	get_env_paths(char **envp, t_data *data);
+void	ts_add_cmd_path(char *arg, t_cmd *cmd,t_data *data);
+char	*ft_strjoin_char(char const *s1, char const *s2, char c);
 
 // /* TESTERS */
 // void	print_strlist(char **list);

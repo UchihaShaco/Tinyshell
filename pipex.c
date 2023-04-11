@@ -10,12 +10,15 @@
 	// if (i != data->num_cmds - 1 && i > 0 && dup2(data->fd[i][1], STDOUT_FILENO) == -1)
 	// 	error(data);
 
+//To Do:
+//fill in path for each command
+
 void	child_process(int i, t_cmd cmd, t_data *data)
 {
 	int	j;
 
-	if (i == 0)
-		dup2(data->fd[i][1], STDOUT_FILENO);
+	// if (i == 0)
+	// 	dup2(data->fd[i][1], STDOUT_FILENO);
 	if (i > 0)
 		dup2(data->fd[i - 1][0], STDIN_FILENO);
 	if (i != data->num_cmds - 1)
@@ -31,7 +34,6 @@ void	child_process(int i, t_cmd cmd, t_data *data)
 		execute_builtin(data->cmd->array_arg, data);
 	else
 		execve(cmd.path, cmd.array_arg, data->our_env);
-		//need to add path to 
 
 	// if (execve(data->exec_list[i].path, data->exec_list[i].commands, envp) == -1)
 	// 	pipex_error(EXEC_ERR, m, NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_record_arr.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:56:12 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/01 05:20:23 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/11 15:47:02 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void	ts_record_array(t_data *data)
 		{
 			ts_count_arg_for_array(&data->cmd[i]);
 			ts_connect_arg_for_array(&data->cmd[i]);
+			ts_add_cmd_path(data->cmd[i].array_arg[0], &data->cmd[i], data);
 		}
 		i++;
 	}

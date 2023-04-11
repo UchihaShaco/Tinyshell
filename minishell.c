@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/03 10:21:16 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/11 15:28:44 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@ void	init_fd_pid(t_data *data)
 {
 	int	i;
 
-	data->fd = (int **)ft_calloc_e(data->num_cmds - 1, sizeof(int *), data);
+	data->fd = (int **)ft_calloc_e(data->num_cmd - 1, sizeof(int *), data);
+	// data->fd = (int **)ft_calloc(data->num_cmd - 1, sizeof(int *));
 	i = 0;
-	while (i < data->num_cmds - 1)
+	while (i < data->num_cmd - 1)
 	{
 		data->fd[i] = (int *)ft_calloc_e(2, sizeof(int), data);
 		i++;
 	}
-	data->pid = (int *)ft_calloc_e(data->num_cmds, sizeof(int), data);
+	data->pid = (int *)ft_calloc_e(data->num_cmd, sizeof(int), data);
 }
 
 void	init_env(t_data *data, char **envp)
@@ -84,8 +85,8 @@ void	ts_init_data(t_data *data, char ***env, int first)
 	data->home_dir = getenv("HOME");
 	// data->build_in = YES; // flag to check if it's a build in command (YES, NO)
 	data->num_cmd = 0;
-	init_fd_pid(data);
-	init_env(data, *env); //what is char ***env
+	init_env(data, *env);
+	get_env_paths(*env, data);
 }
 
 static int ts_quote_checker(t_data *data, char *line)
@@ -135,10 +136,9 @@ int	ts_parse(t_data *data, char *line)
 	int	i;
 
 	i = 0;
-	// int ik = 0;
-	// int jk = 0;
 	ts_quote_checker(data, line);
 	ts_count_and_record_cmd(data, line);
+	init_fd_pid(data);
 	if (data->num_error != 0 || data->empty_str == YES)
 		return (-1);
 	
@@ -174,9 +174,10 @@ int	main(int argc, char **argv, char **env)
 		ts_signal_ctrl_d(&data, &line);
 		// ts_signal_ctrl_slash(&data, &line);
 		ts_parse(&data, line);
-		// print_t_data(data);
 		add_history(line);
 		// print_t_cmd(data.cmd);
+		print_t_data(data);
+	fflush(stdout);
 			if (data.empty_str == NO)
 		{
 			ts_record_array(&data);
@@ -185,11 +186,12 @@ int	main(int argc, char **argv, char **env)
 		{
 			print_t_cmd(&data.cmd[i]);
 		}
+		// printf("first one: %s\n", data.env_paths[0]);
+		// printf("first one: %s\n", env_paths[0]);
 		// printf("num_cmd = %d\n", data.num_cmd);
 		// ts_free_cycle(&data, &line); // we will have to free the memory something like this 
 		}
 	}
-
 }
 void print_t_cmd(t_cmd *cmd)
 {
@@ -217,6 +219,7 @@ void print_t_cmd(t_cmd *cmd)
     for (int i = 0; cmd->array_arg[i] != NULL; i++)
 	{
         printf("    array_arg[%d]: %s\n", i, cmd->array_arg[i]);
+        printf("    array_path: %s\n", cmd->path);
     }
 	
     printf("\033[1;35m  redir:\033[0m\n");

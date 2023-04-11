@@ -19,7 +19,7 @@ char	*lower_str(char *str, t_data *data)
 	return (low_str);
 }
 
-int	check_builtin(char *str)
+int	check_builtin(char *str, t_data *data)
 {
 	char	*command;
 	int		i;

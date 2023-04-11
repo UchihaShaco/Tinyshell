@@ -27,14 +27,14 @@ void	clear_envlist(t_env **env_list)
 {
 	t_env *cur;
 
-
+	cur = *env_list;
 	while (cur)
 	{
-		cur = *env_list;
 		free(cur->key);
 		free(cur->val);
 		*env_list = cur->next;
 		free(cur);
+		cur = *env_list;
 	}
 	free(env_list);
 }

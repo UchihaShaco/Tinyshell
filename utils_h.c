@@ -53,12 +53,24 @@ void	print_string(int num_str, ...)
 /* calloc with error */
 void	*ft_calloc_e(size_t count, size_t size, t_data *data)
 {
-	char	*buf;
+	// void	*buf;
 
-	buf = ft_calloc(count, size);
-	if (!buf)
+	// buf = ft_calloc(count, size);
+	// if (!buf)
+	// 	error(data);
+	// return (buf);
+	void	*buffer;
+
+	if (size != 0 && count > SIZE_MAX / size)
 		error(data);
-	return (buf);
+	buffer = malloc(count * size);
+	if (!buffer)
+	{
+		printf("error\n");
+		error(data);
+	}
+	ft_bzero(buffer, count * size);
+	return (buffer);
 }
 
 /* placeholder error function */
@@ -78,6 +90,7 @@ void	free_strlist(char **str)
 	{
 		while(str[i])
 		{
+
 			free(str[i]);
 			i++;
 		}
@@ -92,8 +105,7 @@ char	**split_env_var(char *str, t_data *data)
 	int		var_len;
 	int		val_len;
 	char	**ret_split;
-
-	ret_split = (char **)ft_calloc_e(2, sizeof(char *), data);
+	ret_split = (char **)ft_calloc_e(3, sizeof(char *), data);
 	var_len = detect_char(str, '=');
 	ret_split[0] = (char *)ft_calloc_e(var_len + 1, sizeof(char), data);
 	val_len = ft_strlen(str) - (var_len + 1);
@@ -101,5 +113,86 @@ char	**split_env_var(char *str, t_data *data)
 	ft_strlcpy(ret_split[0], str, var_len + 1);
 	str += (var_len + 1);
 	ft_strlcpy(ret_split[1], str, val_len + 1);
+	ret_split[2] = NULL;
 	return (ret_split);
+}
+
+/* get environmental paths */
+void	get_env_paths(char **envp, t_data *data)
+{
+	int		i;
+	// char	**env_paths;
+
+	i = -1;
+	while (envp[++i])
+		if (ft_strncmp("PATH=", envp[i], 5) == 0)
+			break ;
+	if (envp[i] == NULL)
+		return ;
+	while (*(envp[i]) != '/')
+		envp[i]++;
+	data->env_paths = ft_split(envp[i], ':');
+	if (!data->env_paths)
+		return ;
+	// return (env_paths);
+}
+
+/* get path */
+void 	ts_add_cmd_path(char *arg, t_cmd *cmd,t_data *data)
+{
+	int		i;
+	// char	*path;
+	cmd->path = NULL;
+	i = 0;
+	// if (!arg || !detect_alnum(arg)) --> just detect one number or alphabet?????
+	// 	return (NULL);
+	if (access(arg, F_OK) == 0 && access(arg, X_OK) == 0)
+	{
+		cmd->path = ft_strdup_lim(arg, '\0', data);
+		return ;
+	}
+	while (data->env_paths[i])
+	{
+		cmd->path = ft_strjoin_char(data->env_paths[i], arg, '/');
+		printf("test_path: %s\n", cmd->path);
+		if (access(cmd->path, F_OK) == 0 && access(cmd->path, X_OK) == 0)
+		{
+			printf("this path works!: %s\n", cmd->path);
+			// fflush(stdout);
+			// cmd->path = NULL;
+			return ;
+		}
+		else if (access(cmd->path, F_OK) == 0 && access(cmd->path, X_OK) < 0)
+		{
+			free(cmd->path);
+			cmd->path = NULL;
+			return ;
+		}
+		free(cmd->path);
+		cmd->path = NULL;
+		i++;
+	}
+}
+
+/* join with a char */
+char	*ft_strjoin_char(char const *s1, char const *s2, char c)
+{
+	char	*buffer;
+	int		k;
+	int		i;
+
+	if (!s1)
+		return (NULL);
+	if (!s2)
+		k = ft_strlen(s1) + 2;
+	else
+		k = ft_strlen(s1) + ft_strlen(s2) + 2;
+	buffer = (char *)ft_calloc(k, sizeof(char));
+	if (!buffer)
+		return (NULL);
+	i = ft_strlcpy(buffer, s1, k);
+	buffer[i] = c;
+	if (s2)
+		ft_strlcat(buffer, s2, k);
+	return (buffer);
 }
