@@ -177,20 +177,21 @@ int	main(int argc, char **argv, char **env)
 		add_history(line);
 		// print_t_cmd(data.cmd);
 		print_t_data(data);
-	fflush(stdout);
-			if (data.empty_str == NO)
+		fflush(stdout);
+		if (data.empty_str == NO)
 		{
 			ts_record_array(&data);
-		// 	ts_execution(&data, &line); // here what it should look like i think when executing :D
-		for(int i = 0; i < data.num_cmd; i++)
-		{
-			print_t_cmd(&data.cmd[i]);
+			// 	ts_execution(&data, &line); // here what it should look like i think when executing :D
+			for(int i = 0; i < data.num_cmd; i++)
+			{
+				print_t_cmd(&data.cmd[i]);
+			}
+			// printf("first one: %s\n", data.env_paths[0]);
+			// printf("first one: %s\n", env_paths[0]);
+			// printf("num_cmd = %d\n", data.num_cmd);
+			// ts_free_cycle(&data, &line); // we will have to free the memory something like this 
 		}
-		// printf("first one: %s\n", data.env_paths[0]);
-		// printf("first one: %s\n", env_paths[0]);
-		// printf("num_cmd = %d\n", data.num_cmd);
-		// ts_free_cycle(&data, &line); // we will have to free the memory something like this 
-		}
+		pipex(&data);
 	}
 }
 void print_t_cmd(t_cmd *cmd)

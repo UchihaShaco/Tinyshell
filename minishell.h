@@ -22,6 +22,7 @@
 # include <dirent.h>
 # include <signal.h>
 # include <stdarg.h>
+# include <sys/wait.h>
 # include "libft/libft.h"
 
 typedef enum e_value
@@ -193,6 +194,7 @@ void	ft_export(char **arg, t_data *data);
 void	ft_pwd(t_data *data);
 void	ft_unset(char **arg, t_data *data);
 void	execute_builtin(char **arg, int	i, t_data *data);
+int		check_builtin(char *str, t_data *data);
 
 /* ENV VAR */
 t_env	*find_var_envlist(char *key, t_data *data);
@@ -211,6 +213,9 @@ char	**split_env_var(char *str, t_data *data);
 void	get_env_paths(char **envp, t_data *data);
 void	ts_add_cmd_path(char *arg, t_cmd *cmd,t_data *data);
 char	*ft_strjoin_char(char const *s1, char const *s2, char c);
+
+/* EXECUTION */
+int	pipex(t_data *data);
 
 // /* TESTERS */
 // void	print_strlist(char **list);

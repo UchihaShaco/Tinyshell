@@ -53,24 +53,24 @@ void	print_string(int num_str, ...)
 /* calloc with error */
 void	*ft_calloc_e(size_t count, size_t size, t_data *data)
 {
-	// void	*buf;
+	void	*buf;
 
-	// buf = ft_calloc(count, size);
-	// if (!buf)
-	// 	error(data);
-	// return (buf);
-	void	*buffer;
+	buf = ft_calloc(count, size);
+	if (!buf)
+		error(data);
+	return (buf);
+// 	void	*buffer;
 
-	if (size != 0 && count > SIZE_MAX / size)
-		error(data);
-	buffer = malloc(count * size);
-	if (!buffer)
-	{
-		printf("error\n");
-		error(data);
-	}
-	ft_bzero(buffer, count * size);
-	return (buffer);
+// 	if (size != 0 && count > SIZE_MAX / size)
+// 		error(data);
+// 	buffer = malloc(count * size);
+// 	if (!buffer)
+// 	{
+// 		printf("error\n");
+// 		error(data);
+// 	}
+// 	ft_bzero(buffer, count * size);
+// 	return (buffer);
 }
 
 /* placeholder error function */
@@ -154,14 +154,8 @@ void 	ts_add_cmd_path(char *arg, t_cmd *cmd,t_data *data)
 	while (data->env_paths[i])
 	{
 		cmd->path = ft_strjoin_char(data->env_paths[i], arg, '/');
-		printf("test_path: %s\n", cmd->path);
 		if (access(cmd->path, F_OK) == 0 && access(cmd->path, X_OK) == 0)
-		{
-			printf("this path works!: %s\n", cmd->path);
-			// fflush(stdout);
-			// cmd->path = NULL;
 			return ;
-		}
 		else if (access(cmd->path, F_OK) == 0 && access(cmd->path, X_OK) < 0)
 		{
 			free(cmd->path);
