@@ -1,14 +1,6 @@
 #include "minishell.h"
 
-//write dup2 function
-// if (i == 0 && dup2(data->fd[i][1], STDOUT_FILENO) == -1)
-	// 	error(data);
-	// if (i > 0 && dup2(data->fd[i - 1][0], STDIN_FILENO) == -1)
-	// 	error(data);
-	// if (i == data->num_cmd - 1 && dup2(data->file2, STDOUT_FILENO) == -1)
-	// 	error(data);
-	// if (i != data->num_cmd - 1 && i > 0 && dup2(data->fd[i][1], STDOUT_FILENO) == -1)
-	// 	error(data);
+
 
 //remember that when freeing up t_cmd cmd, iterate through count_redir instead of going to null
 // void	free_data(t_data data)
@@ -74,18 +66,41 @@ void	pipe_null(int index, t_data *data)
 	// >> = 4 output redirection but open file for appending
 	// << = 5 heredoc
 
+int	count_delimiters(t_cmd cmd)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (i < cmd.count_redir)
+	{
+		if (cmd.redir[i] == 5)
+			count++;
+		i++;
+	}
+	return (count);
+}
+
 void	redirect(int index, t_cmd cmd, t_data *data)
 {
 	int		i;
 	int		last_input;
 	int		last_output;
 	int		*fd_array;
-	char	*delimiter_array;
-	
+	char	**delimiter_array;
+	int		hd;
+	int		record; 
+	int		fd;
+
 	//if more than 1 redirection, check for double files/redir and remove
 	if (cmd.count_redir > 1)
 		check_redir_doubles(cmd, data);
 	fd_array = (int *)ft_calloc_e(cmd.count_redir, sizeof(int), data);
+	hd = count_delimiters(cmd);
+	if (hd > 0)
+		delimiter_array = (char **)ft_calloc_e(hd + 1, sizeof(char *), data);
+	hd = 0;
 	i = 0;
 	last_input = -1;
 	last_output = -1;
@@ -133,22 +148,30 @@ void	redirect(int index, t_cmd cmd, t_data *data)
 				//open error -> exit
 			last_output = i;
 		}
+		//if << (heredoc), append file to delimiter array
+		//there will be no file opened for this, so fd is -1 (no fd)
 		else if (cmd.redir[i] == 5)
 		{
-			//keep track of heredoc delimiter in an array
-			//if there a heredoc redirector, will have to open up terminal for writing
-			//use readline to print > everytime something is written
-			//heredoc delimiters must be written IN ORDER for it to exit out
-			//if more than one heredoc delimiter
-			//disregard everything written until second to the last delimiter passes
-			//start writing to temporary file everything after that 2nd to last delimiter
-			//unlink temporary file -> in close function??? does fd_array have to be a struct???????
-			//other option is to create a temporary pipe - write to pipe and have command read from read end 
+			delimiter_array[hd] = ft_strdup_lim(cmd.file[i], '\0', data);
+			hd++;
+			fd_array[i] = -1;
 		}
+		//if this redirection was deleted, fd is -1 (no fd)
 		else if (cmd.redir[i] == -1)
 			fd_array[i] = -1;
 		i++;
 	}
+	//if last input redirection is a heredoc, record = 1. Else record is 0
+	//record means to record the string in heredoc into a temp file
+	record = 0;
+	if (cmd.redir[last_input] == 5)
+		record = 1;
+	//if at least one << exists, we must open terminal for heredoc
+	if (*delimiter_array)
+		fd = heredoc_fd(delimiter_array, record, data);
+	//if it's a heredoc, change the fd in array to a proper fd
+	if (record = 1)
+		fd_array[last_input] = fd
 	//if there is no < and it's not the first command, read input from previous pipe
 	if (last_input == -1 && index > 0)
 		dup2_e(data->fd[index - 1][0], STDIN_FILENO, data);
@@ -162,14 +185,14 @@ void	redirect(int index, t_cmd cmd, t_data *data)
 	else if (last_output > -1)
 	{
 		dup2_e(fd_array[last_output], STDOUT_FILENO, data);
-		if (index != data->num_cmd - 1)
-			pipe_null(index, data);
+		// if (index != data->num_cmd - 1)
+		// 	pipe_null(index, data);
 	}
 	//close all files
 	i = 0;
 	while (i < cmd.count_redir)
 	{
-		if (cmd.file[i])
+		if (fd_array[i] != -1)
 			close(fd_array[i]);
 		i++;
 	}
