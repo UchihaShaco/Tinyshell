@@ -68,7 +68,7 @@ typedef struct s_cmd
 	char	**file;
 	// int		fd[2]; // i think it will be used for piping
 	// int		redir_born[2]; // i think it will be 
-	int		last_redir; // last redir in the command
+	int		last_redir; // last redir in the command, don't need
 	int		num_arg;
 	int		num_array_arg; // parsing part 
 	int		count_redir; // c
@@ -104,12 +104,10 @@ typedef struct s_data
 	int		num_prev_error; // to give exit value a number
 	int		num_env;
 	char	**our_env; 
-	char	**tmp_var; // unsued empty tmp var
-	int		num_tmp_var; // no need just an empty tmp var 
 	char	*prev_dir; // previous directory
 	char	*cur_dir; // current directory
 	char	*home_dir; // home directory 
-	int		flag_old; // something  could be used to keep track of prev direc
+	//int		flag_old; not used // something  could be used to keep track of prev direc
 	int		empty_str; // flag for main function to know o execute or no
 	int		**fd; // your pipes no idea how to use 😇 ;) --> we need to malloc this
 	int		*pid;

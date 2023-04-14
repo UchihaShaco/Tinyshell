@@ -1,0 +1,6 @@
+1. check to make sure arg is ./minishell only and env exists
+2. Initialize data
+2a. Print data
+3. Take input 
+4. Parse data
+5. Run commands

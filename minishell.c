@@ -69,13 +69,11 @@ void	ts_init_data(t_data *data, char ***env, int first)
 {
 	if (first == YES)
 	{
-		data->flag_old = 1;
-		data->prev_dir = NULL;
+		//data->flag_old = 1;
+	//	data->prev_dir = NULL;
 		data->cur_dir = getcwd(NULL, 0);
 		data->num_prev_error = 0; // check header :P
 		data->num_error = 0;
-		data->num_tmp_var = 0; // just a tmp var might be useful
-		data->tmp_var = NULL;
 		ts_init_env(data, env);
 		data->name_file = NO; // flag to check if it's a file (YES, NO)
 	}
@@ -168,30 +166,36 @@ int	main(int argc, char **argv, char **env)
 	ts_init_data(&data, &env, YES);
 	while (1)
 	{
-		ts_get_signal();
-		ts_init_data(&data, &env, NO);
+		ts_get_signal(); //what's this?
+		ts_init_data(&data, &env, NO); //why init again?
 		line = readline("\033[1;35mTinyShell > \033[0m");
-		ts_signal_ctrl_d(&data, &line);
+		ts_signal_ctrl_d(&data, &line); //what's this?
 		// ts_signal_ctrl_slash(&data, &line);
-		ts_parse(&data, line);
+		ts_parse(&data, line); 
 		add_history(line);
-		// print_t_cmd(data.cmd);
-		print_t_data(data);
-		fflush(stdout);
 		if (data.empty_str == NO)
 		{
 			ts_record_array(&data);
+			print_t_cmd(data.cmd);
+			// pipex(&data);
 			// 	ts_execution(&data, &line); // here what it should look like i think when executing :D
-			for(int i = 0; i < data.num_cmd; i++)
-			{
-				print_t_cmd(&data.cmd[i]);
-			}
+		
+			// for(int i = 0; i < data.num_cmd; i++)
+			// {
+			// 	print_t_cmd(&data.cmd[i]);
+			// }
+
 			// printf("first one: %s\n", data.env_paths[0]);
 			// printf("first one: %s\n", env_paths[0]);
 			// printf("num_cmd = %d\n", data.num_cmd);
 			// ts_free_cycle(&data, &line); // we will have to free the memory something like this 
 		}
-		pipex(&data);
+		// data.cmd++;
+		// print_t_cmd(data.cmd);
+		// data.cmd++;
+		// print_t_cmd(data.cmd);
+		// print_t_data(data);
+		// fflush(stdout);
 	}
 }
 void print_t_cmd(t_cmd *cmd)
@@ -217,6 +221,7 @@ void print_t_cmd(t_cmd *cmd)
     // }
 
     printf(" \033[1;35m array_arg:\033[0m\n");
+	fflush(stdout);
     for (int i = 0; cmd->array_arg[i] != NULL; i++)
 	{
         printf("    array_arg[%d]: %s\n", i, cmd->array_arg[i]);
