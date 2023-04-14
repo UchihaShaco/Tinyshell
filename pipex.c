@@ -36,14 +36,14 @@ void	check_redir_doubles(t_cmd cmd, t_data *data)
 				if (cmd.redir[i] == cmd.redir[j] || (cmd.redir[i] == 3 && cmd.redir[j] == 4))
 				{
 					free(cmd.file[j]);
-					cmd.file[j] == NULL;
-					cmd.redir[j] == -1;
+					cmd.file[j] = NULL;
+					cmd.redir[j] = -1;
 				}
 				else if (cmd.redir[i] == 4 && cmd.redir[j] == 3)
 				{
 					free(cmd.file[i]);
-					cmd.file[i] == NULL;
-					cmd.redir[i] == -1;
+					cmd.file[i] = NULL;
+					cmd.redir[i] = -1;
 				}
 			}
 			j++;
@@ -69,43 +69,47 @@ void	pipe_null(int index, t_data *data)
 	dup2(devnull, data->fd[index][1]);
 	close(devnull);
 }
-
-		
 	// < = 2 input redirection
 	// > = 3 output redirection
 	// >> = 4 output redirection but open file for appending
+	// << = 5 heredoc
 
 void	redirect(int index, t_cmd cmd, t_data *data)
 {
-	int	j;
-	int	last_input;
-	int	last_output;
+	int		i;
+	int		last_input;
+	int		last_output;
+	int		*fd_array;
+	char	*delimiter_array;
 	
 	//if more than 1 redirection, check for double files/redir and remove
 	if (cmd.count_redir > 1)
 		check_redir_doubles(cmd, data);
+	fd_array = (int *)ft_calloc_e(cmd.count_redir, sizeof(int), data);
 	i = 0;
 	last_input = -1;
 	last_output = -1;
-	while (i < count_redir)
+	while (i < cmd.count_redir)
 	{
 		//if <, open file as rdonly.
 		//if error, close all other files and return (1) --> give null to next pipe
 		if (cmd.redir[i] == 2)
 		{
-			if (open(cmd.file[i], O_RDONLY) == -1)
+			fd_array[i] = open(cmd.file[i], O_RDONLY);
+			if (fd_array[i] == -1)
 			{
-				error(data); 
 				//write error
 				//close all other files
 				while (i <= 0)
 				{
-					close(cmd.file[i]);
+					close(fd_array[i]);
 					i--;
 				}
+				free(fd_array);
 				//send null to pipe output
 				if (index != data->num_cmd - 1)
-					null_output(index, data);
+					pipe_null(index, data);
+				//error(data);
 				return ;
 			}
 			//track last_input to dup2
@@ -114,7 +118,8 @@ void	redirect(int index, t_cmd cmd, t_data *data)
 		//if >, create file and track last output to put into dup2
 		else if (cmd.redir[i] == 3)
 		{
-			if (open(cmd.file[i], O_CREAT | O_RDWR | O_TRUNC, 0666) == -1)
+			fd_array[i] = open(cmd.file[i], O_CREAT | O_RDWR | O_TRUNC, 0666);
+			if (fd_array[i] == -1)
 				error(data); 
 				//open error -> exit
 			last_output = i;
@@ -122,34 +127,53 @@ void	redirect(int index, t_cmd cmd, t_data *data)
 		//if >>, open file for appending and track last output to put into dup2
 		else if (cmd.redir[i] == 4)
 		{
-			if (open(cmd.file[i], O_CREAT | O_RDWR | O_APPEND, 0666) == -1)
-				error(data);
+			fd_array[i] = open(cmd.file[i], O_CREAT | O_RDWR | O_APPEND, 0666);
+			if (fd_array[i] == -1)
+				error(data); 
 				//open error -> exit
 			last_output = i;
 		}
+		else if (cmd.redir[i] == 5)
+		{
+			//keep track of heredoc delimiter in an array
+			//if there a heredoc redirector, will have to open up terminal for writing
+			//use readline to print > everytime something is written
+			//heredoc delimiters must be written IN ORDER for it to exit out
+			//if more than one heredoc delimiter
+			//disregard everything written until second to the last delimiter passes
+			//start writing to temporary file everything after that 2nd to last delimiter
+			//unlink temporary file -> in close function??? does fd_array have to be a struct???????
+			//other option is to create a temporary pipe - write to pipe and have command read from read end 
+		}
+		else if (cmd.redir[i] == -1)
+			fd_array[i] = -1;
 		i++;
 	}
 	//if there is no < and it's not the first command, read input from previous pipe
 	if (last_input == -1 && index > 0)
-		dup2_e(data->fd[index - 1][0], STDIN_FILENO);
+		dup2_e(data->fd[index - 1][0], STDIN_FILENO, data);
 	//if there is a < read input from file
-	else
-		dup2_e(cmd.file[last_input], STDIN_FILENO);
+	else if (last_input > -1)
+		dup2_e(fd_array[last_input], STDIN_FILENO, data);
 	//if there is no > or >> and it is not the last command, write results into pipe
 	if (last_output == -1 && index != data->num_cmd - 1)
-		dup2_e(data->fd[index][1], STDOUT_FILENO);
+		dup2_e(data->fd[index][1], STDOUT_FILENO, data);
 	//else if there is > or >>, write results into file
-	else
+	else if (last_output > -1)
 	{
-		dup2_e(cmd.file[last_output], STDOUT_FILENO);
+		dup2_e(fd_array[last_output], STDOUT_FILENO, data);
 		if (index != data->num_cmd - 1)
-			null_output(index, data);
+			pipe_null(index, data);
 	}
 	//close all files
-	i = -1;
-	while (++i < cmd.count_redir)
+	i = 0;
+	while (i < cmd.count_redir)
+	{
 		if (cmd.file[i])
-			close(cmd.file[i]);
+			close(fd_array[i]);
+		i++;
+	}
+		
 
 }
 
@@ -158,6 +182,8 @@ void	redirect(int index, t_cmd cmd, t_data *data)
 //if there is an output redirection only, dup stdin
 	//send null to read end of pipe
 //if both input and output redirection, don't dup pipes
+
+
 
 void	child_process(int i, t_cmd cmd, t_data *data)
 {

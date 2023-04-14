@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/11 15:28:44 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/14 15:51:03 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ int	main(int argc, char **argv, char **env)
 		{
 			ts_record_array(&data);
 			print_t_cmd(data.cmd);
-			// pipex(&data);
+			pipex(&data);
 			// 	ts_execution(&data, &line); // here what it should look like i think when executing :D
 		
 			// for(int i = 0; i < data.num_cmd; i++)
