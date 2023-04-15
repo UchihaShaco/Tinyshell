@@ -165,7 +165,6 @@ int	ts_count_and_record_cmd(t_data *data, char *line)
 //     printf("    int num_env: %d\n", data.num_env);
 //     printf("    char **our_env: %p\n", data.our_env);
 //     printf("    char **tmp_var: %p\n", data.tmp_var);
-//     printf("    int num_tmp_var: %d\n", data.num_tmp_var);
 //     printf("    char *prev_dir: %p\n", data.prev_dir);
 //     printf("    char *cur_dir: %s\n", data.cur_dir);
 //     printf("    char *home_dir: %s\n", data.home_dir);
