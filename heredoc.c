@@ -38,9 +38,13 @@ int	count_delimiters(t_cmd *cmd)
 char	*init_str(char *input, t_data *data)
 {
 	char	*str;
+	int		len;
 
-	str = (char *)ft_calloc_e(ft_strlen(input) + 1, sizeof(char), data);
-	ft_strlcpy(str, input, ft_strlen(input) + 1);
+	len = ft_strlen(input) + 2;
+
+	str = (char *)ft_calloc_e(len, sizeof(char), data);
+	ft_strlcpy(str, input, len);
+	ft_strlcat(str, "\n", len);
 	free(input);
 	return (str);
 }
@@ -57,7 +61,8 @@ char	*generate_heredoc(t_cmd *cmd, int record_hd, t_data *data)
 	{
 		input = readline("> ");
 		//while i = index of the delimiter, it has not hit the delimiter yet
-		if (ft_strncmp(input, cmd->hd_array[i], ft_strlen(input)))
+		
+		if (ft_strncmp(input, cmd->hd_array[i], ft_strlen(input)) == 0)
 			i++;
 		else if (i == cmd->count_hd - 1 && record_hd == 1)
 		{
@@ -65,13 +70,14 @@ char	*generate_heredoc(t_cmd *cmd, int record_hd, t_data *data)
 				str = init_str(input, data);
 			else
 			{
-				new_str = ft_strjoin(str, input); //do we need to make a new function for this too for malloc error
+				new_str = ft_strjoin_e(str, input, data); //do we need to make a new function for this too for malloc error
 				free(str);
 				free(input);
 				str = new_str;
 			}
 		}
 	}
+	printf("the final string is: %s\n", str);
 	return (str);
 }
 

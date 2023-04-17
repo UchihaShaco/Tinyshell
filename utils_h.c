@@ -197,3 +197,37 @@ void	dup2_e(int oldfd, int newfd, t_data *data)
 	if (dup2(oldfd, newfd) == -1)
 		error(data);
 }
+
+/* print list of strings */
+void	print_strlist(char **list)
+{
+	int	i;
+
+	i = 0;
+	if (!list)
+		printf("(null)");
+	while (list[i])
+	{
+		printf("%s\n", list[i]);
+		i++;
+	}
+	// printf("\n");
+}
+
+/* ft_strjoin for heredoc with error management and addition of \n at the end */
+char	*ft_strjoin_e(char const *s1, char const *s2, t_data *data)
+{
+	char	*buffer;
+	int		k;
+
+	if (!s1 || !s2)
+		return (NULL);
+	k = ft_strlen(s1) + ft_strlen(s2) + 2;
+	buffer = (char *)malloc(sizeof(char) * k);
+	if (!buffer)
+		error(data);
+	ft_strlcpy(buffer, s1, k);
+	ft_strlcat(buffer, s2, k);
+	ft_strlcat(buffer, "\n", k);
+	return (buffer);
+}

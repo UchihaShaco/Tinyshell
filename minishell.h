@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/11 15:51:08 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/17 18:01:35 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,7 @@ void	get_env_paths(char **envp, t_data *data);
 void	ts_add_cmd_path(char *arg, t_cmd *cmd,t_data *data);
 char	*ft_strjoin_char(char const *s1, char const *s2, char c);
 void	dup2_e(int oldfd, int newfd, t_data *data);
+char	*ft_strjoin_e(char const *s1, char const *s2, t_data *data);
 
 /* EXECUTION */
 int	pipex(t_data *data);
@@ -227,7 +228,7 @@ int	count_delimiters(t_cmd *cmd);
 void	get_heredoc_fd(t_cmd *cmd, int record_hd, t_data *data);
 
 // /* TESTERS */
-// void	print_strlist(char **list);
+void	print_strlist(char **list);
 // void	print_data(t_data *data);
 void print_t_cmd(t_cmd *cmd);
 

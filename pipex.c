@@ -149,8 +149,11 @@ void	redirect(int index, t_cmd *cmd, t_data *data)
 	//if last input redirection is a heredoc, record_hd = 1. Else record_hd is 0
 	//record_hd means to record_hd the string in heredoc into a temp file
 	record_hd = 0;
-	if (cmd->redir[cmd->last_input] == 5)
+	if (cmd->last_input > -1 && cmd->redir[cmd->last_input] == 5)
 		record_hd = 1;
+	printf("count_hd = %i\n", cmd->count_hd);
+	printf("record_hd = %i\n", record_hd);
+	print_strlist(cmd->hd_array);
 	if (cmd->count_hd > 0)
 		get_heredoc_fd(cmd, record_hd, data);
 	//if there is no < and it's not the first command, read input from previous pipe
@@ -179,7 +182,8 @@ void	child_process(int i, t_cmd *cmd, t_data *data)
 	int	k;
 	int	j;
 
-	redirect(i, cmd, data);
+	if (cmd->count_redir > 0)
+		redirect(i, cmd, data);
 	j = 0;
 	while (j < data->num_cmd - 1)
 	{
@@ -188,6 +192,7 @@ void	child_process(int i, t_cmd *cmd, t_data *data)
 		j++;
 	}
 	k = check_builtin(data->cmd->array_arg[0], data);
+	printf("k: %i\n", k);
 	if (k != 0)
 		execute_builtin(data->cmd->array_arg, k, data);
 	else
