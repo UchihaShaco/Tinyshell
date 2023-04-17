@@ -137,6 +137,26 @@ void	get_env_paths(char **envp, t_data *data)
 	// return (env_paths);
 }
 
+// void	get_env_paths(char **envp, t_data *data)
+// {
+// 	int		i;
+// 	// char	**env_paths;
+
+// 	i = -1;
+// 	while (envp[++i])
+// 		if (ft_strncmp("PATH=", envp[i], 5) == 0)
+// 			break ;
+// 	if (envp[i] == NULL)
+// 		return ;
+// 	while (*(envp[i]) != '/')
+// 		envp[i]++;
+// 	data->env_paths = ft_split(envp[i], ':');
+// 	if (!data->env_paths)
+// 		return ;
+// 	// return (env_paths);
+// }
+
+
 /* get path */
 void 	ts_add_cmd_path(char *arg, t_cmd *cmd,t_data *data)
 {

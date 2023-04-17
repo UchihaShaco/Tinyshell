@@ -7,3 +7,4 @@
 
 -have to use your copy of environmental variables
 -make sure paths is also edited -> because that is linked to env variables
+-edit get_env_paths
