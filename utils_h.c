@@ -190,3 +190,10 @@ char	*ft_strjoin_char(char const *s1, char const *s2, char c)
 		ft_strlcat(buffer, s2, k);
 	return (buffer);
 }
+
+/* dup2 with error */
+void	dup2_e(int oldfd, int newfd, t_data *data)
+{
+	if (dup2(oldfd, newfd) == -1)
+		error(data);
+}

@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+/* this is mostly for the builtins */
+
 //find if a variable exists and return the pointer to the variable if it exists. If not return NULL
 t_env	*find_var_envlist(char *key, t_data *data)
 {

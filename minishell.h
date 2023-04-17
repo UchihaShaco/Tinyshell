@@ -46,7 +46,12 @@ typedef enum e_value
 	ERR_TOKEN = 258, // is not a standard exit code in bash, but some applications may use it to indicate a syntax error or unexpected token in the command line.
 	ERR_NUM_ONE = 1, // can be used to indicate a generic error or failure.
 	ERR_FILE_OR_DIR = 126, //126 typically indicates that the specified file or directory cannot be found or accessed by the shell.
-}				t_value;
+}	t_value;
+
+// < = 2 input redirection
+// > = 3 output redirection
+// >> = 4 output redirection but open file for appending
+// << = 5 heredoc
 
 typedef struct s_arg
 {
@@ -56,66 +61,63 @@ typedef struct s_arg
 	int		redir;  // idk might be usefl later for parsing
 	int		empty_key; // idk why i did this but i think it was for the envp and $ sign maybe
 
-}				t_arg;
-
-typedef struct s_cmd
-{
-	char	*str; // saving command as a string
-	t_arg	*arg;
-	char	**array_arg;
-	char	*path;
-	int		*redir;
-	char	**file;
-	// int		fd[2]; // i think it will be used for piping
-	// int		redir_born[2]; // i think it will be 
-	int		last_redir; // last redir in the command, don't need
-	int		num_arg;
-	int		num_array_arg; // parsing part 
-	int		count_redir; // c
-	int		bad_file; // flag for error might need in excution (yes or no)
-	int		array_empty;
-
-}				t_cmd;
-
-typedef struct	s_env
-{
-	char			*key;
-	char			*val;
-	int				p; //for printed
-	struct s_env	*next;
-	struct s_env	*prev;
-}	t_env;
+}	t_arg;
 
 typedef struct s_tmp
 {
 	int		size_str;
 	int		size_cut;		
 	int		count; 
-}				t_tmp; 
+}	t_tmp; 
+
+typedef struct s_cmd
+{
+	char	*str; //parsing - saving command as a string
+	t_arg	*arg; //parsing
+	char	**array_arg;
+	char	**hd_array; //array of heredoc delimiters in order
+	char	*path;
+	char	**file;
+	int		*redir;
+	int		*fd_array; //array of open files for redirections
+	int		count_hd; //number of heredocs
+	int		num_arg;
+	int		num_array_arg; //parsing
+	int		count_redir; 
+	int		array_empty;
+	int		last_output;
+	int		last_input;
+}	t_cmd;
+
+typedef struct	s_env
+{
+	char			*key;
+	char			*val;
+	int				p; //printed: 1, not printed: 0
+	struct s_env	*next;
+	struct s_env	*prev;
+}	t_env;
 
 typedef struct s_data
 {
-	t_cmd	*cmd;
-	t_tmp	tmp;     // tmp struct to help with parsing and cutting file names
 	t_env	**env_list;
+	t_cmd	*cmd;
+	t_tmp	tmp; // tmp struct to help with parsing and cutting file names
 	char	**env_paths;
-	int		num_cmd; // number of commands
+	char	**our_env; 
+	char	*cur_dir;
+	char	*home_dir;
+	int		**fd;
+	int		*pid;
+	int		num_cmd; 
 	int		num_error;  // error token ERR_TOKEN / DOUBLE_Q_MARK etc..
 	int		num_prev_error; // to give exit value a number
 	int		num_env;
-	char	**our_env; 
-	char	*prev_dir; // previous directory
-	char	*cur_dir; // current directory
-	char	*home_dir; // home directory 
-	//int		flag_old; not used // something  could be used to keep track of prev direc
 	int		empty_str; // flag for main function to know o execute or no
-	int		**fd; // your pipes no idea how to use 😇 ;) --> we need to malloc this
-	int		*pid;
 	int		name_file; // not used so far
 	int		build_in; // flag to know if its a build in cmd (YES,NO)
-	// int		*pid;
 	int		n_end;
-}				t_data;
+}	t_data;
 
 /* *********************  Quotation parse  ********************* */
 void	ts_create_struct_without_qm(t_cmd *cmd);
@@ -184,6 +186,10 @@ void	print_t_data(struct s_data data);
 // void	print_arg(t_arg *arg);
 void	print_t_cmd(t_cmd *cmd);
 
+/* DATA */
+void	ts_init_data(t_data *data, char ***env, int first);
+void	init_fd_pid(t_data *data);
+
 /* BUILTINS */
 void	ft_cd(char **arg, t_data *data);
 void	ft_echo(char **str, t_data *data);
@@ -211,12 +217,18 @@ char	**split_env_var(char *str, t_data *data);
 void	get_env_paths(char **envp, t_data *data);
 void	ts_add_cmd_path(char *arg, t_cmd *cmd,t_data *data);
 char	*ft_strjoin_char(char const *s1, char const *s2, char c);
+void	dup2_e(int oldfd, int newfd, t_data *data);
 
 /* EXECUTION */
 int	pipex(t_data *data);
 
+/* HEREDOC */
+int	count_delimiters(t_cmd *cmd);
+void	get_heredoc_fd(t_cmd *cmd, int record_hd, t_data *data);
+
 // /* TESTERS */
 // void	print_strlist(char **list);
 // void	print_data(t_data *data);
+void print_t_cmd(t_cmd *cmd);
 
 #endif

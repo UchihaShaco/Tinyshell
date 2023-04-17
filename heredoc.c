@@ -17,6 +17,24 @@
 //unlink temporary file -> in close function??? does fd_array have to be a struct???????
 //other option is to create a temporary pipe - write to pipe and have command read from read end 
 
+#include "minishell.h"
+
+int	count_delimiters(t_cmd *cmd)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (i < cmd->count_redir)
+	{
+		if (cmd->redir[i] == 5)
+			count++;
+		i++;
+	}
+	return (count);
+}
+
 char	*init_str(char *input, t_data *data)
 {
 	char	*str;
@@ -27,32 +45,27 @@ char	*init_str(char *input, t_data *data)
 	return (str);
 }
 
-void	heredoc(char **delimiter_array, int record, t_data *data)
+char	*generate_heredoc(t_cmd *cmd, int record_hd, t_data *data)
 {
 	char	*input;
-	int		num_delimiters;
-	int		i;
 	char	*str;
 	char	*new_str;
+	int		i;
 
 	str = NULL;
-	num_delimiters = 0;
-	while (delimiter_array[num_delimiters] != NULL)
-		num_delimiters ++;
-	i = 0;
-	while (i < num_delimiters)
+	while (i < cmd->count_hd)
 	{
 		input = readline("> ");
 		//while i = index of the delimiter, it has not hit the delimiter yet
-		if (ft_strncmp(input, delimiter_array[i], ft_strlen(input)))
+		if (ft_strncmp(input, cmd->hd_array[i], ft_strlen(input)))
 			i++;
-		else if (i == num_delimiters - 1 && record == 1)
+		else if (i == cmd->count_hd - 1 && record_hd == 1)
 		{
 			if (!str)
 				str = init_str(input, data);
 			else
 			{
-				new_str = ft_strjoin(str, input); //do we need to make a new function for this too
+				new_str = ft_strjoin(str, input); //do we need to make a new function for this too for malloc error
 				free(str);
 				free(input);
 				str = new_str;
@@ -62,16 +75,22 @@ void	heredoc(char **delimiter_array, int record, t_data *data)
 	return (str);
 }
 
-int	heredoc_fd(char ** delimiter_array, int record, t_data *data)
+void	get_heredoc_fd(t_cmd *cmd, int record_hd, t_data *data)
 {
 	int		fd[2];
 	char	*str;
 
-	if (pipe(fd) == -1)
-		error(data);
-	str = here_doc(delimiter_array, record, data);
-	write(fd[1], str, ft_strlen(str));
-	free(str);
-	close(fd[1]);
-	return (fd[0]);
+	str = NULL;
+	//only create pipe if we have to input a heredoc
+	if (record_hd == 1)
+		if (pipe(fd) == -1)
+			error(data);
+	str = generate_heredoc(cmd, record_hd, data);
+	if (record_hd == 1)
+	{
+		write(fd[1], str, ft_strlen(str));
+		free(str);
+		close(fd[1]);
+		cmd->fd_array[cmd->last_input] = fd[0];
+	}
 }

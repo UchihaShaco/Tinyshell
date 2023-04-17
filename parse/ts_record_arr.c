@@ -108,6 +108,11 @@ void	ts_record_array(t_data *data)
 			ts_count_arg_for_array(&data->cmd[i]);
 			ts_connect_arg_for_array(&data->cmd[i]);
 			ts_add_cmd_path(data->cmd[i].array_arg[0], &data->cmd[i], data);
+			data->cmd[i].last_output = -1;
+			data->cmd[i].last_input = -1;
+			data->cmd[i].hd_array = NULL; //Is this calloc'd? If it is, we don't have to initiate to NULL
+			data->cmd[i].fd_array = NULL;
+			data->cmd[i].count_hd = 0;
 		}
 		i++;
 	}

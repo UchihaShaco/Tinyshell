@@ -15,7 +15,7 @@ SRCS =	minishell.c parse/ts_signals.c parse/ts_malloc.c parse/ts_count_record_cm
 	parse/ts_free.c parse/ts_record_val.c ts_utils.c parse/ts_quotation_marks.c parse/ts_record_arr.c parse/ts_measure_size_file_name.c parse/ts_init_env.c \
 	parse/ts_found_dollar.c utils.c \
 	builtin/builtin.c builtin/cd.c builtin/echo.c builtin/env.c builtin/exit.c builtin/export.c builtin/pwd.c builtin/unset.c \
-	env_var.c utils_h.c pipex.c
+	env_var.c utils_h.c pipex.c init_data.c heredoc.c testers.c
 
 CC = cc
 
