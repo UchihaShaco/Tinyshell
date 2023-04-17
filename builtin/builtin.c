@@ -60,6 +60,7 @@ void	execute_builtin(char **arg, int	i, t_data *data)
 		ft_env(data);
 	// else if (i == 7)
 	// 	ft_exit(data);
+	exit(0);
 }
 
 // void	execute_builtin(char **arg, int	i, t_data *data)

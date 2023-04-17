@@ -4,3 +4,6 @@
 3. Take input 
 4. Parse data
 5. Run commands
+
+-have to use your copy of environmental variables
+-make sure paths is also edited -> because that is linked to env variables

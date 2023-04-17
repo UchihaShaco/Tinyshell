@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/17 17:50:04 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/17 18:45:36 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	main(int argc, char **argv, char **env)
 		if (data.empty_str == NO)
 		{
 			ts_record_array(&data);
-			print_t_cmd(data.cmd);
+			// print_t_cmd(data.cmd);
 			pipex(&data);
 			// ts_free_cycle(&data, &line); // we will have to free the memory something like this 
 		}

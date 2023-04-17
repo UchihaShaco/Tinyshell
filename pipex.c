@@ -153,7 +153,7 @@ void	redirect(int index, t_cmd *cmd, t_data *data)
 		record_hd = 1;
 	printf("count_hd = %i\n", cmd->count_hd);
 	printf("record_hd = %i\n", record_hd);
-	print_strlist(cmd->hd_array);
+	// print_strlist(cmd->hd_array);
 	if (cmd->count_hd > 0)
 		get_heredoc_fd(cmd, record_hd, data);
 	//if there is no < and it's not the first command, read input from previous pipe
@@ -192,7 +192,7 @@ void	child_process(int i, t_cmd *cmd, t_data *data)
 		j++;
 	}
 	k = check_builtin(data->cmd->array_arg[0], data);
-	printf("k: %i\n", k);
+	// printf("k: %i\n", k);
 	if (k != 0)
 		execute_builtin(data->cmd->array_arg, k, data);
 	else
@@ -247,4 +247,3 @@ int	pipex(t_data *data)
 	status = parent_process(data);
 	return (WEXITSTATUS(status));
 }
-
