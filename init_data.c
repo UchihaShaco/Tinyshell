@@ -57,7 +57,7 @@ void	ts_init_data(t_data *data, char ***env, int first)
 		ts_init_env(data, env);
 		data->name_file = NO; // flag to check if it's a file (YES, NO)
 		init_env(data, *env); //init linked list env variables
-		get_env_paths(*env, data); //list of environmental paths (for execve)
+		data->our_env = NULL; //init this to NULL
 	}
 	data->num_prev_error = data->num_error;
 	data->num_error = 0;

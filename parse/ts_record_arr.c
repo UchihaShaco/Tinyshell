@@ -100,6 +100,9 @@ void	ts_record_array(t_data *data)
 		}
 		return ;
 	}
+	/* we populate env_paths temporarily and then free it in the same function.
+	This way, we anticipate the modification of PATHS via unset or export*/
+	get_env_paths(data);
 	while (i < data->num_cmd)
 	{
 		data->cmd[i].array_empty = YES;
@@ -115,6 +118,11 @@ void	ts_record_array(t_data *data)
 			data->cmd[i].count_hd = 0;
 		}
 		i++;
+	}
+	if (data->env_paths)
+	{
+		free_strlist(data->env_paths);
+		data->env_paths = NULL;
 	}
 	// if (data->num_error == 0 && data->cmd[0].str != NULL)
 	// 	ts_found_variable(data);

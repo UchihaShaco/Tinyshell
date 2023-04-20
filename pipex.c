@@ -151,8 +151,8 @@ void	redirect(int index, t_cmd *cmd, t_data *data)
 	record_hd = 0;
 	if (cmd->last_input > -1 && cmd->redir[cmd->last_input] == 5)
 		record_hd = 1;
-	printf("count_hd = %i\n", cmd->count_hd);
-	printf("record_hd = %i\n", record_hd);
+	// printf("count_hd = %i\n", cmd->count_hd);
+	// printf("record_hd = %i\n", record_hd);
 	// print_strlist(cmd->hd_array);
 	if (cmd->count_hd > 0)
 		get_heredoc_fd(cmd, record_hd, data);

@@ -55,6 +55,8 @@ void	ft_export(char **arg, t_data *data)
 		print_export(data);
 		return ;
 	}
+	if (data->num_cmd <= 1)
+		return ;
 	while (arg[i])
 	{
 		//if no '=', add var if it doesn't exist, otherwise do nothing

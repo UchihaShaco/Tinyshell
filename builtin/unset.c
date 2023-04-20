@@ -44,6 +44,8 @@ void	ft_unset(char **arg, t_data *data)
 	int		i;
 	t_env	*env_var;
 
+	if (data->num_cmd <= 1)
+		return ;
 	i = 1;
 	if (!arg[i])
 	{
@@ -52,6 +54,7 @@ void	ft_unset(char **arg, t_data *data)
 	}
 	else
 	{
+		
 		while (arg[i])
 		{
 			env_var = find_var_envlist(arg[i], data);
@@ -62,3 +65,6 @@ void	ft_unset(char **arg, t_data *data)
 		modify_our_env(NULL, data);
 	}
 }
+
+
+

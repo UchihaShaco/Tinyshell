@@ -7,4 +7,8 @@
 
 -have to use your copy of environmental variables
 -make sure paths is also edited -> because that is linked to env variables
--edit get_env_paths
+-unset and export only works as commands on their own
+	-except if export only, which produces a list of variables in alpha order
+
+2. Initialize data
+	

@@ -85,6 +85,7 @@ int	main(int argc, char **argv, char **env)
 		ts_get_signal();
 		ts_init_data(&data, &env, NO); 
 		line = readline("\033[1;35mTinyShell > \033[0m");
+		//line = readline(data->cwd);
 		ts_signal_ctrl_d(&data, &line);
 		// ts_signal_ctrl_slash(&data, &line);
 		ts_parse(&data, line); 

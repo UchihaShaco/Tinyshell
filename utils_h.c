@@ -118,23 +118,54 @@ char	**split_env_var(char *str, t_data *data)
 }
 
 /* get environmental paths */
-void	get_env_paths(char **envp, t_data *data)
+// void	get_env_paths(t_data *data)
+// {
+// 	int		i;
+// 	t_env	**env_list;
+
+// 	env_list = data->env_list;
+// 	while (data->env_list)
+// 	{
+// 		if (ft_strncmp("PATH", (*data->env_list)->key, 5) == 0)
+// 			break ;
+// 		env_list = env_list->next;
+// 	}
+// 	if (data->env_list == NULL || data->env_list->val == NULL)
+// 		return ;
+// 	//this checks for garbage values in path
+// 	while (*data->env_list->val && *(data->env_list->val) != '/')
+// 		data->env_list->val++;
+// 	if (data->env_list->val == NULL)
+// 		return ;
+// 	data->env_paths = ft_split(data->env_list->val, ':');
+// 	if (!data->env_paths) //malloc error
+// 		return ;
+// }
+
+void	get_env_paths(t_data *data)
 {
 	int		i;
-	// char	**env_paths;
+	t_env	*cur;
 
-	i = -1;
-	while (envp[++i])
-		if (ft_strncmp("PATH=", envp[i], 5) == 0)
+	if (!data->env_list || !*data->env_list)
+		return ;
+	cur = *data->env_list;
+	while (cur)
+	{
+		if (ft_strncmp("PATH", cur->key, 5) == 0)
 			break ;
-	if (envp[i] == NULL)
+		cur = cur->next;
+	}
+	if (cur == NULL || cur->val == NULL)
 		return ;
-	while (*(envp[i]) != '/')
-		envp[i]++;
-	data->env_paths = ft_split(envp[i], ':');
-	if (!data->env_paths)
+	//this checks for garbage values in path
+	while (cur->val && *(cur->val) != '/')
+		cur->val++;
+	if (cur->val == NULL)
 		return ;
-	// return (env_paths);
+	data->env_paths = ft_split(cur->val, ':');
+	if (!data->env_paths) //malloc error
+		return ;
 }
 
 // void	get_env_paths(char **envp, t_data *data)
@@ -171,6 +202,12 @@ void 	ts_add_cmd_path(char *arg, t_cmd *cmd,t_data *data)
 		cmd->path = ft_strdup_lim(arg, '\0', data);
 		return ;
 	}
+	if (!data->env_paths)
+	{
+		cmd->path = NULL;
+		return ;
+	}
+	//-bash: grep: NO such file or directory
 	while (data->env_paths[i])
 	{
 		cmd->path = ft_strjoin_char(data->env_paths[i], arg, '/');

@@ -112,11 +112,10 @@ typedef struct s_data
 	int		num_cmd; 
 	int		num_error;  // error token ERR_TOKEN / DOUBLE_Q_MARK etc..
 	int		num_prev_error; // to give exit value a number
-	int		num_env;
+	int		num_env; // -> do you really need this? can you use null instead, otherwise this number will have to be changed everytime
 	int		empty_str; // flag for main function to know o execute or no
 	int		name_file; // not used so far
-	int		build_in; // flag to know if its a build in cmd (YES,NO)
-	int		n_end;
+	// int		n_end;
 }	t_data;
 
 /* *********************  Quotation parse  ********************* */
@@ -214,7 +213,7 @@ void	*ft_calloc_e(size_t count, size_t size, t_data *data);
 char	*ft_strdup_lim(const char *s1, char c, t_data *data);
 void	free_strlist(char **str);
 char	**split_env_var(char *str, t_data *data);
-void	get_env_paths(char **envp, t_data *data);
+void	get_env_paths(t_data *data);
 void	ts_add_cmd_path(char *arg, t_cmd *cmd,t_data *data);
 char	*ft_strjoin_char(char const *s1, char const *s2, char c);
 void	dup2_e(int oldfd, int newfd, t_data *data);
