@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/20 09:05:08 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/20 09:45:08 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void	ts_init_data(t_data *data, char ***env, int first)
 	// data->fd_pipe[0] = 0; something you need 
 	// data->fd_pipe[1] = 0; same as above
 }
+
+/*Basically this function to return an error if theres an odd number of quotation marks */
 
 static	int	ts_quote_checker(t_data *data, char *line)
 {
