@@ -110,19 +110,16 @@ int	main(int argc, char **argv, char **env)
 		ts_parse(&data, line);
 		// print_t_data(data);
 		add_history(line);
-		// print_t_cmd(data.cmd);
-			if (data.empty_str == NO)
+		if (data.empty_str == NO)
 		{
 			ts_record_array(&data);
-		// 	ts_execution(&data, &line); // here what it should look like i think when executing :D
-		for(int i = 0; i < data.num_cmd; i++)
-		{
-			print_t_cmd(&data.cmd[i]);
+			//modify final cmd here
+			for(int i = 0; i < data.num_cmd; i++)
+				print_t_cmd(&data.cmd[i]);
+			//execute here
+			ts_free_all(&data, &line); // we will have to free the memory something like this 
 		}
-		// printf("num_cmd = %d\n", data.num_cmd);
-		ts_free_all(&data, &line); // we will have to free the memory something like this 
-		}
-}
+	}
 
 }
 

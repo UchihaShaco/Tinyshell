@@ -39,6 +39,7 @@ typedef enum e_value
 	// ERR_Q_MARK, // unsused so far
 	// ADD_TO_OLD, //might be helpful for exporting
 	// ADD_NEW, // might be helpful for exporting
+	ERR_MALLOC,
 	DOUBLE_Q_MARK = 34,
 	ONE_Q_MARK = 39,
 	ERR_CMD = 127, // typically indicates that the specified command could not be found or executed by the shell.
@@ -59,21 +60,24 @@ typedef struct s_arg
 
 typedef struct s_cmd
 {
+	/* parsing only */
 	char	*str; // saving command as a string
-	t_arg	*arg;
-	char	**array_arg;
-	int		*redir;
-	char	**file;
-	int		fd[2]; // with redir_born[2] i think it will be used for piping
-	int		redir_born[2]; // 
-	int		last_redir; // last redir in the command
-	int		num_arg;
-	int		num_array_arg; // 
-	char	*way_cmd; // path to cmd
-	int		count_redir; // c
-	int		bad_file; // flag for error might need in excution (yes or no)
+	t_arg	*arg; 
+	int		num_array_arg;
 	int		array_empty;
-
+	/* execution */
+	char	**array_arg; //arg array
+	char	**hd_array; //array of heredoc delimiters
+	char	**file; //files for redirection
+	char	*path; //path for cmd (execve)
+	int		*redir; //array of redirections in cmd
+	int		*fd_array; //array of open files for redirections
+	int		num_arg;
+	int		count_redir;
+	int		count_hd;
+	int		record_hd;
+	int		last_output; // last redir in the command
+	int		last_input;
 }				t_cmd;
 
 typedef struct s_tmp
@@ -174,4 +178,14 @@ void	ts_record_array(t_data *data);
 void	print_t_data(struct s_data data);
 // void	print_arg(t_arg *arg);
 void	print_t_cmd(t_cmd *cmd);
+
+/* UTILS */
+int		ft_strcmp(const char *s1, const char *s2);
+void	*ts_calloc(size_t count, size_t size, t_data *data);
+char	*ft_strdup_lim(const char *s1, char c, t_data *data);
+void	error(int error, t_data *data);
+
+/* FREE */
+void	free_strlist(char **str);
+
 #endif
