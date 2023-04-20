@@ -1,0 +1,183 @@
+
+echo
+sleep 0.6
+echo echo
+sleep 0.6
+eCho 
+sleep 0.6
+eChO
+sleep 0.6
+eCHO
+sleep 0.6
+ECHO
+sleep 0.6
+echo rhobebou
+sleep 0.6
+echo stop barking
+sleep 0.6
+echo "bonjour"
+sleep 0.6
+echo bonjour
+sleep 0.6
+echo 'bonjour'
+sleep 0.6
+echo -n bonjour
+sleep 0.6
+echo -nn bonjour
+sleep 0.6
+echo -n -n -n bonjour
+sleep 0.6
+echo -n -n -n bonjour
+sleep 0.6
+echo "-n" bonjour
+sleep 0.6
+echo -n"-n" bonjour
+sleep 0.6
+echo "-nnnn" bonjour
+sleep 0.6
+echo "-n -n -n"-n bonjour
+sleep 0.6
+echo "-n '-n'" bonjour
+sleep 0.6
+echo ~
+sleep 0.6
+echo "~"
+sleep 0.6
+echo '~'
+sleep 0.6
+echo ~123
+sleep 0.6
+echo 123~
+sleep 0.6
+echo ~/123
+sleep 0.6
+echo ~/123/456
+sleep 0.6
+echo $USER
+sleep 0.6
+echo "$USER"
+sleep 0.6
+echo "'$USER'"
+sleep 0.6
+echo " '$USER' "
+sleep 0.6
+echo text"$USER"
+sleep 0.6
+echo text"'$USER'" ' $USER '
+sleep 0.6
+echo "text"   "$USER"    "$USER"
+sleep 0.6
+echo '              $USER          '
+sleep 0.6
+echo               text "$USER"            "$USER"text
+sleep 0.6
+echo ''''''''''$USER''''''''''
+sleep 0.6
+echo """"""""$USER""""""""
+sleep 0.6
+echo $USER'$USER'text oui oui     oui  oui $USER oui      $USER ''
+sleep 0.6
+echo $USER '' $USER $USER '' $USER '' $USER -n $USER
+sleep 0.6
+echo ' \' ' \'
+sleep 0.6
+echo '\" ' " \"\""
+sleep 0.6
+echo \\\" \\\" \\\" \\\"\\\"\\\" \\\'\\\'\\\'
+sleep 0.6
+echo "$USER""$USER""$USER"
+sleep 0.6
+echo text"$USER"test
+sleep 0.6
+echo '$USER' "$USER" "text \' text"
+sleep 0.6
+echo '$USER'
+sleep 0.6
+echo $USER " "
+sleep 0.6
+echo "$USER""Users/$USER/file""'$USER'"'$USER'
+sleep 0.6
+echo "$USER$USER$USER"
+sleep 0.6
+echo '$USER'"$USER"'$USER'
+sleep 0.6
+echo '"$USER"''$USER'"""$USER"
+sleep 0.6
+echo " $USER  "'$PWD'
+sleep 0.6
+echo " $USER  \$ "'$PWD'
+sleep 0.6
+echo $USER=4
+sleep 0.6
+echo $USER=thallard
+sleep 0.6
+echo $USER
+sleep 0.6
+echo $?
+sleep 0.6
+echo $USER213
+sleep 0.6
+echo $USER$12USER$USER=4$USER12
+sleep 0.6
+echo $USER $123456789USER $USER123456789
+sleep 0.6
+echo $USER $9999USER $8888USER $7777USER
+sleep 0.6
+echo $USER $USER9999 $USER8888 $USER7777
+sleep 0.6
+echo $USER $USER9999 $USER8888 $USER7777 "$USER"
+sleep 0.6
+echo "$USER=12$USER"
+sleep 0.6
+echo "$9USER" "'$USER=12$SOMETHING'"
+sleep 0.6
+echo $PWD/file
+sleep 0.6
+echo "$PWD/file"
+sleep 0.6
+echo "text" "text$USER" ... "$USER"
+sleep 0.6
+echo $PWD
+sleep 0.6
+
+sleep 0.6
+test
+sleep 0.6
+| test
+sleep 0.6
+echo > <
+sleep 0.6
+echo | |
+EechoE
+sleep 0.6
+.echo.
+sleep 0.6
+>echo>
+sleep 0.6
+<echo<
+sleep 0.6
+>>echo>>
+sleep 0.6
+echo
+sleep 0.6
+|echo|
+sleep 0.6
+echo
+sleep 0.6
+echo something
+sleep 0.6
+rm -f something
+sleep 0.6
+cat something
+sleep 0.6
+| echo -n oui
+sleep 0.6
+echo -n oui
+echo oui | cat -e
+sleep 0.6
+echo oui | echo non | echo something | grep oui
+sleep 0.6
+echo oui | echo non | echo something | grep non
+sleep 0.6
+echo oui | echo non | echo something | grep something
+sleep 0.6

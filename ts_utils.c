@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 03:29:53 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/02/26 12:41:29 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/03 13:35:14 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	ts_record_str(char **file, char *str, int start, int size_str)
 	}
 	(*file)[i] = '\0';
 }
+
 int	ts_cut_qm_in_name_file(char **file)
 {
 	int		i;

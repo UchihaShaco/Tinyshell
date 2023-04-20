@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/03 10:21:16 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/20 09:05:08 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	ts_err_argc_argv(int argc, char **argv, char **env)
 		exit(127);
 	}
 }
+
 void	ts_init_data(t_data *data, char ***env, int first)
 {
 	if (first == YES)
@@ -44,18 +45,18 @@ void	ts_init_data(t_data *data, char ***env, int first)
 	// data->fd_pipe[1] = 0; same as above
 }
 
-static int ts_quote_checker(t_data *data, char *line)
+static	int	ts_quote_checker(t_data *data, char *line)
 {
-	int i = 0;
-	int qm_o = 1;
-	int qm_d = 1;
-	// printf("line = %s\n ", line);
-	while(line[i] != '\0')
-	{
-		ts_switch_qm(line[i], &qm_o, &qm_d);
-		// printf(">>> %c <<< ( single %d) ------ (double %d)",line[i] , qm_o, qm_d);
-		i++;
-	}
+	int	i;
+	int	qm_o;
+	int	qm_d;
+
+	i = 0;
+	qm_o = 1;
+	qm_d = 1;
+
+	while (line[i] != '\0')
+		ts_switch_qm(line[i++], &qm_o, &qm_d);
 	if (qm_o == -1 || qm_d == -1)
 	{
 		data->num_error = ERR_TOKEN;
@@ -65,39 +66,16 @@ static int ts_quote_checker(t_data *data, char *line)
 	}
 	return (0);
 }
-// ts_found_dollar_sign(t_data *data, char *str)
-// {
-// 	int i = 0;
-// 	int j = 0;
 
-// 	while (str[i] != '\0')
-// 	{
-// 		if (str[i] == '$')
-// 		{
-// 			j = i;
-// 			while (str[j] != '\0')
-// 			{
-// 				if (str[j] == ' ')
-// 					break;
-// 				j++;
-// 			}
-// 			ts_found_env_variable(data, str, i, j);
-// 		}
-// 		i++;
-// 	}
-// }
 int	ts_parse(t_data *data, char *line)
 {
 	int	i;
 
 	i = 0;
-	// int ik = 0;
-	// int jk = 0;
 	ts_quote_checker(data, line);
 	ts_count_and_record_cmd(data, line);
 	if (data->num_error != 0 || data->empty_str == YES)
 		return (-1);
-	
 	while (i < data->num_cmd)
 	{
 		if (data->num_error == 0)
@@ -110,7 +88,6 @@ int	ts_parse(t_data *data, char *line)
 			ts_found_env_variable(data, &data->cmd[i]);
 		i++;
 	}
-		
 	i = 0;
 	return (0);
 }
@@ -128,7 +105,6 @@ int	main(int argc, char **argv, char **env)
 		ts_init_data(&data, &env, NO);
 		line = readline("\033[1;35mTinyShell > \033[0m");
 		ts_signal_ctrl_d(&data, &line);
-		// ts_signal_ctrl_slash(&data, &line);
 		ts_parse(&data, line);
 		// print_t_data(data);
 		add_history(line);
@@ -142,11 +118,12 @@ int	main(int argc, char **argv, char **env)
 			print_t_cmd(&data.cmd[i]);
 		}
 		// printf("num_cmd = %d\n", data.num_cmd);
-		// ts_free_cycle(&data, &line); // we will have to free the memory something like this 
+		ts_free_all(&data, &line); // we will have to free the memory something like this 
 		}
 }
 
 }
+
 void print_t_cmd(t_cmd *cmd)
 {
     // printf("\033[1;35m t_cmd: \n\033[0m");
@@ -157,7 +134,6 @@ void print_t_cmd(t_cmd *cmd)
     // printf("  count_redir: %d\n", cmd->count_redir);
     // // printf("  bad_file: %d\n", cmd->bad_file);
     // printf("  array_empty: %d\n", cmd->array_empty);
-
     printf("\033[1;35m everything inside the   cmd->arg.str :\n\033[0m");
     // for (int i = 0; i < cmd->num_arg; i++)
 	// {
@@ -174,7 +150,7 @@ void print_t_cmd(t_cmd *cmd)
 	{
         printf("    array_arg[%d]: %s\n", i, cmd->array_arg[i]);
     }
-	
+	    
     printf("\033[1;35m  redir:\033[0m\n");
     for (int i = 0; i < cmd->count_redir; i++) 
 	{

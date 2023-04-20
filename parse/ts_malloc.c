@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 04:48:38 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/17 22:28:05 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/20 09:03:42 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,16 @@ void	ts_malloc_str(char **name, int size)
 		exit(EXIT_FAILURE);
 	}
 }
+/*stupid conditional jump had to be fixed here intitalizing space 😒😒😒 */
 
 void	ts_malloc_arg(t_arg **arg, int size)
 {
 	(*arg) = malloc(sizeof(t_arg) * (size + 1));
+	while (size >= 0)
+	{
+		(*arg)[size].space = NO;
+		size--;
+	}
 	if ((*arg) == NULL)
 	{
 		write(2, "Tinyshell: Allocation memory error\n", 35);

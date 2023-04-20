@@ -6,11 +6,12 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:56:12 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/01 05:20:23 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/20 08:43:47 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
 void	ts_count_arg_for_array(t_cmd *cmd)
 {
 	int	i;

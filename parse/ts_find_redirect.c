@@ -6,11 +6,11 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 21:40:55 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/01 06:09:09 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/20 06:33:46 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+ #include "../minishell.h"
 
 void	ts_init_emum_redir(t_cmd *cmd, int *i_orig, int num_redir)
 {
@@ -52,7 +52,7 @@ int	ts_error_parse_redir(t_data *data, char *s, int i)
 			if (s[i + 1] == '>')
 				return (ts_error(data->num_error, ">>"));
 			else
-					return (ts_error(data->num_error, ">"));
+				return (ts_error(data->num_error, ">"));
 		}
 		if (s[i] == '<')
 		{
@@ -160,6 +160,10 @@ int	 ts_found_redirect(t_cmd *cmd, t_data *data)
 	return (0);
 }
 
+/* record redir and file get the index of the first character
+of the file name(start) andthe size of file name(size_str)to record the
+file name in the array of strings (cmd->file[num_redir]) and record the
+type of redirection in the array of integers (cmd->redir[num_redir]) */
 int	ts_record_redir_and_file(t_cmd *cmd, int i, int num_redir, t_data *d)
 {
 	int	start;

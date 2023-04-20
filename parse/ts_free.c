@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 19:09:51 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/01 04:41:31 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/19 00:35:45 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,62 @@ void	ts_free_int_arr(int **int_arr)
 	{
 		free(*int_arr);
 		*int_arr = NULL;
+	}
+}
+
+void	ts_free_all(t_data *data, char **line)
+{
+	if (data->our_env != NULL)
+		ts_free_arr(&data->our_env);
+	ts_free_cycle(data, line);
+	if (data->tmp_var != NULL)
+		ts_free_arr(&data->tmp_var);
+	ts_free_str(&data->prev_dir);
+	ts_free_str(&data->cur_dir);
+}
+
+void	ts_free_arg(t_data *data, int y)
+{
+	int	x;
+
+	x = 0;
+	if (data->cmd[y].num_arg > 0)
+	{
+		while (x < data->cmd[y].num_arg)
+		{
+			ts_free_str(&data->cmd[y].arg[x].str);
+			x++;
+		}
+		free(data->cmd[y].arg);
+		data->cmd[y].arg = NULL;
+	}
+}
+
+void	ts_free_cycle(t_data *data, char **line)
+{
+	int	y;
+
+	y = 0;
+	ts_free_str(line);
+	if (data->num_cmd > 0)
+	{
+		while (y < data->num_cmd)
+		{
+			ts_free_arg(data, y);
+			if (data->cmd[y].str != NULL)
+				ts_free_str(&data->cmd[y].str);
+			if (data->cmd[y].array_empty == NO)
+				ts_free_arr(&data->cmd[y].array_arg);
+			if (data->cmd[y].count_redir > 0)
+			{
+				ts_free_int_arr(&data->cmd[y].redir);
+				ts_free_arr(&data->cmd[y].file);
+			}
+			// if (data->cmd[y].way_cmd != NULL) // what ever name it is 
+			// 	ts_free_str(&data->cmd[y].way_cmd); // what ever name it is
+			y++;
+		}
+		free(data->cmd);
+		data->cmd = NULL;
 	}
 }

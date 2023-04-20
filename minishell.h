@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/01 04:24:11 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/19 00:35:11 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <fcntl.h>
 # include <dirent.h>
 # include <signal.h>
+# include <stdint.h>
 
 typedef enum e_value
 {
@@ -64,7 +65,7 @@ typedef struct s_cmd
 	int		*redir;
 	char	**file;
 	int		fd[2]; // with redir_born[2] i think it will be used for piping
-	int		redir_born[2]; // i think it will be used along with fd[2] 
+	int		redir_born[2]; // 
 	int		last_redir; // last redir in the command
 	int		num_arg;
 	int		num_array_arg; // 
@@ -89,18 +90,18 @@ typedef struct s_data
 	int		num_cmd; // number of commands
 	int		num_error;  // error token ERR_TOKEN / DOUBLE_Q_MARK etc..
 	int		num_prev_error; // to give exit value a number
-	int		num_env;
-	char	**our_env; 
-	char	**tmp_var; // unsued empty tmp var
-	int		num_tmp_var; // no need just an empty tmp var 
-	char	*prev_dir; // previous directory
+	char	*prev_dir; // previous directory did not use it yet
 	char	*cur_dir; // current directory
 	char	*home_dir; // home directory 
+	char	**our_env;
+	int		num_env;
+	char	**tmp_var; // unsued empty tmp var
+	int		num_tmp_var; // no need just an empty tmp var 
 	int		flag_old; // something  could be used to keep track of prev direc
 	int		empty_str; // flag for main function to know o execute or no
+	int		name_file; // used to check if file name is empty
 	int		fd_pipe[2]; // your pipes no idea how to use 😇 ;)
-	int		name_file; // not used so far
-	int		build_in; // flag to know if its a build in cmd (YES,NO)
+	int		built_in; // flag to know if its a build in cmd (YES,NO)
 	// int		*pid;
 	int		n_end;
 }				t_data;
@@ -114,7 +115,6 @@ void	ts_search_space_after_arg(char *str, t_arg *arg, int i);
 void	ts_switch_qm(char c, int *qm_o, int *qm_d);
 int		ts_cut_qm_in_name_file(char **file);
 int		ts_count_args_without_qm(t_cmd *cmd, int i);
-int		ts_count_arg_divided_qm(t_cmd *cmd, t_data *data);
 int		ts_check_quotation_marks(t_cmd *cmd, int i, t_data *data);
 // void ts_quote_check(char *line);
 /* *********************  Parse  ********************* */
@@ -148,6 +148,9 @@ void	ts_malloc_str(char **name, int size);
 void	ts_malloc_arg(t_arg **arg, int size);
 void	ts_malloc_cmd(t_cmd **cmd, int size);
 void	ts_malloc_arr_int(int **arr_int, int size);
+void	ts_free_cycle(t_data *data, char **line);
+void	ts_free_all(t_data *data, char **line);
+
 /* ********************* 	signals		  ********************* */
 // apparently i need to include it in the header file to use it otherwise it wont compile  even tho i have its library included
 void	rl_replace_line(const char *text, int clear_undo); 

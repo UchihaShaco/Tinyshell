@@ -430,3 +430,51 @@ minishell $> ls
 minishell $> ls
 minishell $> l;s
 mi...
+
+basheer cases 
+fd leaks
+
+ls | ajsdf | ls
+adjsfd < Makefile 
+""
+!!!!!!!!!!!!! v
+echo ihih | ""cat"" | ls | < l | pwd | cat -n << p
+>
+>
+>
+>
+> p 
+minishell < L | < k | >> L << P > a | cat j
+
+----------------------------------------------------------
+memory leaks
+
+export p='$'
+$p
+cat Makefile | pwd | cat '-e' | wc -l > p 
+
+----------------------------------------------------------
+parsing
+
+cat << $POKPO
+ours: syntax error
+bash: starts heredoc with $POKPO as delim 
+
+<< $POP cat 
+ours: takes cat as delim because $POP expands to nothing
+
+env > $Q
+should be ambigious redirect i guess (what an annoying case >_>)
+
+----------------------------------------------------------
+exit issue 
+
+exit f f 
+ours: displays both error msgs, wrong
+exit '' 
+ours: does not detect it as non numeric, takes atoi value as it is, wrong
+
+export rule
+export identifiers key part rule:	can only start with alpha or _, and rest 
+                                    of the name can only be alphanumeric or _,
+								 	otherwise its an invalid identifier \

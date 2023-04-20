@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 19:12:09 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/01 00:42:35 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/05 03:35:23 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <string.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <stdint.h>
 
 typedef struct s_list
 {

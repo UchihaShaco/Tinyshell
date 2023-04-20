@@ -1,0 +1,60 @@
+cd 
+sleep 0.6
+cd .. 
+sleep 0.6
+cd . 
+sleep 0.6
+cd /Users 
+sleep 0.6
+cd // 
+sleep 0.6
+cd '//' 
+sleep 0.6
+cd ////// 
+sleep 0.6
+cd ./././ 
+sleep 0.6
+cd /
+sleep 0.6
+cd '/////' 2>/dev/null 
+sleep 0.6
+cd '/etc' 
+sleep 0.6
+cd '/var' 
+sleep 0.6
+cd "$PWD/file_tests" 
+sleep 0.6
+cd "doesntexist" 
+sleep 0.6
+cd "doesntexist" 2>/dev/null 
+sleep 0.6
+cd ../../..
+sleep 0.6
+cd "wtf" 2>/dev/null 
+sleep 0.6
+cd .. 
+sleep 0.6
+cd ..
+sleep 0.6
+cd ?
+sleep 0.6
+cd +
+sleep 0.6
+cd _
+sleep 0.6
+cd woof
+sleep 0.6
+cd bark bark
+sleep 0.6
+cd '/' 
+sleep 0.6
+cd $PWD/file_tests 
+sleep 0.6
+cd $OLDPWD/something 
+cd .. | echo "something"
+sleep 0.6
+cd .. | echo "something"
+sleep 0.6
+cd / | echo "something"
+sleep 0.6
+cd .. | pwd

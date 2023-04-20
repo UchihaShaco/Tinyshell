@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 03:31:14 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/03 10:25:42 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/19 10:29:16 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ void	ts_record_tail(char **tmp, char **str, int t, int start_tail)
 	ts_free_str(tmp);
 }
 
+/* start is the index of the first character of the key
+we use while(s < start ) to get to the start of the key to give counter t the index 
+*/
+
 void	ts_replace_key_to_value(char **str, int key, char *value, int start)
 {
 	int		s;
@@ -42,7 +46,7 @@ void	ts_replace_key_to_value(char **str, int key, char *value, int start)
 	s = 0;
 	t = 0;
 	size = ft_strlen(*str) + ft_strlen(value) - key;
-	if (size <= 0)
+	if (size <= 0) // if the key is empty or the value is empty it will be replaced with an empty string it can go to below 0 if the key is longer than the value
 	{
 		ts_free_str(str);
 		ts_malloc_str(str, 0);
@@ -61,6 +65,12 @@ void	ts_replace_key_to_value(char **str, int key, char *value, int start)
 	ts_record_tail(&tmp, str, t, start + key);
 }
 
+/* records the key  in seperate string and returns the length of the key
+ * if the key is a digit it returns 1 and sets digit_key to YES
+ * if the key is a string it returns the length of the key and sets digit_key to NO
+ * if the key is a string it also mallocs the key string
+ * if the key is a digit it does not malloc the key string
+*/
 int	ts_record_key(char *s, int i, char **key, int *digit_key)
 {
 	int	n;
@@ -110,7 +120,13 @@ int	ts_search_var(t_data *data, char **value, char *key)
 	}
 	return (-1);
 }
-
+/*
+ * value is the value of the key
+ i++ to skip the $
+ first call of ts_replace_key_to_value is to replace str with empty string NULL
+ then second call str is replaced with the value
+ we put i - 1 for the start of the key because we want to replace the key with the value
+*/
 int	ts_record_value(t_data *data, char **str, int i)
 {
 	int		n;
@@ -130,6 +146,7 @@ int	ts_record_value(t_data *data, char **str, int i)
 	}
 	if (value == NULL && data->name_file == YES)
 		return (i);
+
 	ts_replace_key_to_value(str, 1, NULL, (i - 1));
 	ts_replace_key_to_value(str, n, value, (i - 1));
 	ts_free_str(&value);

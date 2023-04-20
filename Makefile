@@ -6,7 +6,7 @@
 #    By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/09 11:48:59 by jalwahei          #+#    #+#              #
-#    Updated: 2023/04/01 07:07:55 by jalwahei         ###   ########.fr        #
+#    Updated: 2023/04/05 04:37:58 by jalwahei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ SRCS =	minishell.c parse/ts_signals.c parse/ts_malloc.c parse/ts_count_record_cm
 
 CC = cc
 
-CFLAGS = -I. -g -fsanitize=address -Wall -Wextra
+CFLAGS = -I. -g -Wall -Wextra
 
 OBJS = $(SRCS:.c=.o)
 

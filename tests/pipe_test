@@ -1,0 +1,39 @@
+sleep 0.6
+env | grep "_="
+sleep 0.6
+env | grep "SHLVL"
+sleep 0.6
+ifconfig | grep ":"
+sleep 0.6
+ifconfig | grep nothing
+sleep 0.6
+whoami | grep $USER
+sleep 0.6
+whoami | grep $USER > tmp/file
+sleep 0.6
+whoami | cat -e | cat -e > tmp/file 
+sleep 0.6
+cat Makefile | grep "FLAGS"
+sleep 0.6
+cat Makefile | cat -e | cat -e
+sleep 0.6
+cat Makefile | grep "FLAGS" | grep "FLAGS" | cat -e
+sleep 0.6
+unset TEST | cat -e
+sleep 0.6
+echo test | cat -e | cat -e | cat -e
+sleep 0.6
+whereis ls | cat -e | cat -e > test
+sleep 0.6
+echo test | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e
+sleep 0.6
+ls -la | grep "."
+sleep 0.6
+whereis grep > tmp/file 
+sleep 0.6
+whereis grep > tmp/file
+sleep 0.6
+ls -la > tmp/file
+sleep 0.6
+ls -la > tmp/file 
+sleep 0.6
