@@ -46,11 +46,9 @@ static int	ts_check_empty_and_err_token_pipe(t_data *data, char *line)
 
 static int	ts_get_size_one_cmd_str(char *line, int *start, int size)
 {
-	int	i;
 	int	qm_d;
 	int	qm_o;
 
-	i = 0;
 	qm_o = 1;
 	qm_d = 1;
 	while (line[(*start) + size] != '\0')

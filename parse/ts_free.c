@@ -46,9 +46,6 @@ void	ts_free_arr(char ***arr)
 
 void	ts_free_int_arr(int **int_arr)
 {
-	int	i;
-
-	i = 0;
 	if (*int_arr)
 	{
 		free(*int_arr);
