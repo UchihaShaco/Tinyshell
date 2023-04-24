@@ -40,6 +40,7 @@ typedef enum e_value
 	// ADD_TO_OLD, //might be helpful for exporting
 	// ADD_NEW, // might be helpful for exporting
 	ERR_MALLOC,
+	ERR_OPEN,
 	DOUBLE_Q_MARK = 34,
 	ONE_Q_MARK = 39,
 	ERR_CMD = 127, // typically indicates that the specified command could not be found or executed by the shell.
@@ -187,5 +188,14 @@ void	error(int error, t_data *data);
 
 /* FREE */
 void	free_strlist(char **str);
+
+/* HEREDOC */
+void	get_heredoc(t_cmd *cmd, t_data *data);
+
+/* DATA & CMD*/
+void	finalize_cmd(t_data *data);
+
+/* TESTING */
+void	print_tcmd(t_cmd *cmd);
 
 #endif

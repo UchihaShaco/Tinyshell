@@ -8,7 +8,7 @@
 	while (s1[i] && s2[i])
 	{
 		if (s1[i] != s2[i])
-			break;
+			break ;
 		i++;
 	}
 	return (s1[i] - s2[i]);
@@ -21,7 +21,7 @@ void	*ts_calloc(size_t count, size_t size, t_data *data)
 
 	buf = ft_calloc(count, size);
 	if (!buf)
-		error(MALLOC_ERR, data);
+		error(ERR_MALLOC, data);
 	return (buf);
 }
 
@@ -39,12 +39,35 @@ char	*ft_strdup_lim(const char *s1, char c, t_data *data)
 	return (ret_str);
 }
 
+char	*ft_strjoin_char(char const *s1, char const *s2, char c, t_data *data)
+{
+	char	*buffer;
+	int		len;
+	int		i;
+
+	if (!s1)
+		return (NULL);
+	len = ft_strlen(s1) + ft_strlen(s2) + 2;
+	buffer = (char *)ft_calloc(len, sizeof(char));
+	if (!buffer)
+		error(ERR_MALLOC, data);
+	i = ft_strlcpy(buffer, s1, len);
+	buffer[i] = c;
+	if (s2)
+		ft_strlcat(buffer, s2, len);
+	return (buffer);
+}
+
 /* placeholder error function*/
 void	error(int error, t_data *data)
 {
 	(void)data;
-	if (error = ERR_MALLOC)
+	if (error == ERR_MALLOC)
 		write(2, "Tinyshell: Allocation memory error\n", 35);
+	else if (error == ERR_OPEN)
+		write(2, "Tinyshell: Open function error\n", 31);
+	else if (error == ERR_PIPE)
+		write(2, "Tinyshell: Pipe function error\n", 31);
 	//free(data);
 	exit(EXIT_FAILURE);
 }

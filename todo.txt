@@ -5,24 +5,34 @@ Redirection rules
 -input 
 	all files are opened even if they are not the final input
 	if both < and << are present, the last one will be counted as the file - they can point to the same "filename" because << points to a delimiter rather than a file
+< = 2
+> = 3
+>> = 4
+<< = 5
+
 Finalize data
 .1. modify cmd
-	-modify char **file
-	-modify int *redir
-	-create char **hd_array
-	-create int count_hd
-	-create int record_hd
-	-create int *fd_array
-	-create int last_output
-	-create int_last_input
+	-modify char **file -
+	-modify int *redir -
+	-create char **hd_array - 
+	-create int count_hd -c
+	-create int *fd_array -
+	-create int record_hd -
+	-create int last_output -
+	-create int_last_input -
 	-create char *path
 
 FILES added:
 mod_cmd.c
 utils_h.c
 free.c
+testers.c
+heredoc.c
 
 NOTES to discuss: 
 -ts_malloc.c -> this can probably be reduced to one function -> see ft_calloc_e
 -ts_cound_and_record_cmd.c -> if you use calloc, no need to intialize to NULL and 0 (tcmd){}
-	
+-ts_malloc_cmd ->why size + 1? This is an array of cmd, so the last one is not a pointer but rather an empty cmd struct
+
+ERRORS
+-bash: warning: here-document at line 116 delimited by end-of-file (wanted `hello')
