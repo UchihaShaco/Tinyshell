@@ -48,15 +48,17 @@ int	 ts_found_env_variable(t_data *data, t_cmd *cmd)
 
 void	ts_found_dollar(t_data *data, char **str, int q_m, int *i_orig)
 {
-	int	i;
+	int		i;
+	char	*home;
 
 	i = (*i_orig);
 	if (i == 0 && (*str)[i] == '~' && (*str)[i + 1] == '\0'
 		&& q_m != 39 && q_m != 34)
 	{
+		home = find_home_dir(data);
 		ts_free_str(str);
-		(*str) = ft_strdup(data->home_dir);
-		i = ft_strlen(data->home_dir) - 1;
+		(*str) = ft_strdup(home);
+		i = ft_strlen(home) - 1;
 	}
 	if ((*str)[i] == '$' && (*str)[i + 1] == '$')
 		i += 2;

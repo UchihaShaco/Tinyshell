@@ -58,9 +58,9 @@ void	ts_free_all(t_data *data, char **line)
 	if (data->our_env != NULL)
 		ts_free_arr(&data->our_env);
 	ts_free_cycle(data, line);
-	if (data->tmp_var != NULL)
-		ts_free_arr(&data->tmp_var);
-	ts_free_str(&data->prev_dir);
+	// if (data->tmp_var != NULL)
+	// 	ts_free_arr(&data->tmp_var);
+	// ts_free_str(&data->prev_dir);
 	ts_free_str(&data->cur_dir);
 }
 

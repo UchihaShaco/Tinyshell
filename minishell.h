@@ -23,6 +23,9 @@
 # include <dirent.h>
 # include <signal.h>
 # include <stdint.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <stdarg.h>
 
 typedef enum e_value
 {
@@ -41,6 +44,10 @@ typedef enum e_value
 	// ADD_NEW, // might be helpful for exporting
 	ERR_MALLOC,
 	ERR_OPEN,
+	ERR_DUP,
+	ERR_EXEC,
+	ERR_FORK,
+	ERR_PRINT,
 	DOUBLE_Q_MARK = 34,
 	ONE_Q_MARK = 39,
 	ERR_CMD = 127, // typically indicates that the specified command could not be found or executed by the shell.
@@ -88,27 +95,35 @@ typedef struct s_tmp
 	int		count; 
 }				t_tmp; 
 
+typedef struct	s_env
+{
+	char			*key;
+	char			*val;
+	int				p; //printed: 1, not printed: 0
+	struct s_env	*next;
+	struct s_env	*prev;
+}	t_env;
+
 typedef struct s_data
 {
-	t_cmd	*cmd;
+	/* parsing only */
 	t_tmp	tmp;     // tmp struct to help with parsing and cutting file names
-	int		num_cmd; // number of commands
 	int		num_error;  // error token ERR_TOKEN / DOUBLE_Q_MARK etc..
 	int		num_prev_error; // to give exit value a number
-	char	*prev_dir; // previous directory did not use it yet
-	char	*cur_dir; // current directory
-	char	*home_dir; // home directory 
-	char	**our_env;
 	int		num_env;
-	char	**tmp_var; // unsued empty tmp var
-	int		num_tmp_var; // no need just an empty tmp var 
-	int		flag_old; // something  could be used to keep track of prev direc
 	int		empty_str; // flag for main function to know o execute or no
 	int		name_file; // used to check if file name is empty
-	int		fd_pipe[2]; // your pipes no idea how to use 😇 ;)
-	int		built_in; // flag to know if its a build in cmd (YES,NO)
-	// int		*pid;
-	int		n_end;
+	/* execution */
+	t_cmd	*cmd;
+	t_env	**env_list;
+	char	**our_env;
+	char	**env_paths;
+	char	*old_dir;
+	char	*cur_dir;
+	int		**fd;
+	int		*pid;
+	int		num_cmd;
+	// char	*home_dir; //I think home_dir should be found from t_env 
 }				t_data;
 
 /* *********************  Quotation parse  ********************* */
@@ -183,19 +198,43 @@ void	print_t_cmd(t_cmd *cmd);
 /* UTILS */
 int		ft_strcmp(const char *s1, const char *s2);
 void	*ts_calloc(size_t count, size_t size, t_data *data);
+char	**ts_split(char *str, char c, t_data *data);
+void	ts_dup2(int oldfd, int newfd, t_data *data);
 char	*ft_strdup_lim(const char *s1, char c, t_data *data);
+char	*ft_strjoin_char(char const *s1, char const *s2, char c, t_data *data);
+int		detect_char(char *str, char c);
+void	print_string(int num_str, ...);
 void	error(int error, t_data *data);
 
 /* FREE */
 void	free_strlist(char **str);
+
+/* ENV */
+t_env	*find_var_envlist(char *key, t_data *data);
+void	modify_our_env(t_env *env_var, t_data *data);
+
+/* BUILTIN */
+void	ft_cd(char **arg, t_data *data);
+void	ft_echo(char **arg, t_data *data);
+void	ft_env(t_data *data);
 
 /* HEREDOC */
 void	get_heredoc(t_cmd *cmd, t_data *data);
 
 /* DATA & CMD*/
 void	finalize_cmd(t_data *data);
+void	init_env_list(t_data *data, char **envp);
+void	get_env_paths(t_data *data);
+char	*find_home_dir(t_data *data);
+void	create_fd_pid_array(t_data *data);
+
+/* EXECUTION */
+int		execute(t_data *data);
+int		check_builtin(char *str, t_data *data);
+void	execute_builtin(char **arg, int	i, t_data *data);
 
 /* TESTING */
-void	print_tcmd(t_cmd *cmd);
+void	print_tcmd(t_cmd *cmd, int i);
+void	print_tdata(t_data *data);
 
 #endif

@@ -160,7 +160,36 @@ void	create_heredoc(t_cmd *cmd, t_data *data)
 	get_heredoc(cmd, data);
 }
 
+void	get_cmd_path(t_cmd *cmd, t_data *data)
+{
+	int		i;
+	char	*arg;
 
+	i = 0;
+	arg = cmd->array_arg[0];
+	if (access(arg, F_OK) == 0 && access(arg, X_OK) == 0)
+	{
+		cmd->path = ft_strdup_lim(arg, '\0', data);
+		return ;
+	}
+	if (!data->env_paths)
+		return ;
+	while (data->env_paths[i])
+	{
+		cmd->path = ft_strjoin_char(data->env_paths[i], arg, '/', data);
+		if (access(cmd->path, F_OK) == 0 && access(cmd->path, X_OK) == 0)
+			return ;
+		else if (access(cmd->path, F_OK) == 0 && access(cmd->path, X_OK) < 0)
+		{
+			free(cmd->path);
+			cmd->path = NULL;
+			return ;
+		}
+		free(cmd->path);
+		cmd->path = NULL;
+		i++;
+	}
+}
 
 void	finalize_cmd(t_data *data)
 {
@@ -174,7 +203,7 @@ void	finalize_cmd(t_data *data)
 		mod_fd_array(&data->cmd[i], data);
 		if (data->cmd[i].count_hd > 0)
 			create_heredoc(&data->cmd[i], data);
-		find_path(&data->cmd[i], data);
+		get_cmd_path(&data->cmd[i], data);
 	}
 
 }

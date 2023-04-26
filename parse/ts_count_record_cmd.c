@@ -134,6 +134,5 @@ int	ts_count_and_record_cmd(t_data *data, char *line)
 	num = 0;
 	while (line[i] != '\0')
 		ts_record_one_str(&data->cmd[num].str, line, &i, &num);
-
 	return (0);
 }
