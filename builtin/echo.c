@@ -1,5 +1,10 @@
 #include "../minishell.h"
-
+/* NOTES
+	echo -nnnnn -na
+	echo -nnnnna -n
+	echo -nnnn -nn -n -na
+	echo --nnnnnn -n -na
+*/
 void	ft_echo(char **arg, t_data *data)
 {
 	int	i;

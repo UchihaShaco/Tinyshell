@@ -1,5 +1,15 @@
 #include "../minishell.h"
-
+/* NOTES
+	when exporting, variables will only be uploaded to env if there is an equal sign
+	if no =, will ONLY show up in export
+	export =a
+	export /a
+	export /=a
+	export 1f=a
+	export f1=a
+	export _=a
+	export '=a	
+*/
 /* print export */
 void	print_export(t_data *data)
 {

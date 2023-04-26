@@ -1,5 +1,10 @@
 #include "../minishell.h"
-
+/* NOTES
+	unset a=
+	unset a=a
+	unset =a
+	unset a=1
+*/
 void	free_env_var(t_env *env_var)
 {
 	if (env_var->key)

@@ -65,13 +65,14 @@ char	*ft_strjoin_char(char const *s1, char const *s2, char c, t_data *data)
 	return (buffer);
 }
 
-	char	**ts_split(char *str, char c, t_data *data)
+char	**ts_split(char *str, char c, t_data *data)
 {
 	char	**buffer;
 
 	buffer = ft_split(str, c);
 	if (!buffer)
 		error(ERR_MALLOC, data);
+	return (buffer);
 }
 
 /* looks for char and returns index of that char if found. else it returns -1 */
@@ -99,9 +100,9 @@ void	error(int error, t_data *data)
 		write(2, "Tinyshell: Open function error\n", 31);
 	else if (error == ERR_PIPE)
 		write(2, "Tinyshell: Pipe function error\n", 31);
-	else if (error = ERR_DUP)
+	else if (error == ERR_DUP)
 		write(2, "Tinyshell: Dup2 function error\n", 31);
-	else if (error = ERR_FORK)
+	else if (error == ERR_FORK)
 		write(2, "Tinyshell: Fork function error\n", 31);
 	//free(data);
 	exit(EXIT_FAILURE);

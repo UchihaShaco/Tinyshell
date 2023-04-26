@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/20 09:45:08 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/26 11:58:34 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,30 +89,32 @@ void	ts_init_data(t_data *data, char ***env, int first)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_data	data;
-	char	*line;
+	// t_data	data;
+	// char	*line;
 
-	ts_err_argc_argv(argc, argv, env);
-	ft_bzero(&data, sizeof(t_data));
-	ts_init_data(&data, &env, YES);
-	// print_tdata(&data);
-	while (1)
-	{
-		ts_get_signal();
-		ts_init_data(&data, &env, NO);
-		line = readline("\033[1;35mTinyShell > \033[0m");
-		ts_signal_ctrl_d(&data, &line);
-		ts_parse(&data, line);
-		add_history(line);
-		if (data.empty_str == NO)
-		{
-			ts_record_array(&data);
-			finalize_cmd(&data);
-			// for(int i = 0; i < data.num_cmd; i++)
-			// 	print_tcmd(&data.cmd[i], i);
-			execute(&data);
-			// ts_free_all(&data, &line); // we will have to free the memory something like this 
-		}
-	}
+	// ts_err_argc_argv(argc, argv, env);
+	// ft_bzero(&data, sizeof(t_data));
+	// ts_init_data(&data, &env, YES);
+	// // print_tdata(&data);
+	// while (1)
+	// {
+	// 	ts_get_signal();
+	// 	ts_init_data(&data, &env, NO);
+	// 	line = readline("\033[1;35mTinyShell > \033[0m");
+	// 	ts_signal_ctrl_d(&data, &line);
+	// 	ts_parse(&data, line);
+	// 	add_history(line);
+	// 	if (data.empty_str == NO)
+	// 	{
+	// 		ts_record_array(&data);
+	// 		finalize_cmd(&data);
+	// 		// for(int i = 0; i < data.num_cmd; i++)
+	// 		// 	print_tcmd(&data.cmd[i], i);
+	// 		execute(&data);
+	// 		// ts_free_all(&data, &line); // we will have to free the memory something like this 
+	// 	}
+	// }
+	chdir("builtin");
+	printf("%s\n", getcwd(NULL, 0));
 }
 

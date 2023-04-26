@@ -1,4 +1,9 @@
 #include "../minishell.h"
+/* NOTES
+	pwd and oldpwd do not automatically update if they are added back in
+	check behavior in bash
+*/
+
 /*
 	if no arguments, go to home
 	else, change directories
