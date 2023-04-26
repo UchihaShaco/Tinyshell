@@ -167,7 +167,7 @@ void	get_cmd_path(t_cmd *cmd, t_data *data)
 
 	i = 0;
 	arg = cmd->array_arg[0];
-	if (access(arg, F_OK) == 0 && access(arg, X_OK) == 0)
+	if ((arg, F_OK) == 0 && access(arg, X_OK) == 0)
 	{
 		cmd->path = ft_strdup_lim(arg, '\0', data);
 		return ;
@@ -198,6 +198,7 @@ void	finalize_cmd(t_data *data)
 	i = -1;
 	while(++i < data->num_cmd)
 	{
+		// printf("%i\n", data->cmd[i].count_redir);
 		if (data->cmd[i].count_redir > 1) //only check for doubles if there are 2+ redir
 			check_redir_doubles(&data->cmd[i], data);
 		mod_fd_array(&data->cmd[i], data);
@@ -205,5 +206,6 @@ void	finalize_cmd(t_data *data)
 			create_heredoc(&data->cmd[i], data);
 		get_cmd_path(&data->cmd[i], data);
 	}
+	fflush(stdout);
 
 }

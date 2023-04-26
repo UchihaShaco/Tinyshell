@@ -94,3 +94,52 @@ void	ts_found_dollar(t_data *data, char **str, int q_m, int *i_orig)
 //     // printf("  redir_born: [%d, %d]\n", cmd->redir_born[0], cmd->redir_born[1]);
 //     // printf("  last_redir: %d\n", cmd->last_redir);
 // }
+
+void	ft_echo(char **arg, t_data *data)
+// {
+// 	int	i;
+// 	int	nl;
+
+// 	//check for -n flag. if there is, start the printing at index 2, else start at index 1
+// 	if (arg[1] && ft_strncmp(arg[1], "-n", 3) == 0) 
+// 	{
+// 		i = 2;
+// 		nl = 0;
+// 	}
+// 	else
+// 	{
+// 		i = 1;
+// 		nl = 1;
+// 	}
+// 	//loop through args and print
+// 	while (arg[i])
+// 	{
+// 		if (arg[i + 1] != NULL)
+// 			print_string(2, data, arg[i], " ");
+// 		else if (arg[i + 1] == NULL)
+// 			print_string(1, data, arg[i]);
+// 		i++;
+// 	}
+// 	//if no -n, also print /n after the last string is printed
+// 	if (nl == 1)
+// 		print_string(1, data, "\n");
+// }
+
+if (data->old_dir)
+		free(data->old_dir);
+	data->old_dir = data->cur_dir;
+	data->cur_dir = getcwd(NULL, 0);
+	pwd = find_var_envlist("PWD", data);
+	if (pwd)
+	{
+		free(pwd->val);
+		pwd->val = ft_strdup_lim(data->cur_dir, '\0', data);
+		modify_our_env(pwd, data);
+	}
+	oldpwd = find_var_envlist("OLDPWD", data);
+	if (oldpwd)
+	{
+		free(oldpwd->val);
+		oldpwd->val = ft_strdup_lim(data->old_dir, '\0', data);
+		modify_our_env(oldpwd, data);
+	}

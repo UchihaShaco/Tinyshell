@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/19 00:35:11 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/26 16:11:31 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct	s_env
 	char			*key;
 	char			*val;
 	int				p; //printed: 1, not printed: 0
+	int				equal; // =: 1, no=: 0 
 	struct s_env	*next;
 	struct s_env	*prev;
 }	t_env;

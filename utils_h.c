@@ -32,7 +32,7 @@ void	ts_dup2(int oldfd, int newfd, t_data *data)
 		error(ERR_DUP, data);
 }
 
-/* duplicate string up until a char c */
+/* duplicate string up until but not including char c */
 char	*ft_strdup_lim(const char *s1, char c, t_data *data)
 {
 	char	*ret_str;

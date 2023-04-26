@@ -1,6 +1,20 @@
 #include "minishell.h"
+/* 
+OUR_ENV
+	-find_var_our_env
+	-create_new_entry
+	-rewrite_our_env
+	-modify_our_env
+ENV_LIST
+	-find_var_envlist
+	-add_env_var
+	-split_env_var
+	-init_env_list
+ENV_PATHS
+	-get_env_paths
+*/
 
-//find if a variable exists and return the pointer to the variable if it exists. If not return NULL
+/* find if a variable exists and return the pointer to the variable if it exists. If not return NULL */
 t_env	*find_var_envlist(char *key, t_data *data)
 {
 	t_env *env_key;
@@ -37,7 +51,7 @@ int	find_var_ourenv(char *key, t_data *data)
 	return (-1);
 }
 
-/* create new entry for our_env: key=value and retrun the string */
+/* create new entry for our_env: key=value and return the string */
 char	*create_new_entry(t_env *env_var, t_data *data)
 {
 	int		key_len;
@@ -128,6 +142,7 @@ char	**split_env_var(char *str, t_data *data)
 	int		var_len;
 	int		val_len;
 	char	**ret_split;
+
 	ret_split = (char **)ts_calloc(3, sizeof(char *), data);
 	var_len = detect_char(str, '=');
 	ret_split[0] = (char *)ts_calloc(var_len + 1, sizeof(char), data);

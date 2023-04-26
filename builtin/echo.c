@@ -4,24 +4,39 @@
 	echo -nnnnna -n
 	echo -nnnn -nn -n -na
 	echo --nnnnnn -n -na
+	echo -nnnnnnn -na -n
 */
+
+/* returns 0 if not nflag, 1 if it is nflag */
+int		detect_nflag(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] != '-')
+		return (0);
+	i++;
+	while (str[i] == 'n')
+		i++;
+	if (str[i] != '\0')
+		return (0);
+	return (1);
+}
+
 void	ft_echo(char **arg, t_data *data)
 {
 	int	i;
-	int	nl;
+	int	nflag;
 
-	//check for -n flag. if there is, start the printing at index 2, else start at index 1
-	if (arg[1] && ft_strncmp(arg[1], "-n", 3) == 0) 
+	i = 1;
+	nflag = 0; 
+	while (arg[i])
 	{
-		i = 2;
-		nl = 0;
+		if (!detect_nflag(arg[i]))
+			break;
+		nflag++;
+		i++;
 	}
-	else
-	{
-		i = 1;
-		nl = 1;
-	}
-	//loop through args and print
 	while (arg[i])
 	{
 		if (arg[i + 1] != NULL)
@@ -30,7 +45,6 @@ void	ft_echo(char **arg, t_data *data)
 			print_string(1, data, arg[i]);
 		i++;
 	}
-	//if no -n, also print /n after the last string is printed
-	if (nl == 1)
+	if (nflag == 0)
 		print_string(1, data, "\n");
 }
