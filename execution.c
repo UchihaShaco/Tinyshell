@@ -54,7 +54,7 @@ void	pipe_cmd(int index, t_cmd *cmd, t_data *data)
 
 void	child_process(int i, t_cmd *cmd, t_data *data)
 {
-	// int	builtin;
+	int	builtin;
 	int	j;
 
 	pipe_cmd(i, cmd, data);
@@ -65,16 +65,16 @@ void	child_process(int i, t_cmd *cmd, t_data *data)
 		close(data->fd[j][1]);
 		j++;
 	}
-	// builtin = check_builtin(data->cmd->array_arg[0], data);
-	// if (builtin != 0)
-	// 	execute_builtin(data->cmd->array_arg, builtin, data);
-	// else
-	// {
-	// 	if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
-	// 		error(ERR_EXEC, data);
-	// }
-	if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
-		error(ERR_EXEC, data);
+	builtin = check_builtin(data->cmd->array_arg[0], data);
+	if (builtin != 0)
+		execute_builtin(data->cmd->array_arg, builtin, data);
+	else
+	{
+		if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
+			error(ERR_EXEC, data);
+	}
+	// if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
+	// 	error(ERR_EXEC, data);
 }
 
 int	parent_process(t_data *data)

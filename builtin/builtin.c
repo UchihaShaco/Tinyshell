@@ -47,8 +47,8 @@ void	execute_builtin(char **arg, int	i, t_data *data)
 {
 	if (i == 1)
 		ft_echo(arg, data);
-	else if (i == 2)
-		ft_cd(arg, data);
+	// else if (i == 2)
+	// 	ft_cd(arg, data);
 	// else if (i == 3)
 	// 	ft_pwd(data);
 	// else if (i == 4)

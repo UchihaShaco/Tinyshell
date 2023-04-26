@@ -29,8 +29,8 @@ Finalize data
 	-create int	*pid -
 	-deleted home_dir: use function find_home_dir -
 3. Builtins
-	1. Echo
-	2. Env
+	1. Echo -
+	2. Env - 
 	3. cd
 		what happens if OLDPWD and PWD are unset? - in wsl, they are just not updated
 	4. Export
