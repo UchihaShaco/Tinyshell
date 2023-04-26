@@ -38,6 +38,8 @@ Finalize data
 		-modify our_env based on env_list
 		-modify env_paths based on env_list
 		-export multiple keys
+		-do not print _=
+		-you can export _=somevalue but this will do nothing
 	5. Unset
 		-unset multiple keys
 
