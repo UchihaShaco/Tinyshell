@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+         #
+#    By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/09 11:48:59 by jalwahei          #+#    #+#              #
-#    Updated: 2023/04/05 04:37:58 by jalwahei         ###   ########.fr        #
+#    Updated: 2023/04/27 17:26:24 by hbui-vu          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRCS =	minishell.c parse/ts_signals.c parse/ts_malloc.c parse/ts_count_record_cm
 
 CC = cc
 
-CFLAGS = -I. -g -fsanitize=address -Wall -Wextra
+CFLAGS = -I. -g #-fsanitize=address -Wall -Wextra
 
 OBJS = $(SRCS:.c=.o)
 

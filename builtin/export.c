@@ -41,6 +41,8 @@ void	print_export(t_data *data)
 			else
 				print_string(2, data, to_print->val, "\n");
 		}
+		else
+			print_string(1, data, "\n");
 	}
 	cur = *(data->env_list);
 	while (cur != NULL)
@@ -108,7 +110,6 @@ void	ft_export(char **arg, t_data *data)
 	}
 	if (rewrite > 0)
 		rewrite_ourenv(data);
-	printf("hello\n");
 }
 
 

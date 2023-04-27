@@ -204,8 +204,9 @@ void	finalize_cmd(t_data *data)
 		mod_fd_array(&data->cmd[i], data);
 		if (data->cmd[i].count_hd > 0)
 			create_heredoc(&data->cmd[i], data);
-		get_cmd_path(&data->cmd[i], data);
+		if(data->cmd->num_arg > 0)
+			get_cmd_path(&data->cmd[i], data);
 	}
-	fflush(stdout);
+	// fflush(stdout);
 
 }

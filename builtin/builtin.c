@@ -53,7 +53,6 @@ void	execute_builtin(char **arg, int	i, t_data *data)
 	// 	ft_pwd(data);
 	else if (i == 4)
 	{
-		printf("found export\n");
 		ft_export(arg, data);
 	}
 	// else if (i == 5)
@@ -62,5 +61,5 @@ void	execute_builtin(char **arg, int	i, t_data *data)
 		ft_env(data);
 	// else if (i == 7)
 	// 	ft_exit(data);
-	exit(0);
+	// exit(0);./
 }

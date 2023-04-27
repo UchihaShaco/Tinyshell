@@ -60,6 +60,9 @@ Finalize data
 6. env
 	-only update if = flag is checked
 	-ex: a=
+NOTES: 
+-print error on stderr
+-not bash but TinyShell
 
 
 FILES added:

@@ -73,8 +73,6 @@ void	child_process(int i, t_cmd *cmd, t_data *data)
 		if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
 			error(ERR_EXEC, data);
 	}
-	// if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
-	// 	error(ERR_EXEC, data);
 }
 
 int	parent_process(t_data *data)
@@ -100,22 +98,18 @@ int	parent_process(t_data *data)
 
 void	exec_one_cmd(t_cmd *cmd, t_data *data)
 {
-	printf("entering exec one cmd\n");
 	int	builtin;
 
 	builtin = check_builtin(data->cmd->array_arg[0], data);
 	if (builtin != 0)
 	{
-		printf("found builtin\n");
 		execute_builtin(data->cmd->array_arg, builtin, data);
-		printf("here\n");
 	}
 	// else
 	// {
 	// 	if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
 	// 		error(ERR_EXEC, data);
 	// }
-	printf("finished executing\n");
 }
 
 int	execute(t_data *data)
