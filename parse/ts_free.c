@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 19:09:51 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/19 00:35:45 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/27 17:38:41 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	ts_free_all(t_data *data, char **line)
 	// 	ts_free_arr(&data->tmp_var);
 	// ts_free_str(&data->prev_dir);
 	ts_free_str(&data->cur_dir);
+	
 }
 
 void	ts_free_arg(t_data *data, int y)

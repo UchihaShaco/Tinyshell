@@ -52,14 +52,11 @@ void	execute_builtin(char **arg, int	i, t_data *data)
 	// else if (i == 3)
 	// 	ft_pwd(data);
 	else if (i == 4)
-	{
 		ft_export(arg, data);
-	}
 	// else if (i == 5)
 	// 	ft_unset(arg, data);
 	else if (i == 6)
 		ft_env(data);
 	// else if (i == 7)
 	// 	ft_exit(data);
-	// exit(0);./
 }

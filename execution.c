@@ -37,11 +37,17 @@ void	close_fd_array(t_cmd *cmd)
 void	pipe_cmd(int index, t_cmd *cmd, t_data *data)
 {
 	if (cmd->last_input == -1 && index > 0)
+	{
+		printf("no input and not first command\n");
 		ts_dup2(data->fd[index - 1][0], STDIN_FILENO, data);
+	}
 	else if (cmd->last_input > -1)
 		ts_dup2(cmd->fd_array[cmd->last_input], STDIN_FILENO, data);
 	if (cmd->last_output == -1 && index != data->num_cmd - 1)
+	{
+		printf("no output redirection and not last cmd\n");
 		ts_dup2(data->fd[index][1], STDOUT_FILENO, data);
+	}
 	else if (cmd->last_output > -1)
 	{
 		ts_dup2(cmd->fd_array[cmd->last_output], STDOUT_FILENO, data);
@@ -67,7 +73,9 @@ void	child_process(int i, t_cmd *cmd, t_data *data)
 	}
 	builtin = check_builtin(data->cmd->array_arg[0], data);
 	if (builtin != 0)
+	{
 		execute_builtin(data->cmd->array_arg, builtin, data);
+	}
 	else
 	{
 		if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
@@ -96,31 +104,32 @@ int	parent_process(t_data *data)
 	return (status);
 }
 
-void	exec_one_cmd(t_cmd *cmd, t_data *data)
-{
-	int	builtin;
+// void	exec_one_cmd(t_cmd *cmd, t_data *data)
+// {
+// 	int	builtin;
 
-	builtin = check_builtin(data->cmd->array_arg[0], data);
-	if (builtin != 0)
-	{
-		execute_builtin(data->cmd->array_arg, builtin, data);
-	}
-	// else
-	// {
-	// 	if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
-	// 		error(ERR_EXEC, data);
-	// }
-}
+// 	builtin = check_builtin(data->cmd->array_arg[0], data);
+// 	if (builtin != 0)
+// 	{
+// 		execute_builtin(data->cmd->array_arg, builtin, data);
+// 	}
+// 	else
+// 	{
+// 		if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
+// 			error(ERR_EXEC, data);
+// 	}
+// }
 
 int	execute(t_data *data)
 {
 	int	i;
 	int	status;
 
-	if (data->num_cmd == 1)
-		exec_one_cmd(&data->cmd[0], data);
-	else
-	{
+	// if (data->num_cmd == 1)
+	// 	exec_one_cmd(&data->cmd[0], data);
+	/* create pipes and fork*/
+	// else
+	// {
 		i = -1;
 		/* create pipes based on number of commands - 1*/
 		while (++i < data->num_cmd - 1)
@@ -139,6 +148,6 @@ int	execute(t_data *data)
 		/* run the parent process */
 		status = parent_process(data);
 		return (WEXITSTATUS(status));
-	}
+	// }
 	return (0);
 }

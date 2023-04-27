@@ -23,6 +23,33 @@ int		detect_nflag(char *str)
 	return (1);
 }
 
+// void	ft_echo(char **arg, t_data *data)
+// {
+// 	int	i;
+// 	int	nflag;
+
+// 	i = 1;
+// 	nflag = 0; 
+// 	while (arg[i])
+// 	{
+// 		if (!detect_nflag(arg[i]))
+// 			break;
+// 		nflag++;
+// 		i++;
+// 	}
+// 	while (arg[i])
+// 	{
+// 		if (arg[i + 1] != NULL)
+// 			print_string(2, data, arg[i], " ");
+// 		else if (arg[i + 1] == NULL)
+// 			print_string(1, data, arg[i]);
+// 		i++;
+// 	}
+// 	if (nflag == 0)
+// 		print_string(1, data, "\n");
+// 	exit(0);
+// }
+
 void	ft_echo(char **arg, t_data *data)
 {
 	int	i;
@@ -40,11 +67,15 @@ void	ft_echo(char **arg, t_data *data)
 	while (arg[i])
 	{
 		if (arg[i + 1] != NULL)
-			print_string(2, data, arg[i], " ");
+		{
+			ft_putstr_fd(arg[i], 1);
+			ft_putstr_fd(" ", 1);
+		}
 		else if (arg[i + 1] == NULL)
-			print_string(1, data, arg[i]);
+			ft_putstr_fd(arg[i], 1);
 		i++;
 	}
 	if (nflag == 0)
-		print_string(1, data, "\n");
+		ft_putstr_fd("\n", 1);
+	exit(0);
 }
