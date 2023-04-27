@@ -67,13 +67,15 @@ int	invalid_export(char *str)
 	return (0);
 }
 
-void	ft_export(char **arg, t_data *data) 
+void	ft_export(t_cmd *cmd, t_data *data) 
 {	
 	t_env	*env_var;
 	char	**split_arg;
 	int		i;
 	int		rewrite;
+	char	**arg;
 
+	arg = cmd->array_arg;
 	if (!arg[1])
 	{
 		print_export(data);
@@ -110,6 +112,7 @@ void	ft_export(char **arg, t_data *data)
 	}
 	if (rewrite > 0)
 		rewrite_ourenv(data);
+	exit(0);
 }
 
 

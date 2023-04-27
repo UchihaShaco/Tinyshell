@@ -95,15 +95,17 @@ void	error(int error, t_data *data)
 {
 	(void)data;
 	if (error == ERR_MALLOC)
-		write(2, "Tinyshell: Allocation memory error\n", 35);
+		write(2, "TinyShell: Allocation memory error\n", 35);
 	else if (error == ERR_OPEN)
-		write(2, "Tinyshell: Open function error\n", 31);
+		write(2, "TinyShell: Open function error\n", 31);
 	else if (error == ERR_PIPE)
-		write(2, "Tinyshell: Pipe function error\n", 31);
+		write(2, "TinyShell: Pipe function error\n", 31);
 	else if (error == ERR_DUP)
-		write(2, "Tinyshell: Dup2 function error\n", 31);
+		write(2, "TinyShell: Dup2 function error\n", 31);
 	else if (error == ERR_FORK)
-		write(2, "Tinyshell: Fork function error\n", 31);
+		write(2, "TinyShell: Fork function error\n", 31);
+	else if (error == ERR_CWD)
+		write(2, "TinyShell: getcwd function error\n", 33);
 	//free(data);
 	exit(EXIT_FAILURE);
 }

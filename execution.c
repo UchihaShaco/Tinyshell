@@ -38,14 +38,14 @@ void	pipe_cmd(int index, t_cmd *cmd, t_data *data)
 {
 	if (cmd->last_input == -1 && index > 0)
 	{
-		printf("no input and not first command\n");
+		// printf("no input and not first command\n");
 		ts_dup2(data->fd[index - 1][0], STDIN_FILENO, data);
 	}
 	else if (cmd->last_input > -1)
 		ts_dup2(cmd->fd_array[cmd->last_input], STDIN_FILENO, data);
 	if (cmd->last_output == -1 && index != data->num_cmd - 1)
 	{
-		printf("no output redirection and not last cmd\n");
+		// printf("no output redirection and not last cmd\n");
 		ts_dup2(data->fd[index][1], STDOUT_FILENO, data);
 	}
 	else if (cmd->last_output > -1)
@@ -60,7 +60,6 @@ void	pipe_cmd(int index, t_cmd *cmd, t_data *data)
 
 void	child_process(int i, t_cmd *cmd, t_data *data)
 {
-	int	builtin;
 	int	j;
 
 	pipe_cmd(i, cmd, data);
@@ -71,11 +70,8 @@ void	child_process(int i, t_cmd *cmd, t_data *data)
 		close(data->fd[j][1]);
 		j++;
 	}
-	builtin = check_builtin(data->cmd->array_arg[0], data);
-	if (builtin != 0)
-	{
-		execute_builtin(data->cmd->array_arg, builtin, data);
-	}
+	if (cmd->builtin > 0)
+		execute_builtin(cmd, data);
 	else
 	{
 		if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)

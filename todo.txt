@@ -32,12 +32,12 @@ Finalize data
 	1. Echo -
 	2. Env - 
 	3. cd
-		what happens if OLDPWD and PWD are unset? - in wsl, they are just not updated
+		what happens if OLDPWD and PWD are unset? 
 	4. Export
-		-export multiple keys
+		-export multiple keys - 
 		-do not print _=
 		-you can export _=somevalue but this will do nothing
-		-declare -x OLDPWD (no newline for some reason)
+		-declare -x OLDPWD (no newline for some reason) - 
 	5. Unset
 		-unset multiple keys
 

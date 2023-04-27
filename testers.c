@@ -9,6 +9,7 @@ void	print_tcmd(t_cmd *cmd, int i)
 	printf("\033[1;35m RECORD_HD: \033[0m%i\n", cmd->record_hd);
 	printf("\033[1;35m LAST_INPUT: \033[0m%i\n", cmd->last_input);
 	printf("\033[1;35m LAST_OUTPUT: \033[0m%i\n", cmd->last_output); 
+	printf("\033[1;35m BUILTIN: \033[0m%i\n", cmd->builtin); 
 	printf("\033[1;35m ARRAY_ARG: \033[0m\n");
 	for (int i = 0; i < cmd->num_arg; i++)
 		printf("    array_arg[%i]: %s\n", i, cmd->array_arg[i]);

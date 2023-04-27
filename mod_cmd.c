@@ -206,7 +206,6 @@ void	finalize_cmd(t_data *data)
 			create_heredoc(&data->cmd[i], data);
 		if(data->cmd->num_arg > 0)
 			get_cmd_path(&data->cmd[i], data);
+		data->cmd[i].builtin = check_builtin(&data->cmd[i], data);
 	}
-	// fflush(stdout);
-
 }

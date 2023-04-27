@@ -12,4 +12,5 @@ void	ft_env(t_data *data)
 		print_string(2, data, our_env[i], "\n");
 		i++;
 	}
+	exit(0);
 }

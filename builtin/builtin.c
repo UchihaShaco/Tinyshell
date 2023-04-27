@@ -18,45 +18,75 @@ char	*lower_str(char *str, t_data *data)
 	return (low_str);
 }
 
-int	check_builtin(char *str, t_data *data)
+// int	check_builtin(char *str, t_data *data)
+// {
+// 	char	*command;
+// 	int		i;
+
+// 	command = lower_str(str, data);
+// 	i = 0;
+// 	if (ft_strcmp(command, "echo") == 0)
+// 		i = 1;
+// 	else if (ft_strcmp(command, "cd") == 0)
+// 		i = 2;
+// 	else if (ft_strcmp(command, "pwd") == 0)
+// 		i = 3;
+// 	else if (ft_strcmp(command, "export") == 0)
+// 		i = 4;
+// 	else if (ft_strcmp(command, "unset") == 0)
+// 		i = 5;
+// 	else if (ft_strcmp(command, "env") == 0)
+// 		i = 6;
+// 	else if (ft_strcmp(command, "exit") == 0)
+// 		i = 7;
+// 	free(command);
+// 	return (i);
+// }
+
+int	check_builtin(t_cmd *cmd, t_data *data)
 {
+	char	*str;
 	char	*command;
 	int		i;
 
+	str = cmd->array_arg[0];
 	command = lower_str(str, data);
 	i = 0;
-	if (ft_strncmp(command, "echo", ft_strlen(command)) == 0)
+	if (ft_strcmp(command, "echo") == 0)
 		i = 1;
-	else if (ft_strncmp(command, "cd", ft_strlen(command)) == 0)
+	else if (ft_strcmp(command, "cd") == 0)
 		i = 2;
-	else if (ft_strncmp(command, "pwd", ft_strlen(command)) == 0)
+	else if (ft_strcmp(command, "pwd") == 0)
 		i = 3;
-	else if (ft_strncmp(command, "export", ft_strlen(command)) == 0)
+	else if (ft_strcmp(command, "export") == 0)
 		i = 4;
-	else if (ft_strncmp(command, "unset", ft_strlen(command)) == 0)
+	else if (ft_strcmp(command, "unset") == 0)
 		i = 5;
-	else if (ft_strncmp(command, "env", ft_strlen(command)) == 0)
+	else if (ft_strcmp(command, "env") == 0)
 		i = 6;
-	else if (ft_strncmp(command, "exit", ft_strlen(command)) == 0)
+	else if (ft_strcmp(command, "exit") == 0)
 		i = 7;
 	free(command);
 	return (i);
 }
 
-void	execute_builtin(char **arg, int	i, t_data *data)
+void	execute_builtin(t_cmd *cmd, t_data *data)
 {
-	if (i == 1)
-		ft_echo(arg, data);
-	// else if (i == 2)
+	char **arg;
+
+	arg = cmd->array_arg;
+	if (cmd->builtin == 1)
+		ft_echo(cmd, data);
+	// else if (cmd->builtin == 2)
 	// 	ft_cd(arg, data);
-	// else if (i == 3)
-	// 	ft_pwd(data);
-	else if (i == 4)
-		ft_export(arg, data);
-	// else if (i == 5)
+	else if (cmd->builtin == 3)
+		ft_pwd(data);
+	else if (cmd->builtin == 4)
+		ft_export(cmd, data);
+	// else if (cmd->builtin == 5)
 	// 	ft_unset(arg, data);
-	else if (i == 6)
+	else if (cmd->builtin == 6)
 		ft_env(data);
-	// else if (i == 7)
+	// else if (cmd->builtin == 7)
 	// 	ft_exit(data);
 }
