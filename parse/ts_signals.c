@@ -29,7 +29,8 @@ void	ts_signal_ctrl_d(t_data *data, char **line)
 	{
 		printf("\033[1;35m\bTinyshell >\033[0A");
 		printf("\033[1;0m exit\n\033[0m");
-		ts_free_all(data, line);
+		// ts_free_all(data, line);
+		free_data(data, line, YES);
 		exit(EXIT_SUCCESS);
 	}
 }

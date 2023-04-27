@@ -98,7 +98,7 @@ int	main(int argc, char **argv, char **env)
 	// print_tdata(&data);
 	while (1)
 	{
-		// ts_get_signal();
+		ts_get_signal();
 		ts_init_data(&data, &env, NO);
 		line = readline("\033[1;35mTinyShell > \033[0m");
 		ts_signal_ctrl_d(&data, &line);
@@ -119,7 +119,9 @@ int	main(int argc, char **argv, char **env)
 			// 	print_tcmd(&data.cmd[i], i);
 			// printf("hello\n");
 			// ts_free_all(&data, &line); // we will have to free the memory something like this 
+			free_data(&data, line, NO);
 		}
 	}
+	free_data(&data, line, YES);
 }
 

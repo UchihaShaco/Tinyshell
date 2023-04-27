@@ -72,7 +72,8 @@ void	ft_export(t_cmd *cmd, t_data *data)
 	t_env	*env_var;
 	char	**split_arg;
 	int		i;
-	int		rewrite;
+	int		rewr_ourenv;
+	int		rewr_envpaths;
 	char	**arg;
 
 	arg = cmd->array_arg;
@@ -82,7 +83,8 @@ void	ft_export(t_cmd *cmd, t_data *data)
 		return ;
 	}
 	i = 0;
-	rewrite = 0;
+	rewr_ourenv = 0;
+	rewr_envpaths = 0;
 	while (arg[++i])
 	{
 		if (invalid_export(arg[i]))
@@ -94,23 +96,25 @@ void	ft_export(t_cmd *cmd, t_data *data)
 			if (!env_var)
 				add_var_envlist(split_arg, data);
 			if ((!env_var && split_arg[1]))
-				rewrite++;
+				rewr_ourenv++;
 			// if var exists and there is an = sign in first index (otherwise it would be null)
 			else if (env_var && split_arg[1]) 
 			{
 				if (ft_strcmp(env_var->val, split_arg[2]) != 0)
 				{
+					if (ft_strcmp(env_var->key, "PATH") == 0)
+						rewr_envpaths++;
 					free(env_var->val);
 					env_var->val = NULL;
 					if (split_arg[2])
 						env_var->val = ft_strdup_lim(split_arg[2], '\0', data);
-					rewrite++;
+					rewr_ourenv++;
 				}
 			}
 			free_strlist(split_arg);
 		}
 	}
-	if (rewrite > 0)
+	if (rewr_ourenv > 0)
 		rewrite_ourenv(data);
 	exit(0);
 }

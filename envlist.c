@@ -75,11 +75,20 @@ void	clear_envlist(t_env **env_list)
 {
 	t_env *cur;
 
+	if (!env_list)
+		return ;
+	if (!*env_list)
+	{
+		free(env_list);
+		return ;
+	}
 	cur = *env_list;
 	while (cur)
 	{
-		free(cur->key);
-		free(cur->val);
+		if (cur->key)
+			free(cur->key);
+		if (cur->val)
+			free(cur->val);
 		*env_list = cur->next;
 		free(cur);
 		cur = *env_list;

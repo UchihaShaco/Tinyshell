@@ -210,6 +210,7 @@ void	error(int error, t_data *data);
 
 /* FREE */
 void	free_strlist(char **str);
+void	free_data(t_data *data, char *line, int last);
 
 /* ENV */
 t_env	*find_var_envlist(char *key, t_data *data);
