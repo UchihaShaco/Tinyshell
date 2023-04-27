@@ -108,17 +108,20 @@ int	main(int argc, char **argv, char **env)
 		{
 			ts_record_array(&data);
 			// print_tdata(&data);
-		
-			// printf("\n ---------------------------------------\n");
-			finalize_cmd(&data);
-			// for(int i = 0; i < data.num_cmd; i++)
-				// print_tcmd(&data.cmd[i], i);
-			// print_tdata(&data);
-			execute(&data);
-			// for(int i = 0; i < data.num_cmd; i++)
-			// 	print_tcmd(&data.cmd[i], i);
-			// printf("hello\n");
-			// ts_free_all(&data, &line); // we will have to free the memory something like this 
+			if (data.num_cmd > 0)
+			{
+				// for(int i = 0; i < data.num_cmd; i++)
+				// 	print_tcmd(&data.cmd[i], i);
+				// printf("\n ---------------------------------------\n");
+				finalize_cmd(&data);
+				// for(int i = 0; i < data.num_cmd; i++)
+					// print_tcmd(&data.cmd[i], i);
+				// print_tdata(&data);
+				execute(&data);
+				// for(int i = 0; i < data.num_cmd; i++)
+				// 	print_tcmd(&data.cmd[i], i);
+				// ts_free_all(&data, &line); // we will have to free the memory something like this 
+			}
 			free_data(&data, line, NO);
 		}
 	}
