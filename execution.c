@@ -98,27 +98,53 @@ int	parent_process(t_data *data)
 	return (status);
 }
 
+void	exec_one_cmd(t_cmd *cmd, t_data *data)
+{
+	printf("entering exec one cmd\n");
+	int	builtin;
+
+	builtin = check_builtin(data->cmd->array_arg[0], data);
+	if (builtin != 0)
+	{
+		printf("found builtin\n");
+		execute_builtin(data->cmd->array_arg, builtin, data);
+		printf("here\n");
+	}
+	// else
+	// {
+	// 	if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
+	// 		error(ERR_EXEC, data);
+	// }
+	printf("finished executing\n");
+}
+
 int	execute(t_data *data)
 {
 	int	i;
 	int	status;
 
-	i = -1;
-	/* create pipes based on number of commands - 1*/
-	while (++i < data->num_cmd - 1)
-		if (pipe(data->fd[i]) == -1)
-			error(ERR_PIPE, data);
-	i = -1;
-	/* fork and run the child process */
-	while (++i < data->num_cmd)
+	if (data->num_cmd == 1)
+		exec_one_cmd(&data->cmd[0], data);
+	else
 	{
-		data->pid[i] = fork();
-		if (data->pid[i] == -1)
-			error(ERR_FORK, data);
-		else if (data->pid[i] == 0)
-			child_process(i, &data->cmd[i], data);
+		i = -1;
+		/* create pipes based on number of commands - 1*/
+		while (++i < data->num_cmd - 1)
+			if (pipe(data->fd[i]) == -1)
+				error(ERR_PIPE, data);
+		i = -1;
+		/* fork and run the child process */
+		while (++i < data->num_cmd)
+		{
+			data->pid[i] = fork();
+			if (data->pid[i] == -1)
+				error(ERR_FORK, data);
+			else if (data->pid[i] == 0)
+				child_process(i, &data->cmd[i], data);
+		}
+		/* run the parent process */
+		status = parent_process(data);
+		return (WEXITSTATUS(status));
 	}
-	/* run the parent process */
-	status = parent_process(data);
-	return (WEXITSTATUS(status));
+	return (0);
 }

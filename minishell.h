@@ -119,7 +119,6 @@ typedef struct s_data
 	t_env	**env_list;
 	char	**our_env;
 	char	**env_paths;
-	char	*old_dir;
 	char	*cur_dir;
 	int		**fd;
 	int		*pid;
@@ -212,12 +211,15 @@ void	free_strlist(char **str);
 
 /* ENV */
 t_env	*find_var_envlist(char *key, t_data *data);
-void	modify_our_env(t_env *env_var, t_data *data);
+void	add_var_envlist(char **var, t_data *data);
+char	**split_var_envlist(char *str, t_data *data);
+void	init_envlist(t_data *data, char **envp);
+void	rewrite_ourenv(t_data *data);
 
 /* BUILTIN */
-void	ft_cd(char **arg, t_data *data);
 void	ft_echo(char **arg, t_data *data);
 void	ft_env(t_data *data);
+void	ft_export(char **arg, t_data *data);
 
 /* HEREDOC */
 void	get_heredoc(t_cmd *cmd, t_data *data);
@@ -237,5 +239,8 @@ void	execute_builtin(char **arg, int	i, t_data *data);
 /* TESTING */
 void	print_tcmd(t_cmd *cmd, int i);
 void	print_tdata(t_data *data);
+void	print_strlist(char **str);
+void	print_tenv(t_env **list);
+void	print_envlist_node(t_env *node);
 
 #endif

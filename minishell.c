@@ -77,7 +77,7 @@ void	ts_init_data(t_data *data, char ***env, int first)
 	{
 		data->cur_dir = getcwd(NULL, 0);
 		ts_init_env(data, env);
-		init_env_list(data, *env);
+		init_envlist(data, *env);
 		get_env_paths(data);
 		// data->name_file = NO; // flag to check if it's a file (YES, NO)
 	}
@@ -96,25 +96,25 @@ int	main(int argc, char **argv, char **env)
 	ft_bzero(&data, sizeof(t_data));
 	ts_init_data(&data, &env, YES);
 	// print_tdata(&data);
-	// while (1)
-	// {
-	// 	ts_get_signal();
-	// 	ts_init_data(&data, &env, NO);
-	// 	line = readline("\033[1;35mTinyShell > \033[0m");
-	// 	ts_signal_ctrl_d(&data, &line);
-	// 	ts_parse(&data, line);
-	// 	add_history(line);
-	// 	if (data.empty_str == NO)
-	// 	{
-	// 		ts_record_array(&data);
-	// 		// for(int i = 0; i < data.num_cmd; i++)
-	// 		// 	print_tcmd(&data.cmd[i], i);
-	// 		// // // print_tdata(&data);
-	// 		// printf("\n ---------------------------------------\n");
-	// 		finalize_cmd(&data);
-	// 		execute(&data);
-	// 		// ts_free_all(&data, &line); // we will have to free the memory something like this 
-	// 	}
-	// }
+	while (1)
+	{
+		ts_get_signal();
+		ts_init_data(&data, &env, NO);
+		line = readline("\033[1;35mTinyShell > \033[0m");
+		ts_signal_ctrl_d(&data, &line);
+		ts_parse(&data, line);
+		add_history(line);
+		if (data.empty_str == NO)
+		{
+			ts_record_array(&data);
+			// for(int i = 0; i < data.num_cmd; i++)
+			// 	print_tcmd(&data.cmd[i], i);
+			// // // print_tdata(&data);
+			// printf("\n ---------------------------------------\n");
+			finalize_cmd(&data);
+			execute(&data);
+			// ts_free_all(&data, &line); // we will have to free the memory something like this 
+		}
+	}
 }
 

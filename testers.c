@@ -43,7 +43,31 @@ void	print_tenv(t_env **list)
 		printf("VAL: %s\n", cur->val);
 		cur = cur->next;
 	}
+}
 
+void	print_envlist_node(t_env *node)
+{
+	if (!node)
+	{
+		printf("(null)\n");
+		return ;
+	}
+	if (node->key)
+		printf("key: %s\n", node->key);
+	if (node->val)
+		printf("val: %s\n", node->val);
+	printf("p: %i\n", node->p);
+	printf("equal: %i\n", node->equal);
+}
+
+void	print_strlist(char **str)
+{
+	int i = 0;
+	while (str[i])
+	{
+		printf("%s\n", str[i]);
+		i++;
+	}
 }
 
 void	print_tdata(t_data *data)

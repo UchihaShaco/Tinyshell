@@ -34,12 +34,10 @@ Finalize data
 	3. cd
 		what happens if OLDPWD and PWD are unset? - in wsl, they are just not updated
 	4. Export
-		-when OLDPWD and PWD are restored via export, they automatically contain values
-		-modify our_env based on env_list
-		-modify env_paths based on env_list
 		-export multiple keys
 		-do not print _=
 		-you can export _=somevalue but this will do nothing
+		-declare -x OLDPWD (no newline for some reason)
 	5. Unset
 		-unset multiple keys
 
@@ -54,10 +52,11 @@ Finalize data
 	-take care of env -i ./minishell
 	-every time ./minishell is called, shlvl increases
 5. env_list 
-	-add OLDPWD
-	-add = flag
-	-does not contain _ variable
-	-if =, print ""
+	-add OLDPWD - 
+	-add = flag - 
+	-does not contain _ variable - 
+	-if =, print "" - 
+	-take care of what happens if env -i is run
 6. env
 	-only update if = flag is checked
 	-ex: a=

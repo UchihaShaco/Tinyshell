@@ -18,79 +18,97 @@ void	print_export(t_data *data)
 
 	while (1)
 	{
-		//find the first key that hasn't been printed
 		cur = *(data->env_list);
 		while (cur && cur->p == 1)
 			cur = cur->next;
-		//if everything has been printed, break out of loop
 		if (cur == NULL)
 			break ;
-		//iterate through list to find the next variable to be printed
 		to_print = cur;
 		cur = cur->next;
 		while (cur != NULL)
 		{
-			if (ft_strncmp(to_print->key, cur->key, ft_strlen(to_print->key) + 1) > 0 && cur->p == 0)
+			if (ft_strcmp(to_print->key, cur->key) > 0 && cur->p == 0)
 				to_print = cur;
 			cur = cur->next;
 		}
-		//mark p as 1 (printed) and print key
 		to_print->p = 1;
-		print_string(3, data, "declare -x ", to_print->key, "=");
-		if (to_print->val == NULL)
-			print_string(1, data, "''\n");
-		else
-			print_string(2, data, to_print->val, "\n");
+		print_string(2, data, "declare -x ", to_print->key);
+		if (to_print->equal == 1)
+		{
+			print_string(1, data, "=");
+			if (to_print->val == NULL)
+				print_string(1, data, """\n");
+			else
+				print_string(2, data, to_print->val, "\n");
+		}
 	}
-	//reset all p to 0;
 	cur = *(data->env_list);
 	while (cur != NULL)
 	{
-		cur->p = 0;
+		if (ft_strcmp(cur->key, "_") != 0)
+			cur->p = 0;
 		cur = cur->next;
 	}
 }
 
-/* export variables */
+/* return 1 if invalid, 0 if not */
+int	invalid_export(char *str)
+{
+	//first char must be alpha or _
+	//second char must be alpha, num, _, =, or null
+	int	i;
+
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (1);
+	if (!ft_isalnum(str[1]) && str[1] != '_' && str[1] != '=' && str[1] != '\0')
+		return (1);
+	return (0);
+}
+
 void	ft_export(char **arg, t_data *data) 
 {	
 	t_env	*env_var;
 	char	**split_arg;
 	int		i;
+	int		rewrite;
 
-	i = 1;
-	//if only export, print export
-	if (!arg[i])
+	if (!arg[1])
 	{
 		print_export(data);
 		return ;
 	}
-	if (data->num_cmd <= 1)
-		return ;
-	while (arg[i])
+	i = 0;
+	rewrite = 0;
+	while (arg[++i])
 	{
-		//if no '=', add var if it doesn't exist, otherwise do nothing
-		//if '=', change value if var exists, otherwise add var and value
-		if (!detect_char(arg[i], '='))
+		if (invalid_export(arg[i]))
+			printf("-bash: export: '%s': not a valid identifier\n", arg[i]);
+		else if (ft_strncmp(arg[i], "_=", 2) != 0)
 		{
-			if (!find_var_envlist(arg[i], data))
-				add_env_var(arg[i], NULL, data);
-		}
-		else
-		{
-			split_arg = split_env_var(arg[i], data);
+			split_arg = split_var_envlist(arg[i], data);
 			env_var = find_var_envlist(split_arg[0], data);
 			if (!env_var)
-				add_env_var(split_arg[0], split_arg[1], data);
-			else
+				add_var_envlist(split_arg, data);
+			if ((!env_var && split_arg[1]))
+				rewrite++;
+			// if var exists and there is an = sign in first index (otherwise it would be null)
+			else if (env_var && split_arg[1]) 
 			{
-				env_var->val = ft_strdup_lim(split_arg[1], '\0', data); 
-				modify_our_env(env_var, data);
+				if (ft_strcmp(env_var->val, split_arg[2]) != 0)
+				{
+					free(env_var->val);
+					env_var->val = NULL;
+					if (split_arg[2])
+						env_var->val = ft_strdup_lim(split_arg[2], '\0', data);
+					rewrite++;
+				}
 			}
 			free_strlist(split_arg);
 		}
-		i++;	
 	}
+	if (rewrite > 0)
+		rewrite_ourenv(data);
+	printf("hello\n");
 }
 
 

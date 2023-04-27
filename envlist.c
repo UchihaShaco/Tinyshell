@@ -13,6 +13,7 @@
 		-also now has = flag
 */
 
+/* find var in envlist. If it exists, it returns a pointer to the node, if it doesn't returns NULL*/
 t_env	*find_var_envlist(char *key, t_data *data)
 {
 	t_env *env_key;
@@ -29,6 +30,7 @@ t_env	*find_var_envlist(char *key, t_data *data)
 	return (NULL);
 }
 
+/* free a node */
 void	free_tenv(t_env *node)
 {
 	if (node->key)
@@ -38,6 +40,8 @@ void	free_tenv(t_env *node)
 	free(node);
 	
 }
+
+/* delete a node from the envlist */
 void	delete_var_envlist(char *key, t_data *data)
 {
 	t_env	*delete;
@@ -66,18 +70,22 @@ void	delete_var_envlist(char *key, t_data *data)
 	free_tenv(delete);
 }
 
+/* create a new node from a char ** */
 t_env	*create_var_envlist(char **var, t_data *data)
 {
 	t_env 	*node;
-	node = (t_env *)ts_calloc(1, sizeof(t_env));
+	node = (t_env *)ts_calloc(1, sizeof(t_env), data);
 	node->key = ft_strdup_lim(var[0], '\0', data); 
-	if (ft_strcmp(var[1], "=") == 0)
+	if (var[1] && ft_strcmp(var[1], "=") == 0)
+	{
 		node->equal = 1;
-	if (var[2])
-		node->val = ft_strdup_lim(var[2], '\0', data);
+		if (var[2])
+			node->val = ft_strdup_lim(var[2], '\0', data);
+	}
 	return (node);
 }
 
+/* add node to the envlist */
 void	add_var_envlist(char **var, t_data *data)
 {
 	t_env 	*node;
@@ -96,6 +104,7 @@ void	add_var_envlist(char **var, t_data *data)
 	}
 }
 
+/* split up a given string, and includes the = if there */
 char	**split_var_envlist(char *str, t_data *data)
 {
 	int		i;
@@ -134,6 +143,9 @@ void	init_envlist(t_data *data, char **envp)
 	{
 		split_var = split_var_envlist(envp[i], data);
 		node = create_var_envlist(split_var, data);
+		/* never print out _ var */
+		if (ft_strcmp(node->key, "_") == 0)
+			node->p = 1;
 		node->prev = cur;
 		free_strlist(split_var);
 		if (!*data->env_list)
@@ -143,7 +155,6 @@ void	init_envlist(t_data *data, char **envp)
 		cur = node;
 	}
 	/* manually create an oldpwd var */
-	/* take care of what happens if env -i is run */
 	node = (t_env *)ts_calloc(1, sizeof(t_env), data);
 	node->key = ft_strdup_lim("OLDPWD", '\0', data);
 	node->prev = cur;

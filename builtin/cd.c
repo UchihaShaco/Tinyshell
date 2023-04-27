@@ -1,8 +1,4 @@
 #include "../minishell.h"
-/* NOTES
-	env exists in export
-	it does not exist 
-*/
 
 /*
 	if no arguments, go to home
