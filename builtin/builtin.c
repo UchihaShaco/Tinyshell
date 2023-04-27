@@ -83,8 +83,8 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		ft_pwd(data);
 	else if (cmd->builtin == 4)
 		ft_export(cmd, data);
-	// else if (cmd->builtin == 5)
-	// 	ft_unset(arg, data);
+	else if (cmd->builtin == 5)
+		ft_unset(cmd, data);
 	else if (cmd->builtin == 6)
 		ft_env(data);
 	// else if (cmd->builtin == 7)

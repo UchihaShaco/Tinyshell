@@ -17,4 +17,5 @@ void	free_strlist(char **str)
 	}
 	if (str)
 		free(str);
+	str = NULL;
 }

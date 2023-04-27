@@ -143,3 +143,26 @@ if (data->old_dir)
 		oldpwd->val = ft_strdup_lim(data->old_dir, '\0', data);
 		modify_our_env(oldpwd, data);
 	}
+
+void	free_env_var(t_env *env_var)
+{
+	if (env_var->key)
+		free(env_var->key);
+	if (env_var->val)
+		free(env_var->val);
+	free(env_var);
+}
+
+void	remove_var(t_env *env_var, t_data *data)
+{
+	t_env *temp;
+
+	temp = env_var;
+	if (!env_var->prev)
+		*data->env_list = env_var->next;
+	else
+		env_var->prev->next = env_var->next;
+	if (env_var->next)
+		env_var->next->prev = env_var->prev;
+	free_env_var(temp);
+}

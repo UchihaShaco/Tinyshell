@@ -217,14 +217,15 @@ void	add_var_envlist(char **var, t_data *data);
 char	**split_var_envlist(char *str, t_data *data);
 void	init_envlist(t_data *data, char **envp);
 void	rewrite_ourenv(t_data *data);
+void	clear_envlist(t_env **env_list);
+void	delete_var_envlist(char *key, t_data *data);
 
 /* BUILTIN */
-// void	ft_echo(char **arg, t_data *data);
-// void	ft_export(char **arg, t_data *data);
 void	ft_echo(t_cmd *cmd, t_data *data);
 void	ft_export(t_cmd *cmd, t_data *data);
 void	ft_env(t_data *data);
 void	ft_pwd(t_data *data);
+void	ft_unset(t_cmd *cmd, t_data *data);
 
 /* HEREDOC */
 void	get_heredoc(t_cmd *cmd, t_data *data);
@@ -238,9 +239,7 @@ void	create_fd_pid_array(t_data *data);
 
 /* EXECUTION */
 int		execute(t_data *data);
-// int		check_builtin(char *str, t_data *data);
 int		check_builtin(t_cmd *cmd, t_data *data);
-// void	execute_builtin(char **arg, int	i, t_data *data);
 void	execute_builtin(t_cmd *cmd, t_data *data);
 
 /* TESTING */

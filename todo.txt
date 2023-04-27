@@ -40,6 +40,7 @@ Finalize data
 		-declare -x OLDPWD (no newline for some reason) - 
 	5. Unset
 		-unset multiple keys
+		-check what happens if unset a=
 
 	-builtins are not being piped properly
 	NOTES:

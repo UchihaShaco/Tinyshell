@@ -5,7 +5,6 @@
 	else, change directories
 		print error message if directory doesn't exist and return
 	update data->cur_dir
-	update data->old_dir
 	If oldpwd exists
 		update value
 	if pwd exists

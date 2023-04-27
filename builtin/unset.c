@@ -5,53 +5,17 @@
 	unset =a
 	unset a=1
 */
-void	free_env_var(t_env *env_var)
-{
-	if (env_var->key)
-		free(env_var->key);
-	if (env_var->val)
-		free(env_var->val);
-	free(env_var);
-}
 
-void	remove_var(t_env *env_var, t_data *data)
-{
-	t_env *temp;
-
-	temp = env_var;
-	if (!env_var->prev)
-		*data->env_list = env_var->next;
-	else
-		env_var->prev->next = env_var->next;
-	if (env_var->next)
-		env_var->next->prev = env_var->prev;
-	free_env_var(temp);
-}
-
-void	clear_envlist(t_env **env_list)
-{
-	t_env *cur;
-
-	cur = *env_list;
-	while (cur)
-	{
-		free(cur->key);
-		free(cur->val);
-		*env_list = cur->next;
-		free(cur);
-		cur = *env_list;
-	}
-	free(env_list);
-}
-
-void	ft_unset(char **arg, t_data *data)
+void	ft_unset(t_cmd *cmd, t_data *data)
 {
 	int		i;
+	int		rewrite;
+	char	**arg;
 	t_env	*env_var;
 
-	if (data->num_cmd <= 1)
-		return ;
 	i = 1;
+	rewrite = 0;
+	arg = cmd->array_arg;
 	if (!arg[i])
 	{
 		clear_envlist(data->env_list);
@@ -59,16 +23,21 @@ void	ft_unset(char **arg, t_data *data)
 	}
 	else
 	{
-		
 		while (arg[i])
 		{
 			env_var = find_var_envlist(arg[i], data);
 			if (env_var)
-				remove_var(env_var, data);
+			{
+				if (env_var->equal == 1)
+					rewrite++;
+				delete_var_envlist(arg[i], data);
+			}
 			i++;
 		}
-		modify_our_env(NULL, data);
+		if (rewrite > 0)
+			rewrite_ourenv(data);
 	}
+	exit(0);
 }
 
 

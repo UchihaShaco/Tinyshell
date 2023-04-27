@@ -70,6 +70,24 @@ void	delete_var_envlist(char *key, t_data *data)
 	free_tenv(delete);
 }
 
+/* clear entire envlist */
+void	clear_envlist(t_env **env_list)
+{
+	t_env *cur;
+
+	cur = *env_list;
+	while (cur)
+	{
+		free(cur->key);
+		free(cur->val);
+		*env_list = cur->next;
+		free(cur);
+		cur = *env_list;
+	}
+	free(env_list);
+	env_list = NULL;
+}
+
 /* create a new node from a char ** */
 t_env	*create_var_envlist(char **var, t_data *data)
 {
