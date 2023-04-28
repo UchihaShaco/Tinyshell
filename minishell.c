@@ -22,7 +22,6 @@ static void	ts_err_argc_argv(int argc, char **argv, char **env)
 }
 
 /*Basically this function to return an error if theres an odd number of quotation marks */
-
 static	int	ts_quote_checker(t_data *data, char *line)
 {
 	int	i;
@@ -96,12 +95,12 @@ int	main(int argc, char **argv, char **env)
 	ft_bzero(&data, sizeof(t_data));
 	ts_init_data(&data, &env, YES);
 	// print_tdata(&data);
-	int def_in = dup(STDIN_FILENO);
-	int def_out = dup(STDOUT_FILENO);
+	// int def_in = dup(STDIN_FILENO);
+	// int def_out = dup(STDOUT_FILENO);
 	while (1)
 	{
-		dup2(def_in, STDIN_FILENO);
-		dup2(def_out, STDOUT_FILENO);
+		// dup2(def_in, STDIN_FILENO);
+		// dup2(def_out, STDOUT_FILENO);
 		ts_get_signal();
 		ts_init_data(&data, &env, NO);
 		line = readline("\033[1;35mTinyShell > \033[0m");
@@ -121,14 +120,14 @@ int	main(int argc, char **argv, char **env)
 				// for(int i = 0; i < data.num_cmd; i++)
 				// 	print_tcmd(&data.cmd[i], i);
 				// print_tdata(&data);
-				execute(&data);
+				// execute(&data);
 				// for(int i = 0; i < data.num_cmd; i++)
 				// 	print_tcmd(&data.cmd[i], i);
-				// ts_free_all(&data, &line); // we will have to free the memory something like this 
+				ts_free_all(&data, &line); // we will have to free the memory something like this 
 			}
-			free_data(&data, line, NO);
+			// free_data(&data, line, NO);
 		}
 	}
-	free_data(&data, line, YES);
+	// free_data(&data, line, YES);
 }
 

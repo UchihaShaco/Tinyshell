@@ -198,8 +198,8 @@ void	finalize_cmd(t_data *data)
 	i = -1;
 	while(++i < data->num_cmd)
 	{
-		if (data->cmd[i].num_arg > 0)
-		{
+		// if (data->cmd[i].num_arg > 0)
+		// {
 			if (data->cmd[i].count_redir > 1) //only check for doubles if there are 2+ redir
 				check_redir_doubles(&data->cmd[i], data);
 			mod_fd_array(&data->cmd[i], data);
@@ -207,6 +207,6 @@ void	finalize_cmd(t_data *data)
 				create_heredoc(&data->cmd[i], data);
 			get_cmd_path(&data->cmd[i], data);
 			data->cmd[i].builtin = check_builtin(&data->cmd[i], data);
-		}
+		// }
 	}
 }

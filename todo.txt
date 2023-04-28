@@ -101,7 +101,7 @@ ERRORS
 -bash: cd: /home/hbui-vu:/mnt/c: No such file or directory
 
 TODO: 
--typos - need bash: expor: command not found
+-typos - need bash: expor: command not found - 
 - > | > | > | -->freeing a pointer that wasn't allocated
 - << 2 with no commands - there is redirection but no args
 -  echo hi > f> ls segfault
