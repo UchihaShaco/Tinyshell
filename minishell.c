@@ -117,7 +117,7 @@ int	main(int argc, char **argv, char **env)
 				// for(int i = 0; i < data.num_cmd; i++)
 					// print_tcmd(&data.cmd[i], i);
 				// print_tdata(&data);
-				execute(&data);
+				// execute(&data);
 				// for(int i = 0; i < data.num_cmd; i++)
 				// 	print_tcmd(&data.cmd[i], i);
 				// ts_free_all(&data, &line); // we will have to free the memory something like this 

@@ -80,7 +80,7 @@ void	free_data(t_data *data, char *line, int last)
 		free_fdlist(data->fd, data->num_cmd);
 		if (data->pid)
 			free(data->pid);
-		if (line)
-			free(line);
 	}
+	if (line)
+		free(line);
 }
