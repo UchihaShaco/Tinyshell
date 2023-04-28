@@ -34,8 +34,11 @@ void	*ts_calloc(size_t count, size_t size, t_data *data)
 /* dup2 with error management */
 void	ts_dup2(int oldfd, int newfd, t_data *data)
 {
+	// printf("oldfd: %i newfd: %i\n", oldfd, newfd);
+	// printf("dup2: %i\n", dup2(oldfd, newfd));
 	if (dup2(oldfd, newfd) == -1)
 		error(ERR_DUP, data);
+	// printf("after dup2\n");
 }
 
 /* duplicate string up until but not including char c */
@@ -43,7 +46,9 @@ char	*ft_strdup_lim(const char *s1, char c, t_data *data)
 {
 	char	*ret_str;
 	int		len;
-
+	
+	if (!s1)
+		return (NULL);
 	len = 0;
 	while(s1[len] != c)
 		len++;

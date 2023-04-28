@@ -113,12 +113,12 @@ t_env	*create_var_envlist(char **var, t_data *data)
 }
 
 /* add node to the envlist */
-void	add_var_envlist(char **var, t_data *data)
+void	add_var_envlist(t_env *node, t_data *data)
 {
-	t_env 	*node;
+	// t_env 	*node;
 	t_env	*last;
 	
-	node = create_var_envlist(var, data);
+	// node = create_var_envlist(var, data);
 	if (!*data->env_list)
 		*data->env_list = node;
 	else
@@ -162,7 +162,8 @@ void	init_envlist(t_data *data, char **envp)
 	t_env	*cur;
 	t_env	*node;
 	char	**split_var;
-
+	if(!data->our_env)
+		return ;
 	data->env_list = (t_env **)ts_calloc(1, sizeof(t_env *), data);
 	cur = NULL;
 	i = -1;
@@ -181,9 +182,12 @@ void	init_envlist(t_data *data, char **envp)
 			cur->next = node;
 		cur = node;
 	}
-	/* manually create an oldpwd var */
-	node = (t_env *)ts_calloc(1, sizeof(t_env), data);
-	node->key = ft_strdup_lim("OLDPWD", '\0', data);
-	node->prev = cur;
-	cur->next = node;
+	/* manually create an oldpwd var if one doesn't exist */
+	if (find_var_envlist("OLDPWD", data) == NULL)
+	{
+		node = (t_env *)ts_calloc(1, sizeof(t_env), data);
+		node->key = ft_strdup_lim("OLDPWD", '\0', data);
+		node->prev = cur;
+		cur->next = node;
+	}
 }

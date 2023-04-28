@@ -41,7 +41,8 @@ char	*new_entry_ourenv(t_env *env_var, t_data *data)
 	new_entry = (char *)ts_calloc(key_len + val_len + 2, sizeof(char), data);
 	ft_strlcpy(new_entry, env_var->key, key_len + 1);
 	ft_strlcat(new_entry, "=", key_len + 2);
-	ft_strlcat(new_entry, env_var->val, key_len + val_len + 2);
+	if (env_var->val)
+		ft_strlcat(new_entry, env_var->val, key_len + val_len + 2);
 	return (new_entry);
 }
 
@@ -70,6 +71,7 @@ void	rewrite_ourenv(t_data *data)
 		if (cur->equal == 1)
 		{
 			data->our_env[i] = new_entry_ourenv(cur, data);
+			// printf("%i: %s\n", i, data->our_env[i]);
 			i++;
 		}
 		cur = cur->next;

@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-void	ft_pwd(t_data *data)
+int	ft_pwd(t_data *data)
 {
 	char	*cwd;
 
@@ -9,5 +9,5 @@ void	ft_pwd(t_data *data)
 		error(ERR_CWD, data);
 	print_string(2, data, cwd, "\n");
 	free(cwd);
-	exit(0);
+	return (0);
 }

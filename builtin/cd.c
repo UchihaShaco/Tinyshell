@@ -11,26 +11,56 @@
 		update value
 	update our_env
 */
-void	ft_cd(char **arg, t_data *data)
+int	ft_cd(t_cmd *cmd, t_data *data)
 {
 	t_env	*pwd;
 	t_env 	*oldpwd;
 	char	*home;
+	char	**arg;
+	int		rewrite;
 
-	if (arg[1] == NULL)
+	arg = cmd->array_arg;
+	/* if just cd */
+	if (!arg[1])
 	{
 		home = find_home_dir(data);
 		if (!home)
+		{
 			print_string(1, data, "bash: cd: HOME not set");
+			return (1);
+		}
 		else
 			chdir(home);
 	}
-	else 
+	else if (chdir(arg[1]) != 0)
 	{
-		if (chdir(arg[1]) != 0)
-		{
-			printf("-bash: cd: %s No such file or directory\n", arg[1]);
-			return ;
-		}
+		print_string(3, data, "bash: cd: ", arg[1], " No such file or directory\n");
+		return (1);
 	}
+	if (data->old_dir)
+		free(data->old_dir);
+	data->old_dir = data->cur_dir;
+	data->cur_dir = getcwd(NULL, 0);
+	rewrite = 0;
+	pwd = find_var_envlist("PWD", data);
+	oldpwd = find_var_envlist("OLDPWD", data);
+	if (pwd)
+	{
+		if (pwd->val)
+			free(pwd->val);
+		pwd->equal = 1;
+		pwd->val = ft_strdup_lim(data->cur_dir, '\0', data);
+		rewrite++;
+	}
+	if (oldpwd)
+	{
+		if (oldpwd->val)
+			free(oldpwd->val);
+		oldpwd->equal = 1;
+		oldpwd->val = ft_strdup_lim(data->old_dir, '\0', data);	
+		rewrite++;
+	}
+	if (rewrite > 0)
+		rewrite_ourenv(data);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/26 16:11:31 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/28 14:10:07 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ typedef struct s_data
 	t_env	**env_list;
 	char	**our_env;
 	char	**env_paths;
+	char	*old_dir;
 	char	*cur_dir;
 	int		**fd;
 	int		*pid;
@@ -214,19 +215,21 @@ void	free_data(t_data *data, char *line, int last);
 
 /* ENV */
 t_env	*find_var_envlist(char *key, t_data *data);
-void	add_var_envlist(char **var, t_data *data);
+void	add_var_envlist(t_env *node, t_data *data);
 char	**split_var_envlist(char *str, t_data *data);
 void	init_envlist(t_data *data, char **envp);
 void	rewrite_ourenv(t_data *data);
 void	clear_envlist(t_env **env_list);
 void	delete_var_envlist(char *key, t_data *data);
+t_env	*create_var_envlist(char **var, t_data *data);
 
 /* BUILTIN */
-void	ft_echo(t_cmd *cmd, t_data *data);
-void	ft_export(t_cmd *cmd, t_data *data);
-void	ft_env(t_data *data);
-void	ft_pwd(t_data *data);
-void	ft_unset(t_cmd *cmd, t_data *data);
+int		ft_echo(t_cmd *cmd, t_data *data);
+int		ft_export(t_cmd *cmd, t_data *data);
+int		ft_env(t_data *data);
+int		ft_pwd(t_data *data);
+int		ft_unset(t_cmd *cmd, t_data *data);
+int		ft_cd(t_cmd *cmd, t_data *data);
 
 /* HEREDOC */
 void	get_heredoc(t_cmd *cmd, t_data *data);
@@ -241,7 +244,7 @@ void	create_fd_pid_array(t_data *data);
 /* EXECUTION */
 int		execute(t_data *data);
 int		check_builtin(t_cmd *cmd, t_data *data);
-void	execute_builtin(t_cmd *cmd, t_data *data);
+int		execute_builtin(t_cmd *cmd, int	parent, t_data *data);
 
 /* TESTING */
 void	print_tcmd(t_cmd *cmd, int i);

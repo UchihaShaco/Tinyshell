@@ -88,7 +88,7 @@ void	open_redir_files(int redir, int i, t_cmd *cmd, t_data *data)
 		cmd->fd_array[i] = open(cmd->file[i], O_RDONLY);
 		if (cmd->fd_array[i] == -1)
 		{
-			printf("-bash: %s: No such file or directory\n", cmd->file[i]);
+			printf("bash: %s: No such file or directory\n", cmd->file[i]);
 			//close fd_array, send null to pipe, and exit out of this child process to the next one
 		}
 	}

@@ -37,9 +37,9 @@ void	print_export(t_data *data)
 		{
 			print_string(1, data, "=");
 			if (to_print->val == NULL)
-				print_string(1, data, """\n");
+				print_string(1, data, "\"\"\n");
 			else
-				print_string(2, data, to_print->val, "\n");
+				print_string(3, data, "\"", to_print->val, "\"\n");
 		}
 		else
 			print_string(1, data, "\n");
@@ -67,20 +67,41 @@ int	invalid_export(char *str)
 	return (0);
 }
 
-void	ft_export(t_cmd *cmd, t_data *data) 
+t_env	*create_pwd_envlist(char **var, t_data *data)
+{
+	t_env	*node;
+
+	node = (t_env *)ts_calloc(1, sizeof(t_env), data);
+	node->key = ft_strdup_lim(var[0], '\0', data);
+	if (ft_strcmp(var[0], "OLDPWD") == 0 && data->old_dir)
+	{
+		node->equal = 1;
+		node->val = ft_strdup_lim(data->old_dir, '\0', data);
+	}
+	else if (ft_strcmp(var[0], "PWD") == 0 && data->cur_dir) //assume that it is PWD
+	{
+		node->equal = 1;
+		node->val = ft_strdup_lim(data->cur_dir, '\0', data);
+	}
+	return (node);
+}
+
+int	ft_export(t_cmd *cmd, t_data *data) 
 {	
 	t_env	*env_var;
+	t_env	*node;
 	char	**split_arg;
 	int		i;
 	int		rewr_ourenv;
 	int		rewr_envpaths;
+	int		exit_val;
 	char	**arg;
 
 	arg = cmd->array_arg;
 	if (!arg[1])
 	{
 		print_export(data);
-		return ;
+		return (0);
 	}
 	i = 0;
 	rewr_ourenv = 0;
@@ -88,35 +109,54 @@ void	ft_export(t_cmd *cmd, t_data *data)
 	while (arg[++i])
 	{
 		if (invalid_export(arg[i]))
-			printf("-bash: export: '%s': not a valid identifier\n", arg[i]);
-		else if (ft_strncmp(arg[i], "_=", 2) != 0)
 		{
-			split_arg = split_var_envlist(arg[i], data);
-			env_var = find_var_envlist(split_arg[0], data);
-			if (!env_var)
-				add_var_envlist(split_arg, data);
-			if ((!env_var && split_arg[1]))
-				rewr_ourenv++;
-			// if var exists and there is an = sign in first index (otherwise it would be null)
-			else if (env_var && split_arg[1]) 
+			print_string(3, data, "bash: export: '", arg[i],"': not a valid identifier\n");
+			exit_val = 1;
+		}
+		else
+		{
+			if (ft_strncmp(arg[i], "_=", 2) != 0)
 			{
-				if (ft_strcmp(env_var->val, split_arg[2]) != 0)
+				split_arg = split_var_envlist(arg[i], data);
+				env_var = find_var_envlist(split_arg[0], data);
+				//if var doesn't exist
+				if (!env_var)
 				{
-					if (ft_strcmp(env_var->key, "PATH") == 0)
-						rewr_envpaths++;
-					free(env_var->val);
-					env_var->val = NULL;
-					if (split_arg[2])
-						env_var->val = ft_strdup_lim(split_arg[2], '\0', data);
-					rewr_ourenv++;
+					/* OLDPWD and PWD doesn't exist, and no = is set in the export command */
+					if (!split_arg[1] && (ft_strcmp(split_arg[0], "OLDPWD") == 0 || ft_strcmp(split_arg[0], "PWD") == 0))
+						node = create_pwd_envlist(split_arg, data);
+					else
+						node = create_var_envlist(split_arg, data);
+					add_var_envlist(node, data);
 				}
+				if ((!env_var && split_arg[1]))
+					rewr_ourenv++;
+				// if var exists and there is an = sign in first index (otherwise it would be null)
+				else if (env_var && split_arg[1]) 
+				{
+					env_var->equal = 1;
+					if (ft_strcmp(env_var->val, split_arg[2]) != 0)
+					{
+						if (env_var->val)
+							free(env_var->val);
+						env_var->val = NULL;
+						if (split_arg[2])
+							env_var->val = ft_strdup_lim(split_arg[2], '\0', data);
+						if (ft_strcmp(env_var->key, "PATH") == 0)
+							rewr_envpaths++;
+						rewr_ourenv++;
+					}
+				}
+				free_strlist(split_arg);
 			}
-			free_strlist(split_arg);
+			exit_val = 0;
 		}
 	}
 	if (rewr_ourenv > 0)
 		rewrite_ourenv(data);
-	exit(0);
+	if (rewr_envpaths > 0)
+		get_env_paths(data);
+	return (exit_val);
 }
 
 

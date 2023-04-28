@@ -34,18 +34,16 @@ Finalize data
 	3. cd
 		what happens if OLDPWD and PWD are unset? 
 	4. Export
-		-export multiple keys - 
-		-do not print _=
-		-you can export _=somevalue but this will do nothing
-		-declare -x OLDPWD (no newline for some reason) - 
+		-check first if OLDPWD exists before adding it
+		-write rewrite_envpaths in export function
 	5. Unset
-		-unset multiple keys
-		-check what happens if unset a=
 
 	-builtins are not being piped properly
 	NOTES:
-		-cd with pipes does nothing
-	-to find home directory, iterate through envirnonmental variable
+		-builtins in pipes wont do anything
+		-figure out a way to not exit if builtin executed in parent 
+		-exit 1 for errors
+		-to find home directory, iterate through envirnonmental variable
 4. execution
 	-show directory change in prompt
 	-take care of Exec errors

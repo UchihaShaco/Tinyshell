@@ -166,3 +166,33 @@ void	remove_var(t_env *env_var, t_data *data)
 		env_var->next->prev = env_var->prev;
 	free_env_var(temp);
 }
+
+ // void	ft_echo(char **arg, t_data *data)
+// {
+// 	int	i;
+// 	int	nflag;
+
+// 	i = 1;
+// 	nflag = 0; 
+// 	while (arg[i])
+// 	{
+// 		if (!detect_nflag(arg[i]))
+// 			break;
+// 		nflag++;
+// 		i++;
+// 	}
+// 	while (arg[i])
+// 	{
+// 		if (arg[i + 1] != NULL)
+// 		{
+// 			ft_putstr_fd(arg[i], 1);
+// 			ft_putstr_fd(" ", 1);
+// 		}
+// 		else if (arg[i + 1] == NULL)
+// 			ft_putstr_fd(arg[i], 1);
+// 		i++;
+// 	}
+// 	if (nflag == 0)
+// 		ft_putstr_fd("\n", 1);
+// 	exit(0);
+// }

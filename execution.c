@@ -71,7 +71,7 @@ void	child_process(int i, t_cmd *cmd, t_data *data)
 		j++;
 	}
 	if (cmd->builtin > 0)
-		execute_builtin(cmd, data);
+		execute_builtin(cmd, NO, data);
 	else
 	{
 		if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
@@ -100,32 +100,41 @@ int	parent_process(t_data *data)
 	return (status);
 }
 
-// void	exec_one_cmd(t_cmd *cmd, t_data *data)
-// {
-// 	int	builtin;
-
-// 	builtin = check_builtin(data->cmd->array_arg[0], data);
-// 	if (builtin != 0)
-// 	{
-// 		execute_builtin(data->cmd->array_arg, builtin, data);
-// 	}
-// 	else
-// 	{
-// 		if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
-// 			error(ERR_EXEC, data);
-// 	}
-// }
+void	exec_one_builtin(t_cmd *cmd, t_data *data)
+{
+	int fd;
+	/* redirect */
+	if (cmd->last_input > -1)
+	{
+		printf("there is a last input\n");
+		ts_dup2(cmd->fd_array[cmd->last_input], STDIN_FILENO, data);
+	}
+	if (cmd->last_output > -1)
+	{
+		printf("there is a last output\n");
+		ts_dup2(cmd->fd_array[cmd->last_output], STDOUT_FILENO, data);
+		// fd = open("file5", O_WRONLY | O_CREAT);
+		// dup2(fd, STDOUT_FILENO);
+	}
+	close_fd_array(cmd);
+	// close(fd);
+	// close(cmd->fd_array[cmd->last_output]);
+	execute_builtin(&data->cmd[0], YES, data);
+}
 
 int	execute(t_data *data)
 {
 	int	i;
 	int	status;
 
-	// if (data->num_cmd == 1)
-	// 	exec_one_cmd(&data->cmd[0], data);
+	if (data->num_cmd == 1 && data->cmd->builtin > 0)
+	{
+		exec_one_builtin(&data->cmd[0], data);
+		// exit(0);
+	}
 	/* create pipes and fork*/
-	// else
-	// {
+	else
+	{
 		i = -1;
 		/* create pipes based on number of commands - 1*/
 		while (++i < data->num_cmd - 1)
@@ -144,6 +153,6 @@ int	execute(t_data *data)
 		/* run the parent process */
 		status = parent_process(data);
 		return (WEXITSTATUS(status));
-	// }
+	}
 	return (0);
 }

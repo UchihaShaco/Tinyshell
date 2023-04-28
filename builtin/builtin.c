@@ -70,23 +70,28 @@ int	check_builtin(t_cmd *cmd, t_data *data)
 	return (i);
 }
 
-void	execute_builtin(t_cmd *cmd, t_data *data)
+int	execute_builtin(t_cmd *cmd, int	parent, t_data *data)
 {
 	char **arg;
+	int	exit_val;
 
 	arg = cmd->array_arg;
 	if (cmd->builtin == 1)
-		ft_echo(cmd, data);
-	// else if (cmd->builtin == 2)
-	// 	ft_cd(arg, data);
+		exit_val = ft_echo(cmd, data);
+	else if (cmd->builtin == 2)
+		exit_val = ft_cd(cmd, data);
 	else if (cmd->builtin == 3)
-		ft_pwd(data);
+		exit_val = ft_pwd(data);
 	else if (cmd->builtin == 4)
-		ft_export(cmd, data);
+		exit_val = ft_export(cmd, data);
 	else if (cmd->builtin == 5)
-		ft_unset(cmd, data);
+		exit_val = ft_unset(cmd, data);
 	else if (cmd->builtin == 6)
-		ft_env(data);
+		exit_val = ft_env(data);
 	// else if (cmd->builtin == 7)
-	// 	ft_exit(data);
+	// 	exit_val = ft_exit(data);
+	if (parent == NO) //this needs to be revised
+		exit(exit_val);
+	return (exit_val);
+
 }

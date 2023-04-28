@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/27 17:53:09 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/28 17:37:02 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,12 @@ int	main(int argc, char **argv, char **env)
 	ft_bzero(&data, sizeof(t_data));
 	ts_init_data(&data, &env, YES);
 	// print_tdata(&data);
+	int def_in = dup(STDIN_FILENO);
+	int def_out = dup(STDOUT_FILENO);
 	while (1)
 	{
+		dup2(def_in, STDIN_FILENO);
+		dup2(def_out, STDOUT_FILENO);
 		ts_get_signal();
 		ts_init_data(&data, &env, NO);
 		line = readline("\033[1;35mTinyShell > \033[0m");
@@ -115,9 +119,9 @@ int	main(int argc, char **argv, char **env)
 				// printf("\n ---------------------------------------\n");
 				finalize_cmd(&data);
 				// for(int i = 0; i < data.num_cmd; i++)
-					// print_tcmd(&data.cmd[i], i);
+				// 	print_tcmd(&data.cmd[i], i);
 				// print_tdata(&data);
-				// execute(&data);
+				execute(&data);
 				// for(int i = 0; i < data.num_cmd; i++)
 				// 	print_tcmd(&data.cmd[i], i);
 				// ts_free_all(&data, &line); // we will have to free the memory something like this 
