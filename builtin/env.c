@@ -11,7 +11,7 @@ int	ft_env(t_data *data)
 	i = 0;
 	while(our_env[i])
 	{
-		print_string(2, data, our_env[i], "\n");
+		put_strs_fd(2, data, 1, our_env[i], "\n");
 		i++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/28 14:10:07 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/28 22:10:21 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <stdarg.h>
+
+# define LLMIN 9223372036854775808
 
 typedef enum e_value
 {
@@ -208,6 +210,7 @@ char	*ft_strjoin_char(char const *s1, char const *s2, char c, t_data *data);
 int		detect_char(char *str, char c);
 void	print_string(int num_str, ...);
 void	error(int error, t_data *data);
+void	put_strs_fd(int num_str, ...);
 
 /* FREE */
 void	free_strlist(char **str);
@@ -230,6 +233,7 @@ int		ft_env(t_data *data);
 int		ft_pwd(t_data *data);
 int		ft_unset(t_cmd *cmd, t_data *data);
 int		ft_cd(t_cmd *cmd, t_data *data);
+void	ft_exit(t_cmd *cmd, t_data *data);
 
 /* HEREDOC */
 void	get_heredoc(t_cmd *cmd, t_data *data);

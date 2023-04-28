@@ -42,12 +42,12 @@ int	ft_echo(t_cmd *cmd, t_data *data)
 	while (arg[i])
 	{
 		if (arg[i + 1] != NULL)
-			print_string(2, data, arg[i], " ");
+			put_strs_fd(2, data, 1, arg[i], " ");
 		else if (arg[i + 1] == NULL)
-			print_string(1, data, arg[i]);
+			put_strs_fd(1, data, 1, arg[i]);
 		i++;
 	}
 	if (nflag == 0)
-		print_string(1, data, "\n");
+		put_strs_fd(1, data, 1, "\n");
 	return (0);
 }

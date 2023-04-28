@@ -105,20 +105,10 @@ void	exec_one_builtin(t_cmd *cmd, t_data *data)
 	int fd;
 	/* redirect */
 	if (cmd->last_input > -1)
-	{
-		printf("there is a last input\n");
 		ts_dup2(cmd->fd_array[cmd->last_input], STDIN_FILENO, data);
-	}
 	if (cmd->last_output > -1)
-	{
-		printf("there is a last output\n");
 		ts_dup2(cmd->fd_array[cmd->last_output], STDOUT_FILENO, data);
-		// fd = open("file5", O_WRONLY | O_CREAT);
-		// dup2(fd, STDOUT_FILENO);
-	}
 	close_fd_array(cmd);
-	// close(fd);
-	// close(cmd->fd_array[cmd->last_output]);
 	execute_builtin(&data->cmd[0], YES, data);
 }
 
@@ -128,10 +118,7 @@ int	execute(t_data *data)
 	int	status;
 
 	if (data->num_cmd == 1 && data->cmd->builtin > 0)
-	{
 		exec_one_builtin(&data->cmd[0], data);
-		// exit(0);
-	}
 	/* create pipes and fork*/
 	else
 	{

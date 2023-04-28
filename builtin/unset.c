@@ -42,7 +42,7 @@ int	ft_unset(t_cmd *cmd, t_data *data)
 	{
 		if (invalid_unset(arg[i]))
 		{
-			print_string(3, data, "bash: unset : '", arg[i], "': not a valid identifier\n");
+			put_strs_fd(3, data, 2, "bash: unset : '", arg[i], "': not a valid identifier\n");
 			exit_val = 1;
 		}
 		else

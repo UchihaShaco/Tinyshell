@@ -45,6 +45,9 @@ char	*generate_heredoc(t_cmd *cmd, t_data *data)
 	while (i < cmd->count_hd)
 	{
 		input = readline("> ");
+			if(!input)
+				return (NULL);
+				//stop
 		if (ft_strcmp(input, cmd->hd_array[i]) == 0)
 			i++;
 		else if (cmd->record_hd == 1 && i == cmd->count_hd - 1)

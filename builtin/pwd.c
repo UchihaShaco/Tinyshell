@@ -7,7 +7,7 @@ int	ft_pwd(t_data *data)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		error(ERR_CWD, data);
-	print_string(2, data, cwd, "\n");
+	put_strs_fd(2, data, 1, cwd, "\n");
 	free(cwd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 19:09:51 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/27 17:38:41 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/28 22:21:39 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,10 @@ void	ts_free_all(t_data *data, char **line)
 	if (data->our_env != NULL)
 		ts_free_arr(&data->our_env);
 	ts_free_cycle(data, line);
-	// if (data->tmp_var != NULL)
-	// 	ts_free_arr(&data->tmp_var);
-	// ts_free_str(&data->prev_dir);
+	ts_free_str(&data->old_dir);
 	ts_free_str(&data->cur_dir);
-	
+		// if (data->tmp_var != NULL)
+	// 	ts_free_arr(&data->tmp_var);
 }
 
 void	ts_free_arg(t_data *data, int y)

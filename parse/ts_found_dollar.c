@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_found_dollar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 20:48:43 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/03 10:22:51 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/04/28 22:32:32 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	 ts_found_env_variable(t_data *data, t_cmd *cmd)
 
 	i = 0;
 	y = 0;
+	
 	while (y < cmd->num_arg)
 	{
 		cmd->arg[y].empty_key = NO;

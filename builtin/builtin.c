@@ -88,8 +88,8 @@ int	execute_builtin(t_cmd *cmd, int	parent, t_data *data)
 		exit_val = ft_unset(cmd, data);
 	else if (cmd->builtin == 6)
 		exit_val = ft_env(data);
-	// else if (cmd->builtin == 7)
-	// 	exit_val = ft_exit(data);
+	else if (cmd->builtin == 7)
+		ft_exit(cmd, data);
 	if (parent == NO) //this needs to be revised
 		exit(exit_val);
 	return (exit_val);

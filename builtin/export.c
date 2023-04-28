@@ -32,17 +32,17 @@ void	print_export(t_data *data)
 			cur = cur->next;
 		}
 		to_print->p = 1;
-		print_string(2, data, "declare -x ", to_print->key);
+		put_strs_fd(2, data, 1, "declare -x ", to_print->key);
 		if (to_print->equal == 1)
 		{
-			print_string(1, data, "=");
+			put_strs_fd(1, data, 1, "=");
 			if (to_print->val == NULL)
-				print_string(1, data, "\"\"\n");
+				put_strs_fd(1, data, 1, "\"\"\n");
 			else
-				print_string(3, data, "\"", to_print->val, "\"\n");
+				put_strs_fd(3, data, 1, "\"", to_print->val, "\"\n");
 		}
 		else
-			print_string(1, data, "\n");
+			put_strs_fd(1, data, 1, "\n");
 	}
 	cur = *(data->env_list);
 	while (cur != NULL)
@@ -110,7 +110,7 @@ int	ft_export(t_cmd *cmd, t_data *data)
 	{
 		if (invalid_export(arg[i]))
 		{
-			print_string(3, data, "bash: export: '", arg[i],"': not a valid identifier\n");
+			put_strs_fd(3, data, 2, "bash: export: '", arg[i],"': not a valid identifier\n");
 			exit_val = 1;
 		}
 		else

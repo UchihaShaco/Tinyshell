@@ -62,6 +62,7 @@ Finalize data
 NOTES: 
 -print error on stderr
 -not bash but TinyShell
+-
 
 
 FILES added:
@@ -98,3 +99,10 @@ ERRORS
 -bash: warning: here-document at line 116 delimited by end-of-file (wanted `hello')
 -bash: grep: NO such file or directory
 -bash: cd: /home/hbui-vu:/mnt/c: No such file or directory
+
+TODO: 
+-typos - need bash: expor: command not found
+- > | > | > | -->freeing a pointer that wasn't allocated
+- << 2 with no commands - there is redirection but no args
+-  echo hi > f> ls segfault
+- ctrl c in heredocs

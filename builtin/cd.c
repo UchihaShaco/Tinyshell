@@ -26,7 +26,7 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		home = find_home_dir(data);
 		if (!home)
 		{
-			print_string(1, data, "bash: cd: HOME not set");
+			put_strs_fd(1, data, 2, "bash: cd: HOME not set");
 			return (1);
 		}
 		else
@@ -34,7 +34,7 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 	}
 	else if (chdir(arg[1]) != 0)
 	{
-		print_string(3, data, "bash: cd: ", arg[1], " No such file or directory\n");
+		put_strs_fd(3, data, 2, "bash: cd: ", arg[1], " No such file or directory\n");
 		return (1);
 	}
 	if (data->old_dir)
