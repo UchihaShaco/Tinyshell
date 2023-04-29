@@ -32,7 +32,7 @@ char	*ft_strjoin_hd(char const *s1, char const *s2, t_data *data)
 	return (buffer);
 }
 
-char	*generate_heredoc(t_cmd *cmd, t_data *data)
+void	get_heredoc_str(t_cmd *cmd, t_data *data)
 {
 	char	*input;
 	char	*str;
@@ -49,7 +49,7 @@ char	*generate_heredoc(t_cmd *cmd, t_data *data)
 		{
 			free(str);
 			free_data(data, input, NO);
-			return (NULL);
+			return ; // or exit??
 		}
 		if (ft_strcmp(input, cmd->hd_array[i]) == 0)
 			i++;
@@ -62,22 +62,18 @@ char	*generate_heredoc(t_cmd *cmd, t_data *data)
 		}
 		free(input);
 	}
-	return (str);
+	cmd->heredoc_str = str;
 }
 
-void	get_heredoc(t_cmd *cmd, t_data *data)
+void	get_heredoc_fd(t_cmd *cmd, t_data *data)
 {
 	int		fd[2];
 	char	*str;
 
-	str = generate_heredoc(cmd, data);
-	if (cmd->record_hd == 1)
-	{
-		if (pipe(fd) == -1)
-			error(ERR_PIPE, data);
-		write(fd[1], str, ft_strlen(str)); 
-		free(str);
-		close(fd[1]);
-		cmd->fd_array[cmd->last_input] = fd[0];
-	}
+	if (pipe(fd) == -1)
+		error(ERR_PIPE, data);
+	write(fd[1], cmd->heredoc_str, ft_strlen(str)); 
+	free(str);
+	close(fd[1]);
+	cmd->fd_array[cmd->last_input] = fd[0];
 }

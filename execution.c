@@ -11,19 +11,28 @@ void	pipe_null(int index, t_data *data)
 	close(devnull);
 }
 
-void	close_fd_array(t_cmd *cmd)
+void	close_fd_array(t_cmd *cmd, t_data *data)
 {
 	int	i;
 
-	i = 0;
-	while (i < cmd->count_redir)
+	if (cmd->count_redir == 0)
+		return ;
+	i = -1;
+	while (++i < cmd->count_redir)
+		if (cmd->fd_array[i] > 0 && close(cmd->fd_array[i]) == -1)
+			error(ERR_CLOSE, data);
+}
+
+void	close_pipes(t_data *data)
+{
+	int j;
+
+	j = 0;
+	while (j < data->num_cmd - 1)
 	{
-		if (i != -1)
-		{
-			close(cmd->fd_array[i]);
-			cmd->fd_array[i] = -1;
-		}
-		i++;
+		close(data->fd[j][0]);
+		close(data->fd[j][1]);
+		j++;
 	}
 }
 
@@ -54,15 +63,64 @@ void	pipe_cmd(int index, t_cmd *cmd, t_data *data)
 		// if (index != data->num_cmd - 1)
 		// 	pipe_null(index, data);
 	}
-	close_fd_array(cmd);
-		
 }
 
+void	open_files(t_cmd *cmd, t_data *data)
+{
+	int	i;
+
+	if (cmd->count_redir == 0)
+		return ;
+	cmd->fd_array = (int *)ts_calloc(cmd->count_redir, sizeof(int), data);
+	i = -1;
+	while (++i < cmd->count_redir)
+	{
+		if (cmd->redir[i] == 2)
+		{
+			cmd->fd_array[i] = open(cmd->file[i], O_RDONLY);
+			if (cmd->fd_array[i] == -1)
+			{
+				put_strs_fd(3, data, 2, "bash: ", cmd->file[i], ": No such file or directory\n");
+				close_fd_array(cmd, data);
+				close_pipes(data);
+				exit (EXIT_FAILURE);
+			}
+		}
+		else if (cmd->redir[i] == 3)
+		{
+			cmd->fd_array[i] = open(cmd->file[i], O_CREAT | O_RDWR | O_TRUNC, 0666);
+			if (cmd->fd_array[i] == -1)
+				error(ERR_OPEN, data);
+		}
+		else if (cmd->redir[i] == 4)
+		{
+			cmd->fd_array[i] = open(cmd->file[i], O_CREAT | O_RDWR | O_APPEND, 0666);
+			if (cmd->fd_array[i] == -1)
+				error(ERR_OPEN, data);
+		}
+		else if (cmd->redir[i] == 5)
+		{
+			if (cmd->last_input == i)
+				get_heredoc_fd(cmd, data);
+			else 
+				cmd->fd_array[i] = -2;
+		}
+	}
+}
+
+/*
+if there is 0 num arg but some redirections 
+if the command doesn't exist
+run cmd normally
+*/
 void	child_process(int i, t_cmd *cmd, t_data *data)
 {
-	int	j;
-
+	open_files(cmd, data);
 	pipe_cmd(i, cmd, data);
+	close_fd_array(cmd, data);
+	close_pipes(data);
+	int j;
+
 	j = 0;
 	while (j < data->num_cmd - 1)
 	{
@@ -70,16 +128,17 @@ void	child_process(int i, t_cmd *cmd, t_data *data)
 		close(data->fd[j][1]);
 		j++;
 	}
+	if (cmd->num_arg == 0)
+		exit(0);
 	if (cmd->builtin > 0)
 		execute_builtin(cmd, NO, data);
-	else
+	if (!cmd->path)
 	{
-		if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
-		{
-			put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
-			exit(EXIT_FAILURE);
-		}
+		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
+		exit(EXIT_FAILURE);
 	}
+	else if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
+		error(ERR_EXEC, data);
 }
 
 int	parent_process(t_data *data)
@@ -87,13 +146,7 @@ int	parent_process(t_data *data)
 	int	i;
 	int	status;
 
-	i = 0;
-	while (i < data->num_cmd - 1)
-	{
-		close(data->fd[i][0]);
-		close(data->fd[i][1]);
-		i++;
-	}
+	close_pipes(data);
 	i = 0;
 	while (i < data->num_cmd)
 	{
@@ -111,7 +164,7 @@ void	exec_one_builtin(t_cmd *cmd, t_data *data)
 		ts_dup2(cmd->fd_array[cmd->last_input], STDIN_FILENO, data);
 	if (cmd->last_output > -1)
 		ts_dup2(cmd->fd_array[cmd->last_output], STDOUT_FILENO, data);
-	close_fd_array(cmd);
+	close_fd_array(cmd, data);
 	execute_builtin(&data->cmd[0], YES, data);
 }
 
@@ -120,6 +173,9 @@ int	execute(t_data *data)
 	int	i;
 	int	status;
 
+	if (data->num_cmd == 0)
+		return (0);
+	/* if there is one cmd and it's a builtin*/
 	if (data->num_cmd == 1 && data->cmd->builtin > 0)
 		exec_one_builtin(&data->cmd[0], data);
 	/* create pipes and fork*/
@@ -146,3 +202,24 @@ int	execute(t_data *data)
 	}
 	return (0);
 }
+
+// int	j;
+
+// 	pipe_cmd(i, cmd, data);
+// 	j = 0;
+// 	while (j < data->num_cmd - 1)
+// 	{
+// 		close(data->fd[j][0]);
+// 		close(data->fd[j][1]);
+// 		j++;
+// 	}
+// 	if (cmd->builtin > 0)
+// 		execute_builtin(cmd, NO, data);
+// 	else
+// 	{
+// 		if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
+// 		{
+// 			put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
+// 			exit(EXIT_FAILURE);
+// 		}
+// 	}

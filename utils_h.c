@@ -117,7 +117,12 @@ void	error(int error, t_data *data)
 		write(2, "TinyShell: Fork function error\n", 31);
 	else if (error == ERR_CWD)
 		write(2, "TinyShell: getcwd function error\n", 33);
+	else if (error = ERR_EXEC)
+		write(2, "TinyShell: exec function error\n", 31);
+	else if (error = ERR_CLOSE)
+		write(2, "TinyShell: close function error\n", 32);
 	//free(data);
+	//close all fds in cmds
 	exit(EXIT_FAILURE);
 }
 

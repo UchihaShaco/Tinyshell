@@ -82,72 +82,37 @@ void	check_redir_doubles(t_cmd *cmd, t_data *data)
 	cmd->count_redir = new_count_redir;
 }
 
-/* populates fd_array */
-void	open_redir_files(int redir, int i, t_cmd *cmd, t_data *data)
-{
-	if (redir == 2)
-	{
-		cmd->fd_array[i] = open(cmd->file[i], O_RDONLY);
-		if (cmd->fd_array[i] == -1)
-		{
-			printf("bash: %s: No such file or directory\n", cmd->file[i]);
-			//close fd_array, send null to pipe, and exit out of this child process to the next one
-		}
-	}
-	else if (redir == 3)
-	{
-		cmd->fd_array[i] = open(cmd->file[i], O_CREAT | O_RDWR | O_TRUNC, 0666);
-		if (cmd->fd_array[i] == -1)
-			error(ERR_OPEN, data);
-	}
-	else if (redir == 4)
-	{
-		cmd->fd_array[i] = open(cmd->file[i], O_CREAT | O_RDWR | O_APPEND, 0666);
-		if (cmd->fd_array[i] == -1)
-			error(ERR_OPEN, data);
-	}
-	else if (redir == 5)
-		cmd->fd_array[i] = -1;
-}
 
-/* modifies last_input, last_output, count_hd, init fd_array*/
-void	mod_fd_array(t_cmd *cmd, t_data *data)
+
+
+/* populates last_input, last_output, count_hd */
+void	check_hd_last_redir(t_cmd *cmd, t_data *data)
 {
 	int	i;
 
 	cmd->last_output = -1;
 	cmd->last_input = -1;
-	if (cmd->count_redir > 0)
-		cmd->fd_array = ts_calloc(cmd->count_redir, sizeof(int), data);
 	i = -1;
 	while (++i < cmd->count_redir)
 	{
 		if (cmd->redir[i] == 2)
-		{
-			open_redir_files(2, i, cmd, data);
 			cmd->last_input = i;
-		}
 		else if (cmd->redir[i] == 3)
-		{
-			open_redir_files(3, i, cmd, data);
 			cmd->last_output = i;
-		}
 		else if (cmd->redir[i] == 4)
-		{
-			open_redir_files(4, i, cmd, data);
 			cmd->last_output = i;
-		}
 		else if (cmd->redir[i] == 5)
 		{
-			open_redir_files(5, i, cmd, data);
 			cmd->last_input = i;
 			cmd->count_hd++;
 		}
 	}
+	if (cmd->last_input > -1 && cmd->redir[cmd->last_input] == 5)
+		cmd->record_hd = 1;
 }
 
 /* modifies hd_array, record_hd, fd_array (if last input is hd); inits hd in terminal */
-void	create_heredoc(t_cmd *cmd, t_data *data)
+void	init_heredoc(t_cmd *cmd, t_data *data)
 {
 	int	i;
 	int	j;
@@ -158,9 +123,7 @@ void	create_heredoc(t_cmd *cmd, t_data *data)
 	while (++i < cmd->count_redir)
 		if (cmd->redir[i] == 5)
 			cmd->hd_array[++j] = ft_strdup_lim(cmd->file[i], '\0', data);
-	if (cmd->last_input > -1 && cmd->redir[cmd->last_input] == 5)
-		cmd->record_hd = 1;
-	get_heredoc(cmd, data);
+	get_heredoc_str(cmd, data);
 }
 
 void	get_cmd_path(t_cmd *cmd, t_data *data)
@@ -203,13 +166,51 @@ void	finalize_cmd(t_data *data)
 	{
 		if (data->cmd[i].count_redir > 1) //only check for doubles if there are 2+ redir
 			check_redir_doubles(&data->cmd[i], data);
-		mod_fd_array(&data->cmd[i], data);
+		check_hd_last_redir(&data->cmd[i], data);
 		if (data->cmd[i].count_hd > 0)
-			create_heredoc(&data->cmd[i], data);
+			init_heredoc(&data->cmd[i], data);
 		if (data->cmd[i].num_arg > 0)
 		{
-			get_cmd_path(&data->cmd[i], data);
 			data->cmd[i].builtin = check_builtin(&data->cmd[i], data);
+			get_cmd_path(&data->cmd[i], data);
 		}
 	}
 }
+
+//NOTES: CREATE fd_array when opening files in child process
+
+// /* modifies last_input, last_output, count_hd, init fd_array*/
+// void	mod_fd_array(t_cmd *cmd, t_data *data)
+// {
+// 	int	i;
+
+// 	cmd->last_output = -1;
+// 	cmd->last_input = -1;
+// 	if (cmd->count_redir > 0)
+// 		cmd->fd_array = ts_calloc(cmd->count_redir, sizeof(int), data);
+// 	i = -1;
+// 	while (++i < cmd->count_redir)
+// 	{
+// 		if (cmd->redir[i] == 2)
+// 		{
+// 			open_redir_files(2, i, cmd, data);
+// 			cmd->last_input = i;
+// 		}
+// 		else if (cmd->redir[i] == 3)
+// 		{
+// 			open_redir_files(3, i, cmd, data);
+// 			cmd->last_output = i;
+// 		}
+// 		else if (cmd->redir[i] == 4)
+// 		{
+// 			open_redir_files(4, i, cmd, data);
+// 			cmd->last_output = i;
+// 		}
+// 		else if (cmd->redir[i] == 5)
+// 		{
+// 			open_redir_files(5, i, cmd, data);
+// 			cmd->last_input = i;
+// 			cmd->count_hd++;
+// 		}
+// 	}
+// }

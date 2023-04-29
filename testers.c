@@ -113,11 +113,12 @@ void	print_tcmd(t_cmd *cmd, int i)
 {
 	printf("*******CMD[%i]********\n", i);
 	printf("\033[1;35m STR: \033[0m%s\n", cmd->str);
-	printf("\033[1;35m ARG->STR: \033[0m%s\n", cmd->arg->str);
+	// printf("\033[1;35m ARG->STR: \033[0m%s\n", cmd->arg->str);
 	printf("\033[1;35m NUM_ARG: \033[0m%i\n", cmd->num_arg);
 	printf("\033[1;35m COUNT_REDIR: \033[0m %i\n", cmd->count_redir);
 	printf("\033[1;35m COUNT_HD: \033[0m%i\n", cmd->count_hd);
 	printf("\033[1;35m RECORD_HD: \033[0m%i\n", cmd->record_hd);
+	printf("\033[1;35m HEREDOC_STR: \033[0m%s\n", cmd->heredoc_str);
 	printf("\033[1;35m LAST_INPUT: \033[0m%i\n", cmd->last_input);
 	printf("\033[1;35m LAST_OUTPUT: \033[0m%i\n", cmd->last_output); 
 	printf("\033[1;35m BUILTIN: \033[0m%i\n", cmd->builtin); 

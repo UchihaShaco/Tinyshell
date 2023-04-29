@@ -79,6 +79,8 @@ void	free_cmd(t_data *data)
 			free(cmd[i].redir);
 		if (cmd[i].fd_array)
 			free(cmd[i].fd_array);
+		if (cmd[i].heredoc_str)
+			free(cmd[i].heredoc_str);
 	}
 	free(cmd);
 	data->cmd = NULL;

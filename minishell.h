@@ -51,6 +51,7 @@ typedef enum e_value
 	ERR_FORK,
 	ERR_PRINT,
 	ERR_CWD,
+	ERR_CLOSE,
 	DOUBLE_Q_MARK = 34,
 	ONE_Q_MARK = 39,
 	ERR_CMD = 127, // typically indicates that the specified command could not be found or executed by the shell.
@@ -80,6 +81,7 @@ typedef struct s_cmd
 	char	**array_arg; //arg array
 	char	**hd_array; //array of heredoc delimiters
 	char	**file; //files for redirection
+	char	*heredoc_str;
 	char	*path; //path for cmd (execve)
 	int		*redir; //array of redirections in cmd
 	int		*fd_array; //array of open files for redirections
@@ -169,7 +171,7 @@ int		ts_get_signal(void);
 void	ts_signal_ctrl_slash(t_data *data, char **line);
 /* *********************  Malloc  ********************* */
 void	ts_malloc_array(char ***array, int size, t_data *data);
-void	ts_alloc_str(char **name, int size, t_data *data);
+void	ts_malloc_str(char **name, int size, t_data *data);
 void	ts_malloc_arg(t_arg **arg, int size, t_data *data);
 void	ts_malloc_cmd(t_cmd **cmd, int size, t_data *data);
 void	ts_malloc_arr_int(int **arr_int, int size, t_data *data);
@@ -236,7 +238,8 @@ int		ft_cd(t_cmd *cmd, t_data *data);
 void	ft_exit(t_cmd *cmd, t_data *data);
 
 /* HEREDOC */
-void	get_heredoc(t_cmd *cmd, t_data *data);
+void	get_heredoc_fd(t_cmd *cmd, t_data *data);
+void	get_heredoc_str(t_cmd *cmd, t_data *data);
 
 /* DATA & CMD*/
 void	finalize_cmd(t_data *data);
