@@ -45,9 +45,12 @@ char	*generate_heredoc(t_cmd *cmd, t_data *data)
 	while (i < cmd->count_hd)
 	{
 		input = readline("> ");
-			if(!input)
-				return (NULL);
-				//stop
+		if(!input)
+		{
+			free(str);
+			free_data(data, input, NO);
+			return (NULL);
+		}
 		if (ft_strcmp(input, cmd->hd_array[i]) == 0)
 			i++;
 		else if (cmd->record_hd == 1 && i == cmd->count_hd - 1)
@@ -55,9 +58,9 @@ char	*generate_heredoc(t_cmd *cmd, t_data *data)
 			new_str = ft_strjoin_hd(str, input, data);
 			if (str)
 				free(str);
-			free(input);
 			str = new_str;
 		}
+		free(input);
 	}
 	return (str);
 }

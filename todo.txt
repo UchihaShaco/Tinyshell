@@ -106,3 +106,10 @@ TODO:
 - << 2 with no commands - there is redirection but no args
 -  echo hi > f> ls segfault
 - ctrl c in heredocs
+
+
+NOTES:
+>>>>>>>>>>> will create an empty command
+cd | cd | will NOTE create any commands
+ts_malloc -> changed all functions to calloc
+for malloc arg, it is not a linked list, therefore no need for size + 1

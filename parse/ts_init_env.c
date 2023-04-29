@@ -31,7 +31,7 @@ static void	ts_record_lvl(char **str_lvl, char ***env, int y)
 	ts_free_str(str_lvl);
 }
 
-static int	ts_shell_lvl(char ***env, int y)
+static int	ts_shell_lvl(char ***env, int y, t_data *data)
 {
 	char	*str_lvl;
 	int		len_str_lvl;
@@ -42,7 +42,7 @@ static int	ts_shell_lvl(char ***env, int y)
 	while ((*env)[y][x] != '\0')
 		x++;
 	len_str_lvl = x - 6;
-	ts_malloc_str(&str_lvl, len_str_lvl);
+	ts_malloc_str(&str_lvl, len_str_lvl, data);
 	x = 0;
 	while ((*env)[y][x + 6] != '\0')
 	{
@@ -81,11 +81,11 @@ static int	ts_record_env(t_data *data, char ***env, int y, int shell_lvl)
 		size++;
 	if (shell_lvl == YES)
 		size = ts_check_slvl(*env, y, size);
-	ts_malloc_str(&data->our_env[y], size);
+	ts_malloc_str(&data->our_env[y], size, data);
 	while ((*env)[y][x] != '\0')
 	{
 		if (x == 6 && shell_lvl == YES)
-			ts_shell_lvl(env, y);
+			ts_shell_lvl(env, y, data);
 		data->our_env[y][x] = (*env)[y][x];
 		x++;
 	}
@@ -106,7 +106,7 @@ void	ts_init_env(t_data *data, char ***env)
 	data->num_env = y;
 	if (data->num_env > 0)
 	{
-		ts_malloc_array(&data->our_env, y);
+		ts_malloc_array(&data->our_env, y, data);
 		y = 0;
 		while ((*env)[y] != 0)
 		{

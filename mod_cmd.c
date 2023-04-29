@@ -15,6 +15,8 @@ In this function, char **file and int *redir are potentially modified (if double
 5. Free old char **file and int *redir
 6. Set cmd->file = new_file, cmd->redir = new_redir, cmd->count_redir = new_count;
 */
+
+/* iterates through redir array and if there is a double, turns the redir # to -1 */
 void	mod_redir_doubles(t_cmd *cmd)
 {
 	int	i;
@@ -43,7 +45,7 @@ void	mod_redir_doubles(t_cmd *cmd)
 	}
 }
 
-/* modifies cmd->file and cmd->redir */
+/* modifies cmd->file and cmd->redir - potential re-calloc*/
 void	check_redir_doubles(t_cmd *cmd, t_data *data)
 {
 	int		i;
@@ -115,7 +117,8 @@ void	mod_fd_array(t_cmd *cmd, t_data *data)
 
 	cmd->last_output = -1;
 	cmd->last_input = -1;
-	cmd->fd_array = ts_calloc(cmd->count_redir, sizeof(int), data);
+	if (cmd->count_redir > 0)
+		cmd->fd_array = ts_calloc(cmd->count_redir, sizeof(int), data);
 	i = -1;
 	while (++i < cmd->count_redir)
 	{
@@ -198,15 +201,15 @@ void	finalize_cmd(t_data *data)
 	i = -1;
 	while(++i < data->num_cmd)
 	{
-		// if (data->cmd[i].num_arg > 0)
-		// {
-			if (data->cmd[i].count_redir > 1) //only check for doubles if there are 2+ redir
-				check_redir_doubles(&data->cmd[i], data);
-			mod_fd_array(&data->cmd[i], data);
-			if (data->cmd[i].count_hd > 0)
-				create_heredoc(&data->cmd[i], data);
+		if (data->cmd[i].count_redir > 1) //only check for doubles if there are 2+ redir
+			check_redir_doubles(&data->cmd[i], data);
+		mod_fd_array(&data->cmd[i], data);
+		if (data->cmd[i].count_hd > 0)
+			create_heredoc(&data->cmd[i], data);
+		if (data->cmd[i].num_arg > 0)
+		{
 			get_cmd_path(&data->cmd[i], data);
 			data->cmd[i].builtin = check_builtin(&data->cmd[i], data);
-		// }
+		}
 	}
 }

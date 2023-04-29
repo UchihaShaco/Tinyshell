@@ -162,7 +162,8 @@ void	init_envlist(t_data *data, char **envp)
 	t_env	*cur;
 	t_env	*node;
 	char	**split_var;
-	if(!data->our_env)
+	
+	if(!envp || !*envp)
 		return ;
 	data->env_list = (t_env **)ts_calloc(1, sizeof(t_env *), data);
 	cur = NULL;

@@ -35,7 +35,7 @@ void	ts_search_space_after_arg(char *str, t_arg *arg, int i)
 	}
 }
 
-int	ts_cut_quotation_marks(char *str, t_arg *arg, int i)
+int	ts_cut_quotation_marks(char *str, t_arg *arg, int i, t_data *data)
 {
 	int		c;
 	char	q_m;
@@ -49,7 +49,7 @@ int	ts_cut_quotation_marks(char *str, t_arg *arg, int i)
 		c++;
 		i++;
 	}
-	ts_malloc_str(&arg->str, c);
+	ts_malloc_str(&arg->str, c, data);
 	i = i - c;
 	c = 0;
 	while (str[i] != q_m && str[i] != '\0')
@@ -63,7 +63,7 @@ int	ts_cut_quotation_marks(char *str, t_arg *arg, int i)
 	return (i);
 }
 
-int	ts_record_args_without_qm(char *str, t_arg *arg, int i, int *num_arg)
+int	ts_record_args_without_qm(char *str, t_arg *arg, int i, int *num_arg, t_data *data)
 {
 	int	c;
 
@@ -76,7 +76,7 @@ int	ts_record_args_without_qm(char *str, t_arg *arg, int i, int *num_arg)
 			c++;
 			i++;
 		}
-		ts_malloc_str(&arg->str, c);
+		ts_malloc_str(&arg->str, c, data);
 		i = i - c;
 		c = 0;
 		while (str[i] != 39 && str[i] != 34 && str[i] != '\0' && str[i] != ' ')
@@ -89,20 +89,20 @@ int	ts_record_args_without_qm(char *str, t_arg *arg, int i, int *num_arg)
 	return (i + 1);
 }
 
-void	ts_create_struct_without_qm(t_cmd *cmd)
+void	ts_create_struct_without_qm(t_cmd *cmd, t_data *data)
 {
 	int	i;
 	int	num_arg;
 
 	i = 0;
 	num_arg = 0;
-	ts_malloc_arg(&cmd->arg, cmd->num_arg);
+	ts_malloc_arg(&cmd->arg, cmd->num_arg, data);
 	while (cmd->str[i] != '\0')
 	{
 		cmd->arg[num_arg].space = NO;
 		if (cmd->str[i] == 34 || cmd->str[i] == 39)
 		{
-			i = ts_cut_quotation_marks(cmd->str, &cmd->arg[num_arg], i);
+			i = ts_cut_quotation_marks(cmd->str, &cmd->arg[num_arg], i, data);
 			num_arg++;
 		}
 		else
@@ -110,7 +110,7 @@ void	ts_create_struct_without_qm(t_cmd *cmd)
 			while (cmd->str[i] != 34 && cmd->str[i] != 39
 				&& cmd->str[i] != '\0')
 				{
-				i = ts_record_args_without_qm(cmd->str, &cmd->arg[num_arg], i, &num_arg);
+				i = ts_record_args_without_qm(cmd->str, &cmd->arg[num_arg], i, &num_arg, data);
 				// print_arg(&cmd->arg[num_arg]);
 				}
 		}

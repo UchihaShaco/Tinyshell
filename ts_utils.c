@@ -32,7 +32,7 @@ void	ts_record_str(char **file, char *str, int start, int size_str)
 	(*file)[i] = '\0';
 }
 
-int	ts_cut_qm_in_name_file(char **file)
+int	ts_cut_qm_in_name_file(char **file, t_data *data)
 {
 	int		i;
 	char	qm;
@@ -44,11 +44,11 @@ int	ts_cut_qm_in_name_file(char **file)
 		qm = (*file)[i];
 		if (qm == 34 || qm == 39)
 		{
-			ts_replace_key_to_value(file, 1, NULL, i);
+			ts_replace_key_to_value(file, 1, NULL, i, data);
 			while ((*file)[i] != qm && (*file)[i] != '\0')
 				i++;
 			if ((*file)[i] != '\0')
-				ts_replace_key_to_value(file, 1, NULL, i);
+				ts_replace_key_to_value(file, 1, NULL, i, data);
 		}
 		else
 			i++;

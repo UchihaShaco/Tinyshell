@@ -127,7 +127,7 @@ int	ts_cycle_record_redir(t_cmd *cmd, t_data *data, int qm_o, int qm_d)
 		{
 			if (ts_record_redir_and_file(cmd, i, num_redir, data) == -1)
 				return (-1);
-			ts_replace_key_to_value(&cmd->str, data->tmp.size_cut, NULL, i);
+			ts_replace_key_to_value(&cmd->str, data->tmp.size_cut, NULL, i, data);
 			if (cmd->str[i] == '\0' && i > 0)
 				i--;
 			num_redir++;
@@ -152,11 +152,11 @@ int	 ts_found_redirect(t_cmd *cmd, t_data *data)
 		cmd->count_redir = 0;
 		return (-1);
 	}
-	ts_malloc_arr_int(&cmd->redir, cmd->count_redir);
-	ts_malloc_array(&cmd->file, cmd->count_redir);
+	ts_malloc_arr_int(&cmd->redir, cmd->count_redir, data);
+	ts_malloc_array(&cmd->file, cmd->count_redir, data);
 	ts_cycle_record_redir(cmd, data, qm_o, qm_d);
 	cmd->file[cmd->count_redir] = NULL;
-	cmd->redir[cmd->count_redir] = 0;
+	// cmd->redir[cmd->count_redir] = 0;
 	return (0);
 }
 
@@ -178,10 +178,10 @@ int	ts_record_redir_and_file(t_cmd *cmd, int i, int num_redir, t_data *d)
 	size_str = ts_measure_size_file_name(d, cmd->str, &i);
 	if (size_str == -1)
 		return (-1);
-	ts_malloc_str(&cmd->file[num_redir], size_str);
+	ts_malloc_str(&cmd->file[num_redir], size_str, d);
 	ts_record_str(&cmd->file[num_redir], cmd->str, start, size_str);
 	ts_found_dollar_in_name_file(d, &cmd->file[num_redir]);
-	ts_cut_qm_in_name_file(&cmd->file[num_redir]);
+	ts_cut_qm_in_name_file(&cmd->file[num_redir], d);
 	d->tmp.size_cut = i - d->tmp.size_cut;
 	return (0);
 }

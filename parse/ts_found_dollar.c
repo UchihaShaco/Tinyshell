@@ -12,14 +12,14 @@
 
 #include "../minishell.h"
 
-void	ts_put_num_error(int err, char **str, int *start)
+void	ts_put_num_error(int err, char **str, int *start, t_data *data)
 {
 	int		i;
 	char	*str_err;
 
 	i = *start;
 	str_err = ft_itoa(err);
-	ts_replace_key_to_value(str, 2, str_err, i);
+	ts_replace_key_to_value(str, 2, str_err, i, data);
 	ts_free_str(&str_err);
 	(*start)++;
 }
@@ -64,7 +64,7 @@ void	ts_found_dollar(t_data *data, char **str, int q_m, int *i_orig)
 	if ((*str)[i] == '$' && (*str)[i + 1] == '$')
 		i += 2;
 	else if ((*str)[i] == '$' && (*str)[i + 1] == '?')
-		ts_put_num_error(data->num_prev_error, str, &i);
+		ts_put_num_error(data->num_prev_error, str, &i, data);
 	else if ((*str)[i] == '$' && (*str)[i + 1] != ' '
 		&& ((*str)[i + 1] != '\0' && q_m != 39))
 	{

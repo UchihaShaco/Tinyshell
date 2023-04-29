@@ -26,14 +26,14 @@ void	ts_count_arg_for_array(t_cmd *cmd)
 	}
 }
 
-int	ts_record_arg(t_cmd *cmd, char **str, int *i, int size_str)
+int	ts_record_arg(t_cmd *cmd, char **str, int *i, int size_str, t_data *data)
 {
 	int	x;
 	int	size_copy;
 
 	x = 0;
 	size_copy = 0;
-	ts_malloc_str(str, size_str);
+	ts_malloc_str(str, size_str, data);
 	while (size_copy < size_str)
 	{
 		while (cmd->arg[(*i)].str[x] != '\0')
@@ -60,7 +60,7 @@ int	ts_len_arg_in_array(t_cmd *cmd, int y, int len)
 	return (len);
 }
 
-void	ts_connect_arg_for_array(t_cmd *cmd)
+void	ts_connect_arg_for_array(t_cmd *cmd, t_data *data)
 {
 	int	y_arr;
 	int	y;
@@ -71,14 +71,14 @@ void	ts_connect_arg_for_array(t_cmd *cmd)
 	y = 0;
 	len = 0;
 	start = 0;
-	ts_malloc_array(&cmd->array_arg, cmd->num_array_arg);
+	ts_malloc_array(&cmd->array_arg, cmd->num_array_arg, data);
 	cmd->array_empty = NO;
 	while (y < cmd->num_arg)
 	{
 		len = ts_len_arg_in_array(cmd, y, len);
 		if ((cmd->arg[y].space == YES) || (y + 1) == cmd->num_arg)
 		{
-			len = ts_record_arg(cmd, &cmd->array_arg[y_arr], &start, len);
+			len = ts_record_arg(cmd, &cmd->array_arg[y_arr], &start, len, data);
 			// printf("array_arg[%d] = %s\n", y_arr, cmd->array_arg[y_arr]);
 			y_arr++;
 		}
@@ -107,7 +107,7 @@ void	ts_record_array(t_data *data)
 		if (data->cmd[i].str != NULL)
 		{
 			ts_count_arg_for_array(&data->cmd[i]);
-			ts_connect_arg_for_array(&data->cmd[i]);
+			ts_connect_arg_for_array(&data->cmd[i], data);
 		}
 		i++;
 	}

@@ -60,13 +60,13 @@ int	ts_parse(t_data *data, char *line)
 		if (data->num_error == 0 && data->cmd[i].str != NULL)
 			ts_count_arg_divided_qm(&data->cmd[i], data);
 		if (data->num_error == 0 && data->cmd[i].str != NULL)
-			ts_create_struct_without_qm(&data->cmd[i]);
+			ts_create_struct_without_qm(&data->cmd[i], data);
 		if (data->num_error == 0 && data->cmd[i].str != NULL)
 			ts_found_env_variable(data, &data->cmd[i]);
 		i++;
 	}
-	create_fd_pid_array(data);
 	i = 0; // why do you need this?
+	create_fd_pid_array(data);
 	return (0);
 }
 
@@ -94,23 +94,26 @@ int	main(int argc, char **argv, char **env)
 	ts_err_argc_argv(argc, argv, env);
 	ft_bzero(&data, sizeof(t_data));
 	ts_init_data(&data, &env, YES);
+	line = NULL;
 	// print_tdata(&data);
 	// int def_in = dup(STDIN_FILENO);
 	// int def_out = dup(STDOUT_FILENO);
 	while (1)
 	{
-		// dup2(def_in, STDIN_FILENO);
-		// dup2(def_out, STDOUT_FILENO);
+	// 	// dup2(def_in, STDIN_FILENO);
+	// 	// dup2(def_out, STDOUT_FILENO);
 		ts_get_signal();
 		ts_init_data(&data, &env, NO);
 		line = readline("\033[1;35mTinyShell > \033[0m");
 		ts_signal_ctrl_d(&data, &line);
 		ts_parse(&data, line);
+		// print_cmds(&data);
 		add_history(line);
 		if (data.empty_str == NO)
 		{
 			ts_record_array(&data);
 			// print_tdata(&data);
+			// print_cmds(&data);
 			if (data.num_cmd > 0)
 			{
 				// for(int i = 0; i < data.num_cmd; i++)
@@ -120,14 +123,15 @@ int	main(int argc, char **argv, char **env)
 				// for(int i = 0; i < data.num_cmd; i++)
 				// 	print_tcmd(&data.cmd[i], i);
 				// print_tdata(&data);
-				// execute(&data);
+				execute(&data);
 				// for(int i = 0; i < data.num_cmd; i++)
 				// 	print_tcmd(&data.cmd[i], i);
-				ts_free_all(&data, &line); // we will have to free the memory something like this 
 			}
-			// free_data(&data, line, NO);
 		}
+		free_data(&data, line, NO);
 	}
-	// free_data(&data, line, YES);
+	free_data(&data, line, YES);
+	// ts_free_all(&data, &line); // we will have to free the memory something like this 
+
 }
 

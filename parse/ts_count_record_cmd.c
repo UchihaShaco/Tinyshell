@@ -61,7 +61,7 @@ static int	ts_get_size_one_cmd_str(char *line, int *start, int size)
 	return (size);
 }
 
-static int	ts_record_one_str(char **str, char *line, int *start, int *num)
+static int	ts_record_one_str(char **str, char *line, int *start, int *num, t_data *data)
 {
 	int	size;
 	int	i;
@@ -69,7 +69,7 @@ static int	ts_record_one_str(char **str, char *line, int *start, int *num)
 	size = 0;
 	i = 0;
 	size = ts_get_size_one_cmd_str(line, start, size);
-	ts_malloc_str(str, size);
+	ts_malloc_str(str, size, data);
 	while (i < size)
 	{
 		(*str)[i] = line[(*start) + i];
@@ -123,7 +123,8 @@ int	ts_count_and_record_cmd(t_data *data, char *line)
 		return (-1);
 	if (ts_count_pipe(data, line, 1, 1) == -1)
 		return (-1);
-	ts_malloc_cmd(&data->cmd, data->num_cmd);
+	ts_malloc_cmd(&data->cmd, data->num_cmd, data);
+	//can replace with ts_calloc(&data->cmd, data->num_cmd, data);
 	i = 0;
 	while (data->num_cmd > i)
 	{
@@ -133,6 +134,6 @@ int	ts_count_and_record_cmd(t_data *data, char *line)
 	i = 0;
 	num = 0;
 	while (line[i] != '\0')
-		ts_record_one_str(&data->cmd[num].str, line, &i, &num);
+		ts_record_one_str(&data->cmd[num].str, line, &i, &num, data);
 	return (0);
 }

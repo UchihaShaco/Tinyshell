@@ -20,13 +20,15 @@ void	create_fd_pid_array(t_data *data)
 {
 	int	i;
 
-	data->fd = (int **)ts_calloc(data->num_cmd - 1, sizeof(int *), data);
-	i = 0;
-	while (i < data->num_cmd - 1)
+	//create pipes only if there is more than one cmd
+	if (data->num_cmd > 1)
 	{
-		data->fd[i] = (int *)ts_calloc(2, sizeof(int), data);
-		i++;
+		data->fd = (int **)ts_calloc(data->num_cmd - 1, sizeof(int *), data);
+		i = -1;
+		while (++i < data->num_cmd - 1)
+			data->fd[i] = (int *)ts_calloc(2, sizeof(int), data);
 	}
+	//create a pid even if it may not be used
 	data->pid = (int *)ts_calloc(data->num_cmd, sizeof(int), data);
 }
 

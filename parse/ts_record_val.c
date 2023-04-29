@@ -36,7 +36,7 @@ void	ts_record_tail(char **tmp, char **str, int t, int start_tail)
 we use while(s < start ) to get to the start of the key to give counter t the index 
 */
 
-void	ts_replace_key_to_value(char **str, int key, char *value, int start)
+void	ts_replace_key_to_value(char **str, int key, char *value, int start, t_data *data)
 {
 	int		s;
 	int		t;
@@ -49,11 +49,11 @@ void	ts_replace_key_to_value(char **str, int key, char *value, int start)
 	if (size <= 0) // if the key is empty or the value is empty it will be replaced with an empty string it can go to below 0 if the key is longer than the value
 	{
 		ts_free_str(str);
-		ts_malloc_str(str, 0);
+		ts_malloc_str(str, 0, data);
 		(*str)[0] = '\0';
 		return ;
 	}
-	ts_malloc_str(&tmp, size);
+	ts_malloc_str(&tmp, size, data);
 	while (s < start)
 		ts_record_char(&tmp, (*str), &t, &s);
 	s = 0;
@@ -71,7 +71,7 @@ void	ts_replace_key_to_value(char **str, int key, char *value, int start)
  * if the key is a string it also mallocs the key string
  * if the key is a digit it does not malloc the key string
 */
-int	ts_record_key(char *s, int i, char **key, int *digit_key)
+int	ts_record_key(char *s, int i, char **key, int *digit_key, t_data *data)
 {
 	int	n;
 
@@ -88,7 +88,7 @@ int	ts_record_key(char *s, int i, char **key, int *digit_key)
 		i++;
 		n++;
 	}
-	ts_malloc_str(key, n);
+	ts_malloc_str(key, n, data);
 	i = (i - n);
 	n = 0;
 	while (s[i] != '\0' && s[i] != ' ' && s[i] != 34
@@ -138,7 +138,7 @@ int	ts_record_value(t_data *data, char **str, int i)
 	n = 1;
 	digit_key = NO;
 	value = NULL;
-	n = ts_record_key(*str, i, &key, &digit_key);
+	n = ts_record_key(*str, i, &key, &digit_key, data);
 	if (digit_key == NO)
 	{
 		ts_search_var(data, &value, key);
@@ -147,8 +147,8 @@ int	ts_record_value(t_data *data, char **str, int i)
 	if (value == NULL && data->name_file == YES)
 		return (i);
 
-	ts_replace_key_to_value(str, 1, NULL, (i - 1));
-	ts_replace_key_to_value(str, n, value, (i - 1));
+	ts_replace_key_to_value(str, 1, NULL, (i - 1), data);
+	ts_replace_key_to_value(str, n, value, (i - 1), data);
 	ts_free_str(&value);
 	return (i);
 }

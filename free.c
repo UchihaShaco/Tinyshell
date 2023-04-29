@@ -5,63 +5,83 @@ void	free_strlist(char **str)
 {
 	int	i;
 
-	i = 0;
-	if (str && *str)
+	if (!str)
+		return ;
+	if (!*str)
 	{
-		while(str[i])
-		{
-
-			free(str[i]);
-			i++;
-		}
-	}
-	if (str)
 		free(str);
+		return ;
+	}
+	i = -1;
+	while(str[++i])
+		free(str[i]);
+	free(str);
 	str = NULL;
 }
 
-void	free_fdlist(int **fdlist, int num_cmd)
+void	free_fdlist(t_data *data)
+{
+	int	i;
+	int	**fdlist;
+	int	num_cmd;
+
+	fdlist = data->fd;
+	num_cmd = data->num_cmd;
+	if (!fdlist)
+		return ;
+	if (!*fdlist)
+	{
+		free(fdlist);
+		return ;
+	}
+	i = -1;
+	while(++i < num_cmd - 1)
+		free(fdlist[i]);
+	free(fdlist);
+	data->fd = NULL;
+}
+
+void	free_targ(t_arg *arg, t_cmd *cmd)
 {
 	int	i;
 
-	i = 0;
-	if (!fdlist)
-		return ;
-	while(i < num_cmd - 1)
-	{
-		free(fdlist[i]);
-		i++;
-	}
-	free(fdlist);
-
-}
-
-void	free_targ(t_arg *arg)
-{
 	if (!arg)
 		return ;
-	if (arg->str)
-		free(arg->str);
+	i = -1;
+	while (++i < cmd->num_array_arg + 1)
+	{
+		if (arg[i].str)
+			free(arg[i].str);
+	}
 	free(arg);
 }
 
-void	free_cmd(t_cmd *cmd)
+void	free_cmd(t_data *data)
 {
-	if (!cmd)
+	int	i;
+	t_cmd *cmd;
+
+	if (!data->cmd)
 		return ;
-	if (cmd->str)
-		free(cmd->str);
-	free_targ(cmd->arg);
-	free_strlist(cmd->array_arg);
-	free_strlist(cmd->hd_array);
-	free_strlist(cmd->file);
-	if (cmd->path)
-		free(cmd->path);
-	if (cmd->redir)
-		free(cmd->redir);
-	if (cmd->fd_array)
-		free(cmd->fd_array);
+	cmd = data->cmd;
+	i = -1;
+	while (++i < data->num_cmd)
+	{
+		if (cmd[i].str)
+			free(cmd[i].str);
+		free_targ(cmd[i].arg, cmd);
+		free_strlist(cmd[i].array_arg);
+		free_strlist(cmd[i].hd_array);
+		free_strlist(cmd[i].file);
+		if (cmd[i].path)
+			free(cmd[i].path);
+		if (cmd[i].redir)
+			free(cmd[i].redir);
+		if (cmd[i].fd_array)
+			free(cmd[i].fd_array);
+	}
 	free(cmd);
+	data->cmd = NULL;
 }
 
 void	free_data(t_data *data, char *line, int last)
@@ -72,15 +92,26 @@ void	free_data(t_data *data, char *line, int last)
 		free_strlist(data->our_env);
 		free_strlist(data->env_paths);
 		if (data->cur_dir)
+		{
 			free(data->cur_dir);
+			data->cur_dir = NULL;
+		}
+		if (data->old_dir)
+		{
+			free(data->old_dir);
+			data->old_dir = NULL;
+		}
 	}
-	else
+	free_cmd(data);
+	free_fdlist(data);
+	if (data->pid)
 	{
-		free_cmd(data->cmd);
-		free_fdlist(data->fd, data->num_cmd);
-		if (data->pid)
-			free(data->pid);
+		free(data->pid);
+		data->pid = NULL;
 	}
 	if (line)
+	{
 		free(line);
+		line = NULL;
+	}
 }

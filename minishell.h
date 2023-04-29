@@ -125,20 +125,20 @@ typedef struct s_data
 	char	**env_paths;
 	char	*old_dir;
 	char	*cur_dir;
-	int		**fd;
-	int		*pid;
+	int		**fd; //for pipes
+	int		*pid; //for child processes
 	int		num_cmd;
 	// char	*home_dir; //I think home_dir should be found from t_env 
 }				t_data;
 
 /* *********************  Quotation parse  ********************* */
-void	ts_create_struct_without_qm(t_cmd *cmd);
+void	ts_create_struct_without_qm(t_cmd *cmd, t_data *data); //MODIFIED
 int		ts_count_arg_divided_qm(t_cmd *cmd, t_data *data);
-int		ts_record_args_without_qm(char *str, t_arg *arg, int i, int *num_arg);
-int		ts_cut_quotation_marks(char *str, t_arg *arg, int i);
+int		ts_record_args_without_qm(char *str, t_arg *arg, int i, int *num_arg, t_data *data); //MODIFIED
+int		ts_cut_quotation_marks(char *str, t_arg *arg, int i, t_data *data); //MODIFIED
 void	ts_search_space_after_arg(char *str, t_arg *arg, int i);
 void	ts_switch_qm(char c, int *qm_o, int *qm_d);
-int		ts_cut_qm_in_name_file(char **file);
+int		ts_cut_qm_in_name_file(char **file, t_data *data); //MODIFIED
 int		ts_count_args_without_qm(t_cmd *cmd, int i);
 int		ts_check_quotation_marks(t_cmd *cmd, int i, t_data *data);
 // void ts_quote_check(char *line);
@@ -168,11 +168,11 @@ void	ts_signal_ctrl_d(t_data *data, char **line);
 int		ts_get_signal(void);
 void	ts_signal_ctrl_slash(t_data *data, char **line);
 /* *********************  Malloc  ********************* */
-void	ts_malloc_array(char ***array, int size);
-void	ts_malloc_str(char **name, int size);
-void	ts_malloc_arg(t_arg **arg, int size);
-void	ts_malloc_cmd(t_cmd **cmd, int size);
-void	ts_malloc_arr_int(int **arr_int, int size);
+void	ts_malloc_array(char ***array, int size, t_data *data);
+void	ts_alloc_str(char **name, int size, t_data *data);
+void	ts_malloc_arg(t_arg **arg, int size, t_data *data);
+void	ts_malloc_cmd(t_cmd **cmd, int size, t_data *data);
+void	ts_malloc_arr_int(int **arr_int, int size, t_data *data);
 void	ts_free_cycle(t_data *data, char **line);
 void	ts_free_all(t_data *data, char **line);
 
@@ -186,11 +186,11 @@ int		ts_error_2(int error, int qm);
 int		print_error_pipe(int error, char *str);
 /* ********************* 	Utils for parse  ********************* */
 void	ts_free_str(char **str);
-int		ts_record_key(char *s, int i, char **key, int *digit_key);
+int		ts_record_key(char *s, int i, char **key, int *digit_key, t_data *data); //MODIFIED
 void	ts_record_char(char **result, char *str, int *r, int *s);
 void	ts_record_tail(char **tmp, char **str, int t, int start_tail);
 void	ts_record_str(char **file, char *str, int start, int size_str);
-void	ts_replace_key_to_value(char **str, int key, char *value, int start);
+void	ts_replace_key_to_value(char **str, int key, char *value, int start, t_data *data); //MODIFIED
 /* ********************* 	file name ********************* */
 int		ts_measure_size_file_name(t_data *d, char *str, int *i);
 /* ********************* 	record arr  ********************* */
@@ -256,5 +256,6 @@ void	print_tdata(t_data *data);
 void	print_strlist(char **str);
 void	print_tenv(t_env **list);
 void	print_envlist_node(t_env *node);
+void	print_cmds(t_data *data);
 
 #endif
