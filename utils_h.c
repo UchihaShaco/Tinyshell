@@ -165,6 +165,7 @@ void	put_strs_fd(int num_str, ...)
 	i = -1;
 	data = va_arg(str, t_data*);
 	fd = va_arg(str, int);
+	printf("fd: %i\n", fd);
 	while (++i < num_str)
 	{
 		if (putstr_fd(va_arg(str, char *), fd) == -1)

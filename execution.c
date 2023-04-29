@@ -65,14 +65,13 @@ void	pipe_cmd(int index, t_cmd *cmd, t_data *data)
 	}
 }
 
-void	open_files(t_cmd *cmd, t_data *data)
+int	open_files(t_cmd *cmd, t_data *data, int one_func)
 {
 	int	i;
 
 	if (cmd->count_redir == 0)
-		return ;
+		return (0);
 	cmd->fd_array = (int *)ts_calloc(cmd->count_redir, sizeof(int), data);
-	printf("fd_array calloced at size: %i\n", cmd->count_redir);
 	i = -1;
 	while (++i < cmd->count_redir)
 	{
@@ -84,7 +83,14 @@ void	open_files(t_cmd *cmd, t_data *data)
 				put_strs_fd(3, data, 2, "bash: ", cmd->file[i], ": No such file or directory\n");
 				close_fd_array(cmd, data);
 				close_pipes(data);
-				exit (EXIT_FAILURE);
+				if (one_func == NO)
+					exit (EXIT_FAILURE);
+				else
+				{
+					close(data->defin);
+					close(data->defout);
+					return (1);
+				}
 			}
 		}
 		else if (cmd->redir[i] == 3)
@@ -107,6 +113,7 @@ void	open_files(t_cmd *cmd, t_data *data)
 				cmd->fd_array[i] = -2;
 		}
 	}
+	return(0);
 }
 
 /*
@@ -116,7 +123,7 @@ run cmd normally
 */
 void	child_process(int i, t_cmd *cmd, t_data *data)
 {
-	open_files(cmd, data);
+	open_files(cmd, data, NO);
 	pipe_cmd(i, cmd, data);
 	close_fd_array(cmd, data);
 	close_pipes(data);
@@ -157,32 +164,23 @@ int	parent_process(t_data *data)
 	return (status);
 }
 
-void	exec_one_builtin(t_cmd *cmd, t_data *data)
+int	exec_one_builtin(t_cmd *cmd, t_data *data)
 {
-	printf("entering exec one builtin\n");
-	int fd;
-	int def_in; 
-	int def_out;
+	int status;
 	
-	open_files(cmd, data);
+	if (open_files(cmd, data, YES) == 1)
+		return (1);
 	if (cmd->last_input > -1)
 	{
-		printf("there's a last input\n");
-		def_in = dup(STDIN_FILENO);
 		ts_dup2(cmd->fd_array[cmd->last_input], STDIN_FILENO, data);
-		ts_dup2(def_in, STDIN_FILENO, data);
 	}
 	if (cmd->last_output > -1)
 	{
-		printf("there's an output\n");
-		def_out = dup(STDOUT_FILENO);
 		ts_dup2(cmd->fd_array[cmd->last_output], STDOUT_FILENO, data);
-		ts_dup2(def_out, STDOUT_FILENO, data);
 	}
-	printf("closing array\n");
 	close_fd_array(cmd, data);
-	printf("array closed\n");
-	execute_builtin(&data->cmd[0], YES, data);
+	status = execute_builtin(&data->cmd[0], YES, data);
+	return (status);
 }
 
 int	execute(t_data *data)
@@ -194,7 +192,10 @@ int	execute(t_data *data)
 		return (0);
 	/* if there is one cmd and it's a builtin*/
 	if (data->num_cmd == 1 && data->cmd->builtin > 0)
-		exec_one_builtin(&data->cmd[0], data);
+	{
+		status = exec_one_builtin(&data->cmd[0], data);
+		return (status);
+	}
 	/* create pipes and fork*/
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/29 16:47:41 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/29 18:31:54 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ void	ts_init_data(t_data *data, char ***env, int first)
 		ts_init_env(data, env);
 		init_envlist(data, *env);
 		get_env_paths(data);
+		data->defin = dup(STDIN_FILENO);
+		data->defout = dup(STDOUT_FILENO);
 		// data->name_file = NO; // flag to check if it's a file (YES, NO)
 	}
 	data->num_prev_error = data->num_error;
@@ -85,6 +87,28 @@ void	ts_init_data(t_data *data, char ***env, int first)
 	data->empty_str = NO; // flag to check if the string is empty (YES, NO)
 	data->num_cmd = 0;
 }
+
+// int	invalid_expor(char *str)
+// {
+// 	//first char must be alpha or _
+// 	//second char must be alpha, num, _, =, or null
+// 	// int	i;
+
+// 	// if (!ft_isalpha(str[0]) && str[0] != '_')
+// 	// 	return (1);
+// 	// if (!ft_isalnum(str[1]) && str[1] != '_' && str[1] != '=' && str[1] != '\0')
+// 	// 	return (1);
+// 	// return (0);
+// 	int	i;
+	
+// 	i = 0;
+// 	if (!ft_isalpha(str[0]) && str[0] != '_')
+// 		return (1);
+// 	while (str[++i])
+// 		if (!ft_isalnum(str[i]) && str[i] != '_')
+// 			return (1);
+// 	return (0);
+// }
 
 int	main(int argc, char **argv, char **env)
 {
@@ -96,41 +120,45 @@ int	main(int argc, char **argv, char **env)
 	ts_init_data(&data, &env, YES);
 	line = NULL;
 	// print_tdata(&data);
-	// int def_in = dup(STDIN_FILENO);
-	// int def_out = dup(STDOUT_FILENO);
-	while (1)
-	{
-	// 	// dup2(def_in, STDIN_FILENO);
-	// 	// dup2(def_out, STDOUT_FILENO);
-		ts_get_signal();
-		ts_init_data(&data, &env, NO);
-		line = readline("\033[1;35mTinyShell > \033[0m");
-		ts_signal_ctrl_d(&data, &line);
-		ts_parse(&data, line);
-		// print_cmds(&data);
-		add_history(line);
-		if (data.empty_str == NO)
-		{
-			ts_record_array(&data);
-			// print_tdata(&data);
-			// print_cmds(&data);
-			if (data.num_cmd > 0)
-			{
-				// for(int i = 0; i < data.num_cmd; i++)
-				// 	print_tcmd(&data.cmd[i], i);
-				// printf("\n ---------------------------------------\n");
-				finalize_cmd(&data);
-				// print_cmds(&data);
-				// print_tdata(&data);
-				execute(&data);
-				// for(int i = 0; i < data.num_cmd; i++)
-				// 	print_tcmd(&data.cmd[i], i);
-			}
-		}
-		free_data(&data, line, NO);
-	}
-	free_data(&data, line, YES);
+	// while (1)
+	// {
+	// 	dup2(data.defin, STDIN_FILENO);
+	// 	dup2(data.defout, STDOUT_FILENO);
+	// 	ts_get_signal();
+	// 	ts_init_data(&data, &env, NO);
+	// 	line = readline("\033[1;35mTinyShell > \033[0m");
+	// 	ts_signal_ctrl_d(&data, &line);
+	// 	ts_parse(&data, line);
+	// 	// print_cmds(&data);
+	// 	add_history(line);
+	// 	if (data.empty_str == NO)
+	// 	{
+	// 		ts_record_array(&data);
+	// 		// print_tdata(&data);
+	// 		// print_cmds(&data);
+	// 		if (data.num_cmd > 0)
+	// 		{
+	// 			// for(int i = 0; i < data.num_cmd; i++)
+	// 			// 	print_tcmd(&data.cmd[i], i);
+	// 			// printf("\n ---------------------------------------\n");
+	// 			finalize_cmd(&data);
+	// 			// print_cmds(&data);
+	// 			// print_tdata(&data);
+	// 			execute(&data);
+	// 			// for(int i = 0; i < data.num_cmd; i++)
+	// 			// 	print_tcmd(&data.cmd[i], i);
+	// 		}
+	// 	}
+	// 	free_data(&data, line, NO);
+	// }
+	// free_data(&data, line, YES);
 	// ts_free_all(&data, &line); // we will have to free the memory something like this 
-
+	// char *str = "";
+	// printf("%i\n", invalid_expor(str));
+	int fd = open("file", O_CREAT | O_WRONLY);
+	dup2(fd, STDOUT_FILENO);
+	put_strs_fd(1, data, 2, "hello world\n");
+	// ft_putstr_fd("hello world\n", 2);
+	
 }
 

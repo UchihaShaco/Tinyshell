@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/28 22:10:21 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/29 17:07:52 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ typedef struct s_data
 	int		**fd; //for pipes
 	int		*pid; //for child processes
 	int		num_cmd;
+	int		defin;
+	int		defout;
 	// char	*home_dir; //I think home_dir should be found from t_env 
 }				t_data;
 
