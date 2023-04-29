@@ -41,19 +41,22 @@ void	free_fdlist(t_data *data)
 	data->fd = NULL;
 }
 
-void	free_targ(t_arg *arg, t_cmd *cmd)
+void	free_targ(t_cmd *cmd)
 {
 	int	i;
+	t_arg *arg;
 
+	arg = cmd->arg;
 	if (!arg)
 		return ;
 	i = -1;
-	while (++i < cmd->num_array_arg + 1)
+	while (++i < cmd->num_arg + 1)
 	{
 		if (arg[i].str)
 			free(arg[i].str);
 	}
 	free(arg);
+	cmd->arg = NULL;
 }
 
 void	free_cmd(t_data *data)
@@ -69,7 +72,7 @@ void	free_cmd(t_data *data)
 	{
 		if (cmd[i].str)
 			free(cmd[i].str);
-		free_targ(cmd[i].arg, cmd);
+		free_targ(&cmd[i]);
 		free_strlist(cmd[i].array_arg);
 		free_strlist(cmd[i].hd_array);
 		free_strlist(cmd[i].file);

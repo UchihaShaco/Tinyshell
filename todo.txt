@@ -104,7 +104,7 @@ TODO:
 -typos - need bash: expor: command not found - 
 - > | > | > | -->freeing a pointer that wasn't allocated - 
 - << 2 with no commands - there is redirection but no args
--  echo hi > f> ls segfault - 
+-   c segfault - 
 - ctrl c in heredocs
 - ctrl d in heredocs give segmentation fault
 

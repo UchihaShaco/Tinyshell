@@ -72,6 +72,7 @@ void	open_files(t_cmd *cmd, t_data *data)
 	if (cmd->count_redir == 0)
 		return ;
 	cmd->fd_array = (int *)ts_calloc(cmd->count_redir, sizeof(int), data);
+	printf("fd_array calloced at size: %i\n", cmd->count_redir);
 	i = -1;
 	while (++i < cmd->count_redir)
 	{
@@ -158,13 +159,29 @@ int	parent_process(t_data *data)
 
 void	exec_one_builtin(t_cmd *cmd, t_data *data)
 {
+	printf("entering exec one builtin\n");
 	int fd;
-	/* redirect */
+	int def_in; 
+	int def_out;
+	
+	open_files(cmd, data);
 	if (cmd->last_input > -1)
+	{
+		printf("there's a last input\n");
+		def_in = dup(STDIN_FILENO);
 		ts_dup2(cmd->fd_array[cmd->last_input], STDIN_FILENO, data);
+		ts_dup2(def_in, STDIN_FILENO, data);
+	}
 	if (cmd->last_output > -1)
+	{
+		printf("there's an output\n");
+		def_out = dup(STDOUT_FILENO);
 		ts_dup2(cmd->fd_array[cmd->last_output], STDOUT_FILENO, data);
+		ts_dup2(def_out, STDOUT_FILENO, data);
+	}
+	printf("closing array\n");
 	close_fd_array(cmd, data);
+	printf("array closed\n");
 	execute_builtin(&data->cmd[0], YES, data);
 }
 
