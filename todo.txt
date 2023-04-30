@@ -105,6 +105,7 @@ TODO:
 - ctrl c signal 
 - how to return exit code
 - make sure all error codes are being printed on std2
+- shlvl
 
 
 NOTES:

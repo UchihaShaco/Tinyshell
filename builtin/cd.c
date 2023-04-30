@@ -11,36 +11,14 @@
 		update value
 	update our_env
 */
-int	ft_cd(t_cmd *cmd, t_data *data)
+
+/* if oldpwd/pwd vars exist, update the value. rewrites our_env if necessary */
+int	change_pwd(t_cmd *cmd, t_data *data)
 {
 	t_env	*pwd;
 	t_env 	*oldpwd;
-	char	*home;
-	char	**arg;
 	int		rewrite;
 
-	arg = cmd->array_arg;
-	/* if just cd */
-	if (!arg[1])
-	{
-		home = find_home_dir(data);
-		if (!home)
-		{
-			put_strs_fd(1, data, 2, "bash: cd: HOME not set");
-			return (1);
-		}
-		else
-			chdir(home);
-	}
-	else if (chdir(arg[1]) != 0)
-	{
-		put_strs_fd(3, data, 2, "bash: cd: ", arg[1], " No such file or directory\n");
-		return (1);
-	}
-	if (data->old_dir)
-		free(data->old_dir);
-	data->old_dir = data->cur_dir;
-	data->cur_dir = getcwd(NULL, 0);
 	rewrite = 0;
 	pwd = find_var_envlist("PWD", data);
 	oldpwd = find_var_envlist("OLDPWD", data);
@@ -62,5 +40,46 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 	}
 	if (rewrite > 0)
 		rewrite_ourenv(data);
+}
+
+void	update_directory(t_data *data)
+{
+	if (data->old_dir)
+		free(data->old_dir);
+	data->old_dir = data->cur_dir;
+	data->cur_dir = getcwd(NULL, 0);
+}
+
+int	ft_cd(t_cmd *cmd, t_data *data)
+{
+	char	*home;
+	char	**arg;
+
+	arg = cmd->array_arg;
+	/* if just cd with no args, cd to HOME var */
+	if (!arg[1])
+	{
+		home = find_home_dir(data);
+		if (!home)
+		{
+			put_strs_fd(1, data, 2, "bash: cd: HOME not set");
+			return (1);
+		}
+		else if (chdir(home) == -1)
+		{
+			put_strs_fd(3, data, 2, "bash: cd: ", home->key, " No such file or directory\n");
+			return (1);
+		}
+	}
+	/* change directories and return error if dir doesn't exist */
+	else if (chdir(arg[1]) != 0)
+	{
+		put_strs_fd(3, data, 2, "bash: cd: ", arg[1], " No such file or directory\n");
+		return (1);
+	}
+	/* change old_dir and cur_dir in data struct */
+	update_directory(data);
+	/* change pwd vars in envlist if they exist */
+	change_pwd(cmd, data);	
 	return (0);
 }

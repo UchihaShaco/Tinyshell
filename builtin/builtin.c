@@ -1,5 +1,6 @@
 #include "../minishell.h"
 
+/* bash can take any case of builtin command. ex: echo vs eCHo both work */
 char	*lower_str(char *str, t_data *data)
 {
 	int		i;
@@ -18,31 +19,7 @@ char	*lower_str(char *str, t_data *data)
 	return (low_str);
 }
 
-// int	check_builtin(char *str, t_data *data)
-// {
-// 	char	*command;
-// 	int		i;
-
-// 	command = lower_str(str, data);
-// 	i = 0;
-// 	if (ft_strcmp(command, "echo") == 0)
-// 		i = 1;
-// 	else if (ft_strcmp(command, "cd") == 0)
-// 		i = 2;
-// 	else if (ft_strcmp(command, "pwd") == 0)
-// 		i = 3;
-// 	else if (ft_strcmp(command, "export") == 0)
-// 		i = 4;
-// 	else if (ft_strcmp(command, "unset") == 0)
-// 		i = 5;
-// 	else if (ft_strcmp(command, "env") == 0)
-// 		i = 6;
-// 	else if (ft_strcmp(command, "exit") == 0)
-// 		i = 7;
-// 	free(command);
-// 	return (i);
-// }
-
+/* check first str in array_arg to see if it's a builtin and assign num id */
 int	check_builtin(t_cmd *cmd, t_data *data)
 {
 	char	*str;
@@ -70,10 +47,10 @@ int	check_builtin(t_cmd *cmd, t_data *data)
 	return (i);
 }
 
-int	execute_builtin(t_cmd *cmd, int	parent, t_data *data)
+int	execute_builtin(t_cmd *cmd, int	proc, t_data *data)
 {
-	char **arg;
-	int	exit_val;
+	char	**arg;
+	int		exit_val;
 
 	arg = cmd->array_arg;
 	if (cmd->builtin == 1)
@@ -90,8 +67,10 @@ int	execute_builtin(t_cmd *cmd, int	parent, t_data *data)
 		exit_val = ft_env(data);
 	else if (cmd->builtin == 7)
 		ft_exit(cmd, data);
-	if (parent == NO) //this needs to be revised
+	/* if a child process exit with exit value */
+	if (proc == CHILD)
 		exit(exit_val);
+	/* if parent, return exit value */
 	return (exit_val);
 
 }

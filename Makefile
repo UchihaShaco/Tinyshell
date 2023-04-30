@@ -30,18 +30,15 @@ lib = libft/libft.a libft_h/libft_h.a
 
 $(NAME): $(OBJS)
 	@make -C libft
-	@make -C libft_h
 	@$(CC) $(CFLAGS) $(OBJS) $(lib) -I/usr/local/opt/readline/include -L/usr/local/opt/readline/lib -l readline -o $(NAME)
-	@echo "\033[35mTinyshell Ready\033[0m"
+	@echo "\033[35mTinyShell Ready\033[0m"
 
 clean:
 	@rm -f $(OBJS)
 	@make clean -C libft
-	@make clean -C libft_h
 
 fclean: clean
 	@rm -f $(NAME)
 	@make fclean -C libft
-	@make fclean -C libft_h
 
 re: fclean all

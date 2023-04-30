@@ -52,6 +52,8 @@ typedef enum e_value
 	ERR_PRINT,
 	ERR_CWD,
 	ERR_CLOSE,
+	PARENT,
+	CHILD,
 	DOUBLE_Q_MARK = 34,
 	ONE_Q_MARK = 39,
 	ERR_CMD = 127, // typically indicates that the specified command could not be found or executed by the shell.
@@ -251,7 +253,7 @@ char	*find_home_dir(t_data *data);
 void	create_fd_pid_array(t_data *data);
 
 /* EXECUTION */
-int		execute(t_data *data);
+void	execute(t_data *data);
 int		check_builtin(t_cmd *cmd, t_data *data);
 int		execute_builtin(t_cmd *cmd, int	parent, t_data *data);
 

@@ -183,18 +183,19 @@ int	exec_one_builtin(t_cmd *cmd, t_data *data)
 	return (status);
 }
 
-int	execute(t_data *data)
+void	execute(t_data *data)
 {
 	int	i;
 	int	status;
 
 	if (data->num_cmd == 0)
-		return (0);
+		data->num_prev_error = 0;
 	/* if there is one cmd and it's a builtin*/
-	if (data->num_cmd == 1 && data->cmd->builtin > 0)
+	else if (data->num_cmd == 1 && data->cmd->builtin > 0)
 	{
 		status = exec_one_builtin(&data->cmd[0], data);
-		return (status);
+		// return (status);
+		data->num_prev_error = status;
 	}
 	/* create pipes and fork*/
 	else
@@ -216,9 +217,10 @@ int	execute(t_data *data)
 		}
 		/* run the parent process */
 		status = parent_process(data);
-		return (WEXITSTATUS(status));
+		data->num_prev_error = WEXITSTATUS(status);
+		//in execute, update data->num_prev_error to final exit status
 	}
-	return (0);
+	// return (0);
 }
 
 // int	j;

@@ -1,5 +1,7 @@
 #include "../minishell.h"
 
+/* print env using our_env */
+
 int	ft_env(t_data *data)
 {
 	char	**our_env;

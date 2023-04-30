@@ -7,7 +7,6 @@ char	*find_home_dir(t_data *data)
 
 	home = find_var_envlist("HOME", data);
 	if (!home)
-		//substitute home directory associated with specific username"
 		home_path = NULL;
 	else
 		home_path = home->val;

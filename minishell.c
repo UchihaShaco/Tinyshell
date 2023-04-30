@@ -120,45 +120,42 @@ int	main(int argc, char **argv, char **env)
 	ts_init_data(&data, &env, YES);
 	line = NULL;
 	// print_tdata(&data);
-	// while (1)
-	// {
-	// 	dup2(data.defin, STDIN_FILENO);
-	// 	dup2(data.defout, STDOUT_FILENO);
-	// 	ts_get_signal();
-	// 	ts_init_data(&data, &env, NO);
-	// 	line = readline("\033[1;35mTinyShell > \033[0m");
-	// 	ts_signal_ctrl_d(&data, &line);
-	// 	ts_parse(&data, line);
-	// 	// print_cmds(&data);
-	// 	add_history(line);
-	// 	if (data.empty_str == NO)
-	// 	{
-	// 		ts_record_array(&data);
-	// 		// print_tdata(&data);
-	// 		// print_cmds(&data);
-	// 		if (data.num_cmd > 0)
-	// 		{
-	// 			// for(int i = 0; i < data.num_cmd; i++)
-	// 			// 	print_tcmd(&data.cmd[i], i);
-	// 			// printf("\n ---------------------------------------\n");
-	// 			finalize_cmd(&data);
-	// 			// print_cmds(&data);
-	// 			// print_tdata(&data);
-	// 			execute(&data);
-	// 			// for(int i = 0; i < data.num_cmd; i++)
-	// 			// 	print_tcmd(&data.cmd[i], i);
-	// 		}
-	// 	}
-	// 	free_data(&data, line, NO);
-	// }
-	// free_data(&data, line, YES);
+	while (1)
+	{
+		dup2(data.defin, STDIN_FILENO);
+		dup2(data.defout, STDOUT_FILENO);
+		ts_get_signal();
+		ts_init_data(&data, &env, NO);
+		line = readline("\033[1;35mTinyShell > \033[0m");
+		ts_signal_ctrl_d(&data, &line);
+		ts_parse(&data, line);
+		// print_cmds(&data);
+		add_history(line);
+		if (data.empty_str == NO)
+		{
+			ts_record_array(&data);
+			// print_tdata(&data);
+			// print_cmds(&data);
+			if (data.num_cmd > 0)
+			{
+				// for(int i = 0; i < data.num_cmd; i++)
+				// 	print_tcmd(&data.cmd[i], i);
+				// printf("\n ---------------------------------------\n");
+				finalize_cmd(&data);
+				// print_cmds(&data);
+				// print_tdata(&data);
+				execute(&data);
+				// for(int i = 0; i < data.num_cmd; i++)
+				// 	print_tcmd(&data.cmd[i], i);
+			}
+		}
+		free_data(&data, line, NO);
+	}
+	free_data(&data, line, YES);
 	// ts_free_all(&data, &line); // we will have to free the memory something like this 
 	// char *str = "";
 	// printf("%i\n", invalid_expor(str));
-	int fd = open("file", O_CREAT | O_WRONLY);
-	dup2(fd, STDOUT_FILENO);
-	put_strs_fd(1, data, 2, "hello world\n");
-	// ft_putstr_fd("hello world\n", 2);
+
 	
 }
 

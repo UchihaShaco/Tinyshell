@@ -1,5 +1,5 @@
 #include "../minishell.h"
-/* NOTES
+/* TESTS:
 	echo -nnnnn -na
 	echo -nnnnna -n
 	echo -nnnn -nn -n -na
@@ -31,7 +31,8 @@ int	ft_echo(t_cmd *cmd, t_data *data)
 
 	i = 1;
 	nflag = 0; 
-	arg = cmd->array_arg;
+	arg = cmd->array_arg;*/
+	/* iterate through each arg to detect if flag (see tests above) */
 	while (arg[i])
 	{
 		if (!detect_nflag(arg[i]))
@@ -39,14 +40,17 @@ int	ft_echo(t_cmd *cmd, t_data *data)
 		nflag++;
 		i++;
 	}
+	/* print strings */
 	while (arg[i])
 	{
 		if (arg[i + 1] != NULL)
 			put_strs_fd(2, data, 1, arg[i], " ");
+		/* if last string don't print space */
 		else if (arg[i + 1] == NULL)
 			put_strs_fd(1, data, 1, arg[i]);
 		i++;
 	}
+	/* if no -n was detected, add newline at end*/
 	if (nflag == 0)
 		put_strs_fd(1, data, 1, "\n");
 	return (0);
