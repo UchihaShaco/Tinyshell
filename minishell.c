@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/29 18:31:54 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/30 20:40:19 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,17 @@ static	int	ts_quote_checker(t_data *data, char *line)
 	return (0);
 }
 
-int	ts_parse(t_data *data, char *line)
+void	ts_parse(t_data *data, char *line)
 {
 	int	i;
 
 	i = 0;
+	if(!(*line))
+		return ;
 	ts_quote_checker(data, line);
-	ts_count_and_record_cmd(data, line);
 	if (data->num_error != 0 || data->empty_str == YES)
-		return (-1);
+		return ;
+	ts_count_and_record_cmd(data, line);
 	while (i < data->num_cmd)
 	{
 		if (data->num_error == 0)
@@ -65,9 +67,8 @@ int	ts_parse(t_data *data, char *line)
 			ts_found_env_variable(data, &data->cmd[i]);
 		i++;
 	}
-	i = 0; // why do you need this?
 	create_fd_pid_array(data);
-	return (0);
+	return ;
 }
 
 void	ts_init_data(t_data *data, char ***env, int first)
@@ -88,28 +89,6 @@ void	ts_init_data(t_data *data, char ***env, int first)
 	data->num_cmd = 0;
 }
 
-// int	invalid_expor(char *str)
-// {
-// 	//first char must be alpha or _
-// 	//second char must be alpha, num, _, =, or null
-// 	// int	i;
-
-// 	// if (!ft_isalpha(str[0]) && str[0] != '_')
-// 	// 	return (1);
-// 	// if (!ft_isalnum(str[1]) && str[1] != '_' && str[1] != '=' && str[1] != '\0')
-// 	// 	return (1);
-// 	// return (0);
-// 	int	i;
-	
-// 	i = 0;
-// 	if (!ft_isalpha(str[0]) && str[0] != '_')
-// 		return (1);
-// 	while (str[++i])
-// 		if (!ft_isalnum(str[i]) && str[i] != '_')
-// 			return (1);
-// 	return (0);
-// }
-
 int	main(int argc, char **argv, char **env)
 {
 	t_data	data;
@@ -124,13 +103,14 @@ int	main(int argc, char **argv, char **env)
 	{
 		dup2(data.defin, STDIN_FILENO);
 		dup2(data.defout, STDOUT_FILENO);
-		ts_get_signal();
+		ts_get_signal() ;
 		ts_init_data(&data, &env, NO);
 		line = readline("\033[1;35mTinyShell > \033[0m");
 		ts_signal_ctrl_d(&data, &line);
 		ts_parse(&data, line);
 		// print_cmds(&data);
-		add_history(line);
+		// if(line)
+			add_history(line);
 		if (data.empty_str == NO)
 		{
 			ts_record_array(&data);
@@ -147,9 +127,12 @@ int	main(int argc, char **argv, char **env)
 				execute(&data);
 				// for(int i = 0; i < data.num_cmd; i++)
 				// 	print_tcmd(&data.cmd[i], i);
+				// printf("hello world\n");
+				// exit(0);
 			}
 		}
 		free_data(&data, line, NO);
+			// exit(0);
 	}
 	free_data(&data, line, YES);
 	// ts_free_all(&data, &line); // we will have to free the memory something like this 

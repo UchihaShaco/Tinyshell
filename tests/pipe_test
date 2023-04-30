@@ -35,5 +35,3 @@ whereis grep > tmp/file
 sleep 0.6
 ls -la > tmp/file
 sleep 0.6
-ls -la > tmp/file 
-sleep 0.6

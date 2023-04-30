@@ -48,7 +48,7 @@ void	add_oldpwd(t_data *data, t_env **cur)
 		node = (t_env *)ts_calloc(1, sizeof(t_env), data);
 		node->key = ft_strdup_lim("OLDPWD", '\0', data);
 		node->prev = *cur;
-		*cur->next = node;
+		(*cur)->next = node;
 	}
 }
 

@@ -139,7 +139,7 @@ void	child_process(int i, t_cmd *cmd, t_data *data)
 	if (cmd->num_arg == 0)
 		exit(0);
 	if (cmd->builtin > 0)
-		execute_builtin(cmd, NO, data);
+		execute_builtin(cmd, CHILD, data);
 	if (!cmd->path)
 	{
 		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
@@ -179,7 +179,8 @@ int	exec_one_builtin(t_cmd *cmd, t_data *data)
 		ts_dup2(cmd->fd_array[cmd->last_output], STDOUT_FILENO, data);
 	}
 	close_fd_array(cmd, data);
-	status = execute_builtin(&data->cmd[0], YES, data);
+	status = execute_builtin(&data->cmd[0], PARENT, data);
+	
 	return (status);
 }
 

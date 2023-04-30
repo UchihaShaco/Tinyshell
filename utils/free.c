@@ -82,8 +82,8 @@ void	free_cmd(t_data *data)
 			free(cmd[i].redir);
 		if (cmd[i].fd_array)
 			free(cmd[i].fd_array);
-		if (cmd[i].heredoc_str)
-			free(cmd[i].heredoc_str);
+		// if (cmd[i].heredoc_str)
+		// 	free(cmd[i].heredoc_str);
 	}
 	free(cmd);
 	data->cmd = NULL;
@@ -111,6 +111,7 @@ void	free_data(t_data *data, char *line, int last)
 	free_fdlist(data);
 	if (data->pid)
 	{
+		fflush(stdout);
 		free(data->pid);
 		data->pid = NULL;
 	}
@@ -119,4 +120,6 @@ void	free_data(t_data *data, char *line, int last)
 		free(line);
 		line = NULL;
 	}
+	// print_tdata(data);
+	// print_cmds(data);
 }

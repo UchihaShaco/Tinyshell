@@ -113,15 +113,20 @@ void	error(int error, t_data *data)
 	else if (error == ERR_FORK)
 		write(2, "TinyShell: Fork function error\n", 31);
 	else if (error == ERR_CWD)
-		write(2, "TinyShell: getcwd function error\n", 33);
+		{
+			write(2, "TinyShell: getcwd function error\n", 33);
+		return ; // return 1 and update data to previous num error 
+		}
 	else if (error == ERR_EXEC)
 		write(2, "TinyShell: exec function error\n", 31);
 	else if (error == ERR_CLOSE)
 		write(2, "TinyShell: close function error\n", 32);
 	close(data->defin);
 	close(data->defout);
-	free_data(data);
-	exit(EXIT_FAILURE);
+	// free_data(data); // free if we exit 
+	write(2, "Exiting TinyShell\n", 19); // for now
+	exit(EXIT_FAILURE); // for now
+
 }
 
 /* prints strings and accounts for printf errors */

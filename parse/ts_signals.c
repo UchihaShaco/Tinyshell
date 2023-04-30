@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_signals.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 23:56:09 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/29 17:09:15 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/30 19:45:26 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	ts_signal_ctrl_d(t_data *data, char **line)
 {
 	if (*line == NULL)
 	{
-		printf("\033[1;35m\bTinyshell >\033[0A");
-		printf("\033[1;0m exit\n\033[0m");
+		// printf("\033[1;35m\bTinyshell >\033[0A");
+		// printf("\033[1;0mexit\n\033[0m");
 		// ts_free_all(data, line);
 		close(data->defin);
 		close(data->defout);

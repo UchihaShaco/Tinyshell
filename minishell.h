@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/29 17:07:52 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/30 20:33:23 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <stdarg.h>
-
-# define LLMIN 9223372036854775808
+#include <limits.h>
+// # define LLMIN 9223372036854775808
 
 typedef enum e_value
 {

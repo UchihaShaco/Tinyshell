@@ -67,7 +67,7 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		}
 		else if (chdir(home) == -1)
 		{
-			put_strs_fd(3, data, 2, "bash: cd: ", home->key, " No such file or directory\n");
+			put_strs_fd(3, data, 2, "bash: cd: ", home, " No such file or directory\n");
 			return (1);
 		}
 	}

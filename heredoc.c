@@ -44,11 +44,13 @@ void	get_heredoc_str(t_cmd *cmd, t_data *data)
 	//while i = index of the delimiter, it has not hit the delimiter yet
 	while (i < cmd->count_hd)
 	{
+		signal(SIGINT, SIG_IGN);
 		input = readline("> ");
-		if(!input)
+
+		if(!input) //instead jump to the next delimiter
 		{
 			free(str);
-			free_data(data, input, NO);
+			free_data(data, input, NO); // seg fault
 			return ; // or exit??
 		}
 		if (ft_strcmp(input, cmd->hd_array[i]) == 0)

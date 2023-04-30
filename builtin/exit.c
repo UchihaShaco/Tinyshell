@@ -45,7 +45,7 @@ long long	check_exit_val(const char *str, t_data *data)
 	}
 	while (str[i])
 	{
-		if ((num > LLONG_MAX && neg == 1) || (num > LLMIN && neg == -1))
+		if ((num > LLONG_MAX && neg == 1) || (num > LLONG_MAX && neg == -1))
 		{
 			put_strs_fd(3, data, 2, "bash: exit: ", str, ": numeric argument required\n");
 			return (255);

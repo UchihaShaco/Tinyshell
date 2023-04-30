@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_found_dollar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 20:48:43 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/28 22:32:32 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/04/30 17:37:09 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	ts_found_dollar(t_data *data, char **str, int q_m, int *i_orig)
 	}
 	if ((*str)[i] == '$' && (*str)[i + 1] == '$')
 		i += 2;
-	else if ((*str)[i] == '$' && (*str)[i + 1] == '?')
+	else if ((*str)[i] == '$' && (*str)[i + 1] == '?' && (*str)[i + 1] != '\0' && q_m != 39)
 		ts_put_num_error(data->num_prev_error, str, &i, data);
 	else if ((*str)[i] == '$' && (*str)[i + 1] != ' '
 		&& ((*str)[i + 1] != '\0' && q_m != 39))

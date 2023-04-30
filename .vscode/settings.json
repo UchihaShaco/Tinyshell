@@ -1,5 +1,7 @@
 {
 	"files.associations": {
-		"history.h": "c"
+		"history.h": "c",
+		"complex": "c",
+		"stdarg.h": "c"
 	}
 }
