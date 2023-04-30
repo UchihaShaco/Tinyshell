@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <stdarg.h>
+#include <limits.h>
 
 int	putstr_fd(char *s, int fd)
 {
@@ -16,21 +17,56 @@ int	putstr_fd(char *s, int fd)
 	return(0);
 }
 /* prints strings and accounts for printf errors */
-void	put_strs_fd(int num_str, ...)
-{
-	int		i;
-	int		fd;
-	va_list	str;
+// void	put_strs_fd(int num_str, ...)
+// {
+// 	int		i;
+// 	int		fd;
+// 	va_list	str;
 
-	va_start(str, num_str);
-	i = -1;
-	fd = va_arg(str, int);
-	while (++i < num_str)
-	{
-		if (putstr_fd(va_arg(str, char *), fd) == -1)
-			return ;
-	}
-	va_end(str);
+// 	va_start(str, num_str);
+// 	i = -1;
+// 	fd = va_arg(str, int);
+// 	while (++i < num_str)
+// 	{
+// 		if (putstr_fd(va_arg(str, char *), fd) == -1)
+// 			return ;
+// 	}
+// 	va_end(str);
+// }
+
+long long check_exit_val(const char *str) {
+    unsigned long long num = 0;
+    int neg = 1;
+    int i = 0;
+
+    if (str[i] == '+' || str[i] == '-') {
+        if (str[i] == '-')
+            neg *= -1;
+        i++;
+    }
+    while (str[i]) {
+        if (num > ULLONG_MAX / 10) {
+            printf("error\n");
+            return (2);
+        }
+        num = (num * 10) + (str[i] - '0');
+        i++;
+    }
+
+    if (neg == 1 && num > LLONG_MAX) {
+		printf("pos num larger than LLONG_MAX\n");
+        printf("error\n");
+        return (2);
+    }
+    else if (neg == -1 && num > ((unsigned long long)LLONG_MAX + 1)) {
+		printf("neg num larger than LLONG_MIN\n");
+        printf("error\n");
+        return (2);
+    }
+
+    printf("num is: %llu\n", num);
+
+    return (long long)(num * neg);
 }
 
 int main(void)
@@ -64,8 +100,11 @@ int main(void)
 	// close(fd);
 	// printf("hello\n");
 
-	put_strs_fd(1, 2, "hello world on stderr\n");
+	// put_strs_fd(1, 2, "hello world on stderr\n");
 	// put_strs_fd(1, 1, "hello world on stdout\n");
 	// put_strs_fd()
 	// write (2, "hello\n", 6);
+
+	char *str =  "9223372036854775809";
+	printf("%llu\n", check_exit_val(str));
 }

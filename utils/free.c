@@ -16,7 +16,6 @@ void	free_strlist(char **str)
 	while(str[++i])
 		free(str[i]);
 	free(str);
-	str = NULL;
 }
 
 void	free_fdlist(t_data *data)
@@ -94,8 +93,11 @@ void	free_data(t_data *data, char *line, int last)
 	if (last == YES)
 	{
 		clear_envlist(data->env_list);
+		data->env_list = NULL;
 		free_strlist(data->our_env);
+		data->our_env = NULL;
 		free_strlist(data->env_paths);
+		data->env_paths = NULL;
 		if (data->cur_dir)
 		{
 			free(data->cur_dir);
@@ -111,7 +113,6 @@ void	free_data(t_data *data, char *line, int last)
 	free_fdlist(data);
 	if (data->pid)
 	{
-		fflush(stdout);
 		free(data->pid);
 		data->pid = NULL;
 	}
@@ -120,6 +121,4 @@ void	free_data(t_data *data, char *line, int last)
 		free(line);
 		line = NULL;
 	}
-	// print_tdata(data);
-	// print_cmds(data);
 }

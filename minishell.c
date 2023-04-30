@@ -16,7 +16,7 @@ static void	ts_err_argc_argv(int argc, char **argv, char **env)
 {
 	if (argc != 1 || argv == NULL || env == NULL)
 	{
-		ft_putstr_fd("Tinyshell: this programm complies without arguments\n", 2);
+		ft_putstr_fd("Tinyshell: this programm compiles without arguments\n", 2);
 		exit(127);
 	}
 }
@@ -83,7 +83,7 @@ void	ts_init_data(t_data *data, char ***env, int first)
 		data->defout = dup(STDOUT_FILENO);
 		// data->name_file = NO; // flag to check if it's a file (YES, NO)
 	}
-	data->num_prev_error = data->num_error;
+	// data->num_prev_error = data->num_error;
 	data->num_error = 0;
 	data->empty_str = NO; // flag to check if the string is empty (YES, NO)
 	data->num_cmd = 0;
@@ -124,7 +124,7 @@ int	main(int argc, char **argv, char **env)
 				finalize_cmd(&data);
 				// print_cmds(&data);
 				// print_tdata(&data);
-				execute(&data);
+				execute(line, &data);
 				// for(int i = 0; i < data.num_cmd; i++)
 				// 	print_tcmd(&data.cmd[i], i);
 				// printf("hello world\n");

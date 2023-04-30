@@ -100,6 +100,7 @@ int	ft_export(t_cmd *cmd, t_data *data)
 	char	**arg;
 
 	arg = cmd->array_arg;
+	exit_val = 0;
 	if (!arg[1])
 	{
 		print_export(data);
@@ -152,7 +153,6 @@ int	ft_export(t_cmd *cmd, t_data *data)
 				}
 			}
 			free_strlist(split_arg);
-			exit_val = 0;
 		}
 	}
 	if (rewr_ourenv > 0)

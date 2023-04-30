@@ -27,7 +27,7 @@ int	str_isnum(char *str)
 }
 
 /* check value of num. Max exit can take is llong max and llong min */
-long long	check_exit_val(const char *str, t_data *data)
+long long	check_exit_val(const char *str, char *line, t_data *data)
 {
 
 	unsigned long long	num;
@@ -45,50 +45,59 @@ long long	check_exit_val(const char *str, t_data *data)
 	}
 	while (str[i])
 	{
-		if ((num > LLONG_MAX && neg == 1) || (num > LLONG_MAX && neg == -1))
+		if (num > ULLONG_MAX / 10)
 		{
 			put_strs_fd(3, data, 2, "bash: exit: ", str, ": numeric argument required\n");
-			return (255);
+			return (2); //it's seriously not 255????
 		}
 		num = (num * 10) + (str[i] - 48);
 		i++;
 	}
+	if ((neg == 1 && num > LLONG_MAX) || (neg == -1 && num > ((unsigned long long)(LLONG_MAX + 1))))
+		{
+			put_strs_fd(3, data, 2, "bash: exit: ", str, ": numeric argument required\n");
+			// free_data(data, line, YES);
+			// close(data->defin);
+			// close(data->defout);
+			exit (2); //it's seriously not 255????
+		}
 	// if (neg == -1)
 	// 	return (256-(num % 256));
 	// return (num % 256);
+	// printf("num is : %lli\n", num);
+	// printf("llmax: %lli\n", LLONG_MAX);
 	return (num * neg);
 }
 
-void	ft_exit(t_cmd *cmd, t_data *data)
+void	ft_exit(t_cmd *cmd,  char *line, t_data *data)
 {
 	char	**arg;
 	int		i;
-	char	*line = malloc(5);
 
 	arg = cmd->array_arg;
 	/* if exit and no other args*/
 	if (!arg[1])
 	{
-		put_strs_fd(1, data, 1, "exit\n");
 		i = 0;
+		put_strs_fd(1, data, 1, "exit\n");
 	}
 	/* if exit and next arg is not a num. exit checks for nonnumbers first */
 	else if (!str_isnum(arg[1]))
 	{
+		i = 2; //check this again bc I thought it was 255
 		put_strs_fd(3, data, 2, "bash: exit: ", arg[1], ": numeric argument required\n");
-		i = 255;
 	}
 	/* if exit and there are multiple args (so arg[2] exists)*/
 	else if (arg[2])
 	{
+		i = 1; // check this again bc I thought it was 255
 		put_strs_fd(1, data, 2, "bash: exit: too many arguments\n");
-		i = 255;
 	}
 	/* exit normally */
 	else
 	{
+		i = check_exit_val(arg[1], line, data);
 		put_strs_fd(1, data, 1, "exit\n");
-		i = check_exit_val(arg[1], data);
 	}
 	free_data(data, line, YES); // NEED TO EDIT
 	close(data->defin);

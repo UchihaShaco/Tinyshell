@@ -26,17 +26,20 @@ int	ft_unset(t_cmd *cmd, t_data *data)
 	int		i;
 	int		rewrite;
 	int		exit_val;
+	int		rewrite_paths;
 	char	**arg;
 	t_env	*env_var;
 
 	i = 1;
 	rewrite = 0;
 	arg = cmd->array_arg;
+	exit_val = 0;
+	rewrite_paths = 0;
 	if (!arg[i])
 	{
 		clear_envlist(data->env_list);
 		free_strlist(data->our_env);
-		exit(0);
+		return (0);
 	}
 	while (arg[i])
 	{
@@ -62,16 +65,17 @@ int	ft_unset(t_cmd *cmd, t_data *data)
 				}
 				if (env_var->equal == 1)
 					rewrite++;
-				delete_var_envlist(arg[i], data);
 				if (strcmp(env_var->key, "PATH") == 0)
-					get_env_paths(data);
+					rewrite_paths++;
+				delete_var_envlist(arg[i], data);
 			}
-			exit_val = 0;
 		}
 		i++;
 	}
 	if (rewrite > 0)
 		rewrite_ourenv(data);
+	if (rewrite_paths > 0)
+		get_env_paths(data);
 	return (exit_val);
 }
 

@@ -62,7 +62,7 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		home = find_home_dir(data);
 		if (!home)
 		{
-			put_strs_fd(1, data, 2, "bash: cd: HOME not set");
+			put_strs_fd(1, data, 2, "bash: cd: HOME not set\n");
 			return (1);
 		}
 		else if (chdir(home) == -1)
@@ -70,6 +70,11 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 			put_strs_fd(3, data, 2, "bash: cd: ", home, " No such file or directory\n");
 			return (1);
 		}
+	}
+	if (arg[1] && arg[2])
+	{
+		put_strs_fd(1, data, 2, "bash: cd: too many arguments\n");
+		return (1);
 	}
 	/* change directories and return error if dir doesn't exist */
 	else if (chdir(arg[1]) != 0)

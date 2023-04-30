@@ -121,7 +121,7 @@ if there is 0 num arg but some redirections
 if the command doesn't exist
 run cmd normally
 */
-void	child_process(int i, t_cmd *cmd, t_data *data)
+void	child_process(int i, t_cmd *cmd, char *line, t_data *data)
 {
 	open_files(cmd, data, NO);
 	pipe_cmd(i, cmd, data);
@@ -139,7 +139,7 @@ void	child_process(int i, t_cmd *cmd, t_data *data)
 	if (cmd->num_arg == 0)
 		exit(0);
 	if (cmd->builtin > 0)
-		execute_builtin(cmd, CHILD, data);
+		execute_builtin(cmd, CHILD, line, data);
 	if (!cmd->path)
 	{
 		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
@@ -164,7 +164,7 @@ int	parent_process(t_data *data)
 	return (status);
 }
 
-int	exec_one_builtin(t_cmd *cmd, t_data *data)
+int	exec_one_builtin(t_cmd *cmd, char * line, t_data *data)
 {
 	int status;
 	
@@ -179,12 +179,11 @@ int	exec_one_builtin(t_cmd *cmd, t_data *data)
 		ts_dup2(cmd->fd_array[cmd->last_output], STDOUT_FILENO, data);
 	}
 	close_fd_array(cmd, data);
-	status = execute_builtin(&data->cmd[0], PARENT, data);
-	
+	status = execute_builtin(&data->cmd[0], PARENT, line, data);
 	return (status);
 }
 
-void	execute(t_data *data)
+void	execute(char *line, t_data *data)
 {
 	int	i;
 	int	status;
@@ -194,7 +193,7 @@ void	execute(t_data *data)
 	/* if there is one cmd and it's a builtin*/
 	else if (data->num_cmd == 1 && data->cmd->builtin > 0)
 	{
-		status = exec_one_builtin(&data->cmd[0], data);
+		status = exec_one_builtin(&data->cmd[0], line, data);
 		// return (status);
 		data->num_prev_error = status;
 	}
@@ -214,7 +213,7 @@ void	execute(t_data *data)
 			if (data->pid[i] == -1)
 				error(ERR_FORK, data);
 			else if (data->pid[i] == 0)
-				child_process(i, &data->cmd[i], data);
+				child_process(i, &data->cmd[i], line, data);
 		}
 		/* run the parent process */
 		status = parent_process(data);

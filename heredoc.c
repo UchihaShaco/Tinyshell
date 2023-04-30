@@ -44,23 +44,24 @@ void	get_heredoc_str(t_cmd *cmd, t_data *data)
 	//while i = index of the delimiter, it has not hit the delimiter yet
 	while (i < cmd->count_hd)
 	{
-		signal(SIGINT, SIG_IGN);
+		// signal(SIGINT, SIG_IGN);
 		input = readline("> ");
-
 		if(!input) //instead jump to the next delimiter
 		{
-			free(str);
-			free_data(data, input, NO); // seg fault
-			return ; // or exit??
-		}
-		if (ft_strcmp(input, cmd->hd_array[i]) == 0)
+			put_strs_fd(3, data, 1, "bash: warning: here-document delimited by end-of-file (wanted '", cmd->hd_array[i], "')\n");
 			i++;
-		else if (cmd->record_hd == 1 && i == cmd->count_hd - 1)
+		}
+		else
 		{
-			new_str = ft_strjoin_hd(str, input, data);
-			if (str)
-				free(str);
-			str = new_str;
+			if (ft_strcmp(input, cmd->hd_array[i]) == 0)
+				i++;
+			else if (cmd->record_hd == 1 && i == cmd->count_hd - 1)
+			{
+				new_str = ft_strjoin_hd(str, input, data);
+				if (str)
+					free(str);
+				str = new_str;
+			}
 		}
 		free(input);
 	}

@@ -129,6 +129,7 @@ typedef struct s_data
 	char	**env_paths;
 	char	*old_dir;
 	char	*cur_dir;
+	char	*line; //line for read_line
 	int		**fd; //for pipes
 	int		*pid; //for child processes
 	int		num_cmd;
@@ -149,7 +150,7 @@ int		ts_count_args_without_qm(t_cmd *cmd, int i);
 int		ts_check_quotation_marks(t_cmd *cmd, int i, t_data *data);
 // void ts_quote_check(char *line);
 /* *********************  Parse  ********************* */
-int		ts_parse(t_data *data, char *line);
+void	ts_parse(t_data *data, char *line);
 void	ts_check_empty_str(t_cmd *cmd);
 /* ********************* Cmd Parse  ********************* */
 int		ts_count_and_record_cmd(t_data *data, char *line);
@@ -239,7 +240,7 @@ int		ft_env(t_data *data);
 int		ft_pwd(t_data *data);
 int		ft_unset(t_cmd *cmd, t_data *data);
 int		ft_cd(t_cmd *cmd, t_data *data);
-void	ft_exit(t_cmd *cmd, t_data *data);
+void	ft_exit(t_cmd *cmd, char *line, t_data *data);
 
 /* HEREDOC */
 void	get_heredoc_fd(t_cmd *cmd, t_data *data);
@@ -253,9 +254,9 @@ char	*find_home_dir(t_data *data);
 void	create_fd_pid_array(t_data *data);
 
 /* EXECUTION */
-void	execute(t_data *data);
+void	execute(char *line, t_data *data);
 int		check_builtin(t_cmd *cmd, t_data *data);
-int		execute_builtin(t_cmd *cmd, int	parent, t_data *data);
+int		execute_builtin(t_cmd *cmd, int	proc, char *line, t_data *data);
 
 /* TESTING */
 void	print_tcmd(t_cmd *cmd, int i);

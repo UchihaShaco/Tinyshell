@@ -49,7 +49,10 @@ void	get_env_paths(t_data *data)
 	// if (cur == NULL || cur->val == NULL)
 	// 	return ;
 	if (data->env_paths)
+	{
 		free_strlist(data->env_paths);
+		data->env_paths = NULL;
+	}
 	path_node = find_var_envlist("PATH", data);
 	if (!path_node || path_node->val == NULL)
 		return ;
