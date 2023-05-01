@@ -14,7 +14,9 @@ void	free_strlist(char **str)
 	}
 	i = -1;
 	while(str[++i])
+	{
 		free(str[i]);
+	}
 	free(str);
 }
 

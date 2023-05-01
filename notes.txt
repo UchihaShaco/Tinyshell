@@ -104,3 +104,5 @@ int	execute(t_data *data)
 	return (WEXITSTATUS(status));
 	return (0);
 }
+
+$EMPTY echo $EMPTY hello

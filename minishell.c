@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/30 20:40:19 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/01 12:00:43 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static	int	ts_quote_checker(t_data *data, char *line)
 
 void	ts_parse(t_data *data, char *line)
 {
+	printf("parsing..\n");
 	int	i;
 
 	i = 0;
@@ -106,6 +107,7 @@ int	main(int argc, char **argv, char **env)
 		ts_get_signal() ;
 		ts_init_data(&data, &env, NO);
 		line = readline("\033[1;35mTinyShell > \033[0m");
+		// line = readline("\033[1;35m%%\033[0m");
 		ts_signal_ctrl_d(&data, &line);
 		ts_parse(&data, line);
 		// print_cmds(&data);
@@ -124,7 +126,7 @@ int	main(int argc, char **argv, char **env)
 				finalize_cmd(&data);
 				// print_cmds(&data);
 				// print_tdata(&data);
-				execute(line, &data);
+				// execute(line, &data);
 				// for(int i = 0; i < data.num_cmd; i++)
 				// 	print_tcmd(&data.cmd[i], i);
 				// printf("hello world\n");
@@ -132,9 +134,9 @@ int	main(int argc, char **argv, char **env)
 			}
 		}
 		free_data(&data, line, NO);
-			// exit(0);
 	}
 	free_data(&data, line, YES);
+	// exit(0);
 	// ts_free_all(&data, &line); // we will have to free the memory something like this 
 	// char *str = "";
 	// printf("%i\n", invalid_expor(str));

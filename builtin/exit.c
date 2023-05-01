@@ -48,7 +48,7 @@ long long	check_exit_val(const char *str, char *line, t_data *data)
 		if (num > ULLONG_MAX / 10)
 		{
 			put_strs_fd(3, data, 2, "bash: exit: ", str, ": numeric argument required\n");
-			return (2); //it's seriously not 255????
+			return (255); //it's seriously not 255????
 		}
 		num = (num * 10) + (str[i] - 48);
 		i++;
@@ -59,7 +59,7 @@ long long	check_exit_val(const char *str, char *line, t_data *data)
 			// free_data(data, line, YES);
 			// close(data->defin);
 			// close(data->defout);
-			exit (2); //it's seriously not 255????
+			exit (255); //it's seriously not 255????
 		}
 	// if (neg == -1)
 	// 	return (256-(num % 256));
@@ -84,14 +84,15 @@ void	ft_exit(t_cmd *cmd,  char *line, t_data *data)
 	/* if exit and next arg is not a num. exit checks for nonnumbers first */
 	else if (!str_isnum(arg[1]))
 	{
-		i = 2; //check this again bc I thought it was 255
+		i = 255; //check this again bc I thought it was 255
 		put_strs_fd(3, data, 2, "bash: exit: ", arg[1], ": numeric argument required\n");
 	}
-	/* if exit and there are multiple args (so arg[2] exists)*/
+	/* if exit and there are multiple args (so arg[2] exists) - does not exit out of shell */
 	else if (arg[2])
 	{
-		i = 1; // check this again bc I thought it was 255
+		i = 1;
 		put_strs_fd(1, data, 2, "bash: exit: too many arguments\n");
+		return ;
 	}
 	/* exit normally */
 	else

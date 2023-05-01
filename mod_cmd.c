@@ -82,9 +82,6 @@ void	check_redir_doubles(t_cmd *cmd, t_data *data)
 	cmd->count_redir = new_count_redir;
 }
 
-
-
-
 /* populates last_input, last_output, count_hd */
 void	check_hd_last_redir(t_cmd *cmd, t_data *data)
 {
@@ -157,6 +154,51 @@ void	get_cmd_path(t_cmd *cmd, t_data *data)
 	}
 }
 
+/* check if there is $EMPTY in cmd->array_arg 
+if nothing remains in array_arg, */
+void	check_empty(t_cmd *cmd, t_data *data)
+{
+	int		i;
+	int		j;
+	int		count_empty;
+	int		new_num_arg;
+	char	**new_array_arg;
+
+	i = -1;
+	count_empty = 0;
+	new_array_arg = NULL;
+	while (cmd->array_arg[++i])
+		if (cmd->array_arg[i][0] == '\0')
+			count_empty++;
+	if (count_empty == 0)
+		return ;
+	new_num_arg = cmd->num_arg - count_empty;
+	if (new_num_arg > 0)
+	{
+		new_array_arg = (char **)ts_calloc(new_num_arg + 1, sizeof(char *), data);
+		i = -1;
+		j = 0;
+		while (cmd->array_arg[++i])
+		{
+			if (cmd->array_arg[i][0] != '\0')
+			{
+				new_array_arg[j] = ft_strdup_lim(cmd->array_arg[i], '\0', data);
+				j++;
+			}
+		}
+	}
+	free_strlist(cmd->array_arg);
+	cmd->array_arg = NULL;
+	cmd->array_arg = new_array_arg;
+	// free_strlist(cmd->array_arg);
+	// cmd->array_arg = NULL;
+	// printf("new array arg: \n");
+	// print_strlist(cmd->array_arg);
+	
+	cmd->num_arg = new_num_arg;
+	// printf("cmd->num_arg: %i\n", cmd->num_arg);
+}
+
 void	finalize_cmd(t_data *data)
 {
 	int	i;
@@ -169,6 +211,8 @@ void	finalize_cmd(t_data *data)
 		check_hd_last_redir(&data->cmd[i], data);
 		if (data->cmd[i].count_hd > 0)
 			init_heredoc(&data->cmd[i], data);
+		/* check cmd->array_arg for $EMPTY */
+		check_empty(&data->cmd[i], data);
 		if (data->cmd[i].num_arg > 0)
 		{
 			data->cmd[i].builtin = check_builtin(&data->cmd[i], data);

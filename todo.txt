@@ -123,6 +123,7 @@ TODO:
 3. Permission denied - check access to files that are being opened in redirections
 4. Check ./minishell | ./minishell -> its acutally producing the correct behavior 
 but how do i send it it something smaller  than the whole program??
+-figure out if the executable is ./minishell - if it is, do nothing
 5. ls | ls | "" | ls 
 Should be command not 
 Instead it is going to exec function error

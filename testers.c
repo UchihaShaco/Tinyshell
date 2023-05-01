@@ -52,6 +52,8 @@ void	print_strlist(char **str)
 	while (str[i])
 	{
 		printf("[%i]: %s\n", i, str[i]);
+		if (str[i][0] == '\0')
+			printf("malloc'd string that contains null in first index\n");
 		i++;
 	}
 }
