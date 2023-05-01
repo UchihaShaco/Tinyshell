@@ -131,3 +131,7 @@ Instead it is going to exec function error
 can use sigaction instead of signal 
 if ctrl c then exit out of heredoc and go back to shell
 
+-can use stat to find if a string is a directory or not
+-also use stat to check for file permissions when openinng up a file
+
+EXECUTION:

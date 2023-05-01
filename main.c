@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <stdarg.h>
 #include <limits.h>
+#include <sys/stat.h>
 
 int	putstr_fd(char *s, int fd)
 {
@@ -69,7 +70,16 @@ long long check_exit_val(const char *str) {
     return (long long)(num * neg);
 }
 
-int main(void)
+int is_directory(const char *path) {
+    struct stat path_stat;
+    if (stat(path, &path_stat) != 0) {
+        // error occurred, could not get file status
+        return 0;
+    }
+    return S_ISDIR(path_stat.st_mode);
+}
+
+int main(int argc, char **argv, char **envp)
 {
 	// int	fd[2];
 	// int	pid;
@@ -105,6 +115,14 @@ int main(void)
 	// put_strs_fd()
 	// write (2, "hello\n", 6);
 
-	char *str =  "9223372036854775809";
-	printf("%llu\n", check_exit_val(str));
+	// char *str =  "9223372036854775809";
+	// printf("%llu\n", check_exit_val(str));
+	// int result = is_directory("/path/to/directory");
+	// if (result == 1) 
+	// 	printf("This is a directory\n");
+	// else 
+	// 	printf("This is not a directory\n");
+
+	
+
 }

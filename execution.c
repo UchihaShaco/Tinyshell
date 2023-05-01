@@ -116,11 +116,31 @@ int	open_files(t_cmd *cmd, t_data *data, int one_func)
 	return(0);
 }
 
+int		find_path_separator(t_cmd *cmd)
+{
+	int		i;
+	char	*arg;
+
+	i = -1;
+	arg = cmd->array_arg[0];
+	while (arg[++i])
+		if (arg[i] == '/')
+			return (1);
+	return (0);
+}
+
+/*
+look for a path separator
+if path separator exists, check if it is a directory
+otherwise check if it is a command 
+*/
 void	check_if_dir(t_cmd *cmd, char *line, t_data *data)
 {
 	DIR *dir;
 	int	dir_exists;
 
+	if (!find_path_separator(cmd))
+		return ;
 	dir_exists = 0;
 	dir = opendir(cmd->path);
 	if (dir)
@@ -147,25 +167,25 @@ void	child_process(int i, t_cmd *cmd, char *line, t_data *data)
 	pipe_cmd(i, cmd, data);
 	close_fd_array(cmd, data);
 	close_pipes(data);
-	int j;
+	// int j;
 
-	j = 0;
-	while (j < data->num_cmd - 1)
-	{
-		close(data->fd[j][0]);
-		close(data->fd[j][1]);
-		j++;
-	}
+	// j = 0;
+	// while (j < data->num_cmd - 1)
+	// {
+	// 	close(data->fd[j][0]);
+	// 	close(data->fd[j][1]);
+	// 	j++;
+	// }
 	if (cmd->num_arg == 0)
 		exit(0);
 	if (cmd->builtin > 0)
 		execute_builtin(cmd, CHILD, line, data);
+	// check_if_dir(cmd, line, data);
 	if (!cmd->path)
 	{
 		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
 		exit(127);
 	}
-	check_if_dir(cmd, line, data);
 	if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
 	{
 		put_strs_fd(3, data, 2, "bash: ", cmd->path, ": command not found\n");

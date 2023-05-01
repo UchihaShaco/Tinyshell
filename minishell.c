@@ -91,55 +91,53 @@ void	ts_init_data(t_data *data, char ***env, int first)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_data	data;
-	char	*line;
+	// t_data	data;
+	// char	*line;
 
-	ts_err_argc_argv(argc, argv, env);
-	ft_bzero(&data, sizeof(t_data));
-	ts_init_data(&data, &env, YES);
-	line = NULL;
-	// print_tdata(&data);
-	while (1)
-	{
-		dup2(data.defin, STDIN_FILENO);
-		dup2(data.defout, STDOUT_FILENO);
-		ts_get_signal() ;
-		ts_init_data(&data, &env, NO);
-		line = readline("\033[1;35mTinyShell > \033[0m");
-		// line = readline("\033[1;35m%%\033[0m");
-		ts_signal_ctrl_d(&data, &line);
-		ts_parse(&data, line);
-		// print_cmds(&data);
-		// if(line)
-			add_history(line);
-		if (data.empty_str == NO)
-		{
-			ts_record_array(&data);
-			// print_tdata(&data);
-			// print_cmds(&data);
-			if (data.num_cmd > 0)
-			{
-				// for(int i = 0; i < data.num_cmd; i++)
-				// 	print_tcmd(&data.cmd[i], i);
-				// printf("\n ---------------------------------------\n");
-				finalize_cmd(&data);
-				// print_tdata(&data);
-				// print_cmds(&data);
-				execute(line, &data);
-				// for(int i = 0; i < data.num_cmd; i++)
-				// 	print_tcmd(&data.cmd[i], i);
-				// printf("hello world\n");
-				// exit(0);
-			}
-		}
-		free_data(&data, line, NO);
-	}
-	free_data(&data, line, YES);
-	// exit(0);
-	// ts_free_all(&data, &line); // we will have to free the memory something like this 
-	// char *str = "";
-	// printf("%i\n", invalid_expor(str));
-
-	
+	// ts_err_argc_argv(argc, argv, env);
+	// ft_bzero(&data, sizeof(t_data));
+	// ts_init_data(&data, &env, YES);
+	// line = NULL;
+	// // print_tdata(&data);
+	// while (1)
+	// {
+	// 	dup2(data.defin, STDIN_FILENO);
+	// 	dup2(data.defout, STDOUT_FILENO);
+	// 	ts_get_signal() ;
+	// 	ts_init_data(&data, &env, NO);
+	// 	line = readline("\033[1;35mTinyShell > \033[0m");
+	// 	// line = readline("\033[1;35m%%\033[0m");
+	// 	ts_signal_ctrl_d(&data, &line);
+	// 	ts_parse(&data, line);
+	// 	// print_cmds(&data);
+	// 	// if(line)
+	// 		add_history(line);
+	// 	if (data.empty_str == NO)
+	// 	{
+	// 		ts_record_array(&data);
+	// 		// print_tdata(&data);
+	// 		// print_cmds(&data);
+	// 		if (data.num_cmd > 0)
+	// 		{
+	// 			// for(int i = 0; i < data.num_cmd; i++)
+	// 			// 	print_tcmd(&data.cmd[i], i);
+	// 			// printf("\n ---------------------------------------\n");
+	// 			finalize_cmd(&data);
+	// 			// print_tdata(&data);
+	// 			// print_cmds(&data);
+	// 			execute(line, &data);
+	// 			// for(int i = 0; i < data.num_cmd; i++)
+	// 			// 	print_tcmd(&data.cmd[i], i);
+	// 			// printf("hello world\n");
+	// 			// exit(0);
+	// 		}
+	// 	}
+	// 	free_data(&data, line, NO);
+	// }
+	// free_data(&data, line, YES);
+	// // // exit(0);
+	// // // ts_free_all(&data, &line); // we will have to free the memory something like this 
+	// // // char *str = "";
+	// // // printf("%i\n", invalid_expor(str));
 }
 

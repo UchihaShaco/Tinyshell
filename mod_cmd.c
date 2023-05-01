@@ -193,14 +193,8 @@ void	check_empty(t_cmd *cmd, t_data *data)
 	free_strlist(cmd->array_arg);
 	cmd->array_arg = NULL;
 	cmd->array_arg = new_array_arg;
-	// free_strlist(cmd->array_arg);
-	// cmd->array_arg = NULL;
-	// printf("new array arg: \n");
-	// print_strlist(cmd->array_arg);
-	
 	cmd->old_num_arg = cmd->num_arg;
 	cmd->num_arg = new_num_arg;
-	// printf("cmd->num_arg: %i\n", cmd->num_arg);
 }
 
 void	finalize_cmd(t_data *data)
