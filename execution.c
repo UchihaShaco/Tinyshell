@@ -143,7 +143,7 @@ void	child_process(int i, t_cmd *cmd, char *line, t_data *data)
 	if (!cmd->path)
 	{
 		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 	else if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
 		error(ERR_EXEC, data);

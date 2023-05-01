@@ -129,3 +129,5 @@ Should be command not
 Instead it is going to exec function error
 6. figure out ctrl + c signal
 can use sigaction instead of signal 
+if ctrl c then exit out of heredoc and go back to shell
+

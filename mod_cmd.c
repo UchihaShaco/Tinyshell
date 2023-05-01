@@ -171,7 +171,10 @@ void	check_empty(t_cmd *cmd, t_data *data)
 		if (cmd->array_arg[i][0] == '\0')
 			count_empty++;
 	if (count_empty == 0)
+	{
+		cmd->old_num_arg = cmd->num_arg;
 		return ;
+	}
 	new_num_arg = cmd->num_arg - count_empty;
 	if (new_num_arg > 0)
 	{
@@ -195,6 +198,7 @@ void	check_empty(t_cmd *cmd, t_data *data)
 	// printf("new array arg: \n");
 	// print_strlist(cmd->array_arg);
 	
+	cmd->old_num_arg = cmd->num_arg;
 	cmd->num_arg = new_num_arg;
 	// printf("cmd->num_arg: %i\n", cmd->num_arg);
 }

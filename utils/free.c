@@ -51,7 +51,7 @@ void	free_targ(t_cmd *cmd)
 	if (!arg)
 		return ;
 	i = -1;
-	while (++i < cmd->num_arg + 1)
+	while (++i < cmd->old_num_arg + 1)
 	{
 		if (arg[i].str)
 			free(arg[i].str);

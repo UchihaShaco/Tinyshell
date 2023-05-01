@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/01 09:18:01 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/01 12:13:48 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct s_cmd
 	int		*redir; //array of redirections in cmd
 	int		*fd_array; //array of open files for redirections
 	int		num_arg;
+	int		old_num_arg;
 	int		count_redir;
 	int		count_hd;
 	int		record_hd;

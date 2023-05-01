@@ -71,6 +71,7 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 			return (1);
 		}
 	}
+	/* NOTE: in mac bash, cd will actually go to the directory even if there are multiple commands */
 	if (arg[1] && arg[2])
 	{
 		put_strs_fd(1, data, 2, "bash: cd: too many arguments\n");

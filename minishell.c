@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/01 12:00:43 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/01 12:18:55 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ static	int	ts_quote_checker(t_data *data, char *line)
 
 void	ts_parse(t_data *data, char *line)
 {
-	printf("parsing..\n");
 	int	i;
 
 	i = 0;
@@ -126,7 +125,7 @@ int	main(int argc, char **argv, char **env)
 				finalize_cmd(&data);
 				// print_cmds(&data);
 				// print_tdata(&data);
-				// execute(line, &data);
+				execute(line, &data);
 				// for(int i = 0; i < data.num_cmd; i++)
 				// 	print_tcmd(&data.cmd[i], i);
 				// printf("hello world\n");
