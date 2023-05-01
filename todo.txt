@@ -113,3 +113,18 @@ NOTES:
 cd | cd | will NOTE create any commands
 ts_malloc -> changed all functions to calloc
 for malloc arg, it is not a linked list, therefore no need for size + 1
+
+TODO: 
+1. for $ expansions
+	Do this before execve in execution function
+	check if the arg is a directory using opendir and closedir
+	if just expansion, give error 126
+2. $EMPTY - ignore this and move on to the next command in array_arg to executed
+3. Permission denied - check access to files that are being opened in redirections
+4. Check ./minishell | ./minishell -> its acutally producing the correct behavior 
+but how do i send it it something smaller  than the whole program??
+5. ls | ls | "" | ls 
+Should be command not 
+Instead it is going to exec function error
+6. figure out ctrl + c signal
+can use sigaction instead of signal 
