@@ -66,7 +66,7 @@ int	execute_builtin(t_cmd *cmd, int	proc, char *line, t_data *data)
 	else if (cmd->builtin == 6)
 		exit_val = ft_env(data);
 	else if (cmd->builtin == 7)
-		ft_exit(cmd, line, data);
+		exit_val = ft_exit(cmd, line, data);
 	/* if a child process exit with exit value */
 	if (proc == CHILD)
 		exit(exit_val);

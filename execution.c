@@ -116,6 +116,26 @@ int	open_files(t_cmd *cmd, t_data *data, int one_func)
 	return(0);
 }
 
+void	check_if_dir(t_cmd *cmd, char *line, t_data *data)
+{
+	DIR *dir;
+	int	dir_exists;
+
+	dir_exists = 0;
+	dir = opendir(cmd->path);
+	if (dir)
+	{
+		put_strs_fd(3, data, 2, "bash: ", cmd->path, ": Is a directory\n");
+		dir_exists = 1;
+	}
+	closedir(dir);
+	if (dir_exists == 1)
+	{
+		free_data(data, line, NO);
+		exit (126);
+	}
+}
+
 /*
 if there is 0 num arg but some redirections 
 if the command doesn't exist
@@ -145,8 +165,13 @@ void	child_process(int i, t_cmd *cmd, char *line, t_data *data)
 		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
 		exit(127);
 	}
-	else if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
-		error(ERR_EXEC, data);
+	check_if_dir(cmd, line, data);
+	if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
+	{
+		put_strs_fd(3, data, 2, "bash: ", cmd->path, ": command not found\n");
+		exit(127);
+		// error(ERR_EXEC, data);
+	}
 }
 
 int	parent_process(t_data *data)

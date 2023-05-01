@@ -69,7 +69,7 @@ long long	check_exit_val(const char *str, char *line, t_data *data)
 	return (num * neg);
 }
 
-void	ft_exit(t_cmd *cmd,  char *line, t_data *data)
+int	ft_exit(t_cmd *cmd,  char *line, t_data *data)
 {
 	char	**arg;
 	int		i;
@@ -92,7 +92,8 @@ void	ft_exit(t_cmd *cmd,  char *line, t_data *data)
 	{
 		i = 1;
 		put_strs_fd(1, data, 2, "bash: exit: too many arguments\n");
-		return ;
+		data->num_prev_error = 1;
+		return (1);
 	}
 	/* exit normally */
 	else
@@ -104,5 +105,6 @@ void	ft_exit(t_cmd *cmd,  char *line, t_data *data)
 	close(data->defin);
 	close(data->defout);
 	exit(i);
+	return (0);
 }
 

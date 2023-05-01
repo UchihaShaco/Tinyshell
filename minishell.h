@@ -241,7 +241,7 @@ int		ft_env(t_data *data);
 int		ft_pwd(t_data *data);
 int		ft_unset(t_cmd *cmd, t_data *data);
 int		ft_cd(t_cmd *cmd, t_data *data);
-void	ft_exit(t_cmd *cmd, char *line, t_data *data);
+int		ft_exit(t_cmd *cmd, char *line, t_data *data);
 
 /* HEREDOC */
 void	get_heredoc_fd(t_cmd *cmd, t_data *data);

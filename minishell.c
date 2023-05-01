@@ -123,8 +123,8 @@ int	main(int argc, char **argv, char **env)
 				// 	print_tcmd(&data.cmd[i], i);
 				// printf("\n ---------------------------------------\n");
 				finalize_cmd(&data);
-				// print_cmds(&data);
 				// print_tdata(&data);
+				// print_cmds(&data);
 				execute(line, &data);
 				// for(int i = 0; i < data.num_cmd; i++)
 				// 	print_tcmd(&data.cmd[i], i);
