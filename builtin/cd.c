@@ -13,7 +13,7 @@
 */
 
 /* if oldpwd/pwd vars exist, update the value. rewrites our_env if necessary */
-int	change_pwd(t_cmd *cmd, t_data *data)
+void	change_pwd(t_cmd *cmd, t_data *data)
 {
 	t_env	*pwd;
 	t_env 	*oldpwd;
@@ -72,11 +72,11 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		}
 	}
 	/* NOTE: in mac bash, cd will actually go to the directory even if there are multiple commands */
-	if (arg[1] && arg[2])
-	{
-		put_strs_fd(1, data, 2, "bash: cd: too many arguments\n");
-		return (1);
-	}
+	// if (arg[1] && arg[2])
+	// {
+	// 	put_strs_fd(1, data, 2, "bash: cd: too many arguments\n");
+	// 	return (1);
+	// }
 	/* change directories and return error if dir doesn't exist */
 	else if (chdir(arg[1]) != 0)
 	{

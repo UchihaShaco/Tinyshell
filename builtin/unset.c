@@ -37,8 +37,8 @@ int	ft_unset(t_cmd *cmd, t_data *data)
 	rewrite_paths = 0;
 	if (!arg[i])
 	{
-		clear_envlist(data->env_list);
-		free_strlist(data->our_env);
+		// clear_envlist(data->env_list);
+		// free_strlist(data->our_env);
 		return (0);
 	}
 	while (arg[i])

@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/02 12:26:06 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/02 18:08:03 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <stdarg.h>
 # include <limits.h>
 # include <sys/stat.h>
+# include <errno.h>
 // # define LLMIN 9223372036854775808
 
 typedef enum e_value

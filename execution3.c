@@ -24,91 +24,23 @@ void	close_pipes(t_data *data)
 		j++;
 	}
 }
-
-int	handle_dir(t_cmd *cmd, int i, t_data *data)
+int	err(char *str, int errno, int proc, t_data *data)
 {
-	if (cmd->redir[i] == 2)
-		put_strs_fd(1, data, 2, "bash: input is a directory\n");
-	else if (cmd->redir[i] == 3 || cmd->redir[i] == 4)
-		put_strs_fd(3, data, 2, "bash: ", cmd->file[i], ": Is a directory\n");
-	return (1);
-}
-int	check_one_file_permissions(t_cmd *cmd, int i, t_data *data)
-{
-	struct stat file_stat;
-	int			stat_res;
-	int			permission;
-	int			dir_status;
-
-	//if heredoc, return 
-	if (cmd->redir[i] == 5)
-		return (0);
-	stat_res = stat(cmd->file[i], &file_stat);
-	//check if file is a directory
-	if (stat_res != -1 && S_ISDIR(file_stat.st_mode))
-	{
-		dir_status = handle_dir(cmd, i, data);
-		if (dir_status == 1)
-			return (1);
-	}
-	/* if input redir
-	if file doesn't exist, return 1
-	find read permissions
-	*/
-	if (cmd->redir[i] == 2)
-	{
-		if (stat_res == -1)
-		{
-			put_strs_fd(3, data, 2, "bash: ", cmd->file[i], ": No such file or directory\n");
-			return (1);
-		}
-		permission = (file_stat.st_mode & S_IRUSR);
-	}
-	/* if output redir
-	if file doesn't exist, return 0
-	find write permissions */
-	else if (cmd->redir[i] == 3 || cmd->redir[i] == 4)
-	{
-		if (stat_res == -1)
-			return (0);
-		permission = (file_stat.st_mode & S_IWUSR);
-	}
-	if (permission)
-		return (0);
+	ft_putstr_fd("bash: ", 2);
+	ft_putstr_fd(str, 2);
+	strerror(errno);
+	close_pipes(data);
+	if (proc == CHILD)
+		exit(1);
 	else
 	{
-		put_strs_fd(3, data, 3, "bash: ", cmd->file[i], ": Permission denied\n");
+		close(data->defin);
+		close(data->defout);
 		return (1);
 	}
 	return (0);
+
 }
-
-/* check file permissions. If a restricted file is found, set num error and exit/return */
-int	check_file_permissions(t_cmd *cmd, int proc, char *line, t_data *data)
-{
-	int	restrict_file;
-	int	i;
-
-	restrict_file = 0;
-	i = -1; 
-	while (++i < cmd->count_redir)
-	{
-		restrict_file = check_one_file_permissions(cmd, i, data);
-		if (restrict_file == 1)
-		{
-			if (proc == CHILD)
-				exit(1);
-			else
-			{
-				data->num_prev_error = 1;
-				return (1);
-			}
-		}
-	}
-	return (0);
-}
-
-/* still keep checkers in case */
 int	open_one_file(t_cmd *cmd, int i, int proc, t_data *data)
 {
 	if (cmd->redir[i] == 2)
@@ -116,7 +48,8 @@ int	open_one_file(t_cmd *cmd, int i, int proc, t_data *data)
 		cmd->fd_array[i] = open(cmd->file[i], O_RDONLY);
 		if (cmd->fd_array[i] == -1)
 		{
-			put_strs_fd(3, data, 2, "bash: ", cmd->file[i], ": No such file or directory\n");
+			// put_strs_fd(3, data, 2, "bash: ", cmd->file[i], strerror(errno));
+			ft_putstr_fd(strerror(errno), 2);
 			close_fd_array(cmd, data);
 			close_pipes(data);
 			if (proc == CHILD)
@@ -126,7 +59,7 @@ int	open_one_file(t_cmd *cmd, int i, int proc, t_data *data)
 				close(data->defin);
 				close(data->defout);
 				return (1);
-			}	
+			}
 		}
 	}
 	else if (cmd->redir[i] == 3)
@@ -134,22 +67,40 @@ int	open_one_file(t_cmd *cmd, int i, int proc, t_data *data)
 		cmd->fd_array[i] = open(cmd->file[i], O_CREAT | O_RDWR | O_TRUNC, 0666);
 		if (cmd->fd_array[i] == -1)
 		{
-			put_strs_fd(3, data, 2, "bash: ", cmd->file[i], ": No such file or directory\n");
+			// put_strs_fd(3, data, 2, "bash: ", cmd->file[i], strerror(errno));
+			ft_putstr_fd(strerror(errno), 2);
+			close_fd_array(cmd, data);
+			close_pipes(data);
 			if (proc == CHILD)
-				exit(1);
-			return (1);
+				exit (EXIT_FAILURE);
+			else
+			{
+				close(data->defin);
+				close(data->defout);
+				return (1);
+			}
 		}
+			// error(ERR_OPEN, data);
 	}
 	else if (cmd->redir[i] == 4)
 	{
 		cmd->fd_array[i] = open(cmd->file[i], O_CREAT | O_RDWR | O_APPEND, 0666);
 		if (cmd->fd_array[i] == -1)
 		{
-			put_strs_fd(3, data, 2, "bash: ", cmd->file[i], ": No such file or directory\n");
+			// put_strs_fd(3, data, 2, "bash: ", cmd->file[i], strerror(errno));
+			ft_putstr_fd(strerror(errno), 2);
+			close_fd_array(cmd, data);
+			close_pipes(data);
 			if (proc == CHILD)
-				exit(1);
-			return (1);
+				exit (EXIT_FAILURE);
+			else
+			{
+				close(data->defin);
+				close(data->defout);
+				return (1);
+			}
 		}
+			// error(ERR_OPEN, data);
 	}
 	else if (cmd->redir[i] == 5)
 	{
@@ -166,15 +117,18 @@ check file permissions already change exit value num*/
 int	open_files(t_cmd *cmd, int proc, char *line, t_data *data)
 {
 	int	i;
+	int	exit_val;
 
 	if (cmd->count_redir == 0)
 		return (0);
-	if (check_file_permissions(cmd, proc, line, data) == 1)
-		return (1);
 	cmd->fd_array = (int *)ts_calloc(cmd->count_redir, sizeof(int), data);
 	i = -1;
 	while (++i < cmd->count_redir)
-		open_one_file(cmd, i, proc, data);
+	{
+		exit_val = open_one_file(cmd, i, proc, data);
+		if (exit_val == 1)
+			return (1);
+	}
 	return(0);
 }
 

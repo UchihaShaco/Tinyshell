@@ -123,6 +123,6 @@ void	free_data(t_data *data, char *line, int last)
 		free(line);
 		line = NULL;
 	}
-	close(data->defin);
-	close(data->defout);
+	// close(data->defin);
+	// close(data->defout);
 }

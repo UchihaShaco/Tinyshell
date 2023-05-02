@@ -1,5 +1,16 @@
 #include "minishell.h"
 
+/* write null to pipe */
+void	pipe_null(int index, t_data *data)
+{
+	int	devnull;
+	devnull = open("dev/null", O_WRONLY);
+	if (devnull < 0)
+		error(ERR_OPEN, data);
+	ts_dup2(devnull, data->fd[index][1], data);
+	close(devnull);
+}
+
 void	close_fd_array(t_cmd *cmd, t_data *data)
 {
 	int	i;
