@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 23:56:09 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/01 12:18:12 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/02 15:19:14 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	ts_signal_ctrl_d(t_data *data, char **line)
 		// printf("\033[1;35m\bTinyshell >\033[0A");
 		// printf("\033[1;0mexit\n\033[0m");
 		// ts_free_all(data, line);
-		close(data->defin);
-		close(data->defout);
 		free_data(data, *line, YES);
 		exit(EXIT_SUCCESS);
 	}

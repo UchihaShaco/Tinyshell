@@ -236,3 +236,17 @@ void	pipe_null(int index, t_data *data)
 	ts_dup2(devnull, data->fd[index][1], data);
 	close(devnull);
 }
+
+// DIR *dir;
+
+	// if (!find_path_separator(cmd))
+	// 	return ;
+	// dir = opendir(cmd->path);
+	// if (dir)
+	// 	put_strs_fd(3, data, 2, "bash: ", cmd->path, ": Is a directory\n");
+	// else
+	// 	put_strs_fd(3, data, 2, "bash: ", cmd->path, ": No such file or directory\n");
+	// closedir(dir);
+	// free_data(data, line, NO);
+	// data->num_prev_error = 126;
+	// exit(126);

@@ -135,3 +135,4 @@ if ctrl c then exit out of heredoc and go back to shell
 -also use stat to check for file permissions when openinng up a file
 
 EXECUTION:
+If not a builtin, always create a child

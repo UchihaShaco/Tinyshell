@@ -102,8 +102,6 @@ int	ft_exit(t_cmd *cmd,  char *line, t_data *data)
 		put_strs_fd(1, data, 1, "exit\n");
 	}
 	free_data(data, line, YES); // NEED TO EDIT
-	close(data->defin);
-	close(data->defout);
 	exit(i);
 	return (0);
 }

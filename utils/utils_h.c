@@ -121,8 +121,8 @@ void	error(int error, t_data *data)
 		write(2, "TinyShell: exec function error\n", 31);
 	else if (error == ERR_CLOSE)
 		write(2, "TinyShell: close function error\n", 32);
-	close(data->defin);
-	close(data->defout);
+	// close(data->defin);
+	// close(data->defout);
 	// free_data(data); // free if we exit 
 	write(2, "Exiting TinyShell\n", 19); // for now
 	exit(EXIT_FAILURE); // for now
