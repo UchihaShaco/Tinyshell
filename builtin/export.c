@@ -16,6 +16,8 @@ void	print_export(t_data *data)
 	t_env	*cur;
 	t_env	*to_print;
 
+	if (!data->env_list)
+		return ;
 	while (1)
 	{
 		cur = *(data->env_list);

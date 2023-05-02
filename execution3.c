@@ -179,12 +179,12 @@ look for a path separator
 if path separator exists, check if cmd is a directory
 otherwise check if it is a command 
 */
-void	check_dir(t_cmd *cmd, int proc, t_data *data)
+void	check_as_dir(t_cmd *cmd, int proc, t_data *data)
 {
 	struct stat file_stat;
 	int			stat_res;
 
-	if (!find_path_separator(cmd))
+	if (!find_path_separator(cmd) && data->env_paths)
 		return ;
 	stat_res = stat(cmd->array_arg[0], &file_stat);
 	/* if file doesn't exist */
@@ -237,6 +237,38 @@ int	check_permissions_executable(t_cmd *cmd, t_data *data)
 	}
 	return(0);
 }
+
+void	check_as_command(t_cmd *cmd, int proc, t_data *data)
+{
+	get_cmd_path(cmd, data);
+	if (cmd->path == NULL)
+	{
+		if (access(cmd->array_arg[0], F_OK) == 0)
+			check_permissions_executable(cmd, data); //this will write an error message and exit if permission is denied
+		else
+		{
+			put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
+			exit(127);
+		}
+	}
+	if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
+	{
+		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
+		exit(127);
+	}
+	
+	// if (access(cmd->array_arg[0], F_OK) != 0 && !path)
+	// {
+	// 	put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
+	// 	exit(127);
+	// }
+	// if (execve(path, cmd->array_arg, data->our_env) == -1)
+	// {
+	// 	check_permissions_executable(cmd, data);
+	// 	put_strs_fd(3, data, 2, "bash: ", cmd->path, ": command not found\n");
+	// 	exit(127);
+	// }
+}
 /*
 if there is 0 num arg but some redirections 
 if the command doesn't exist
@@ -252,18 +284,14 @@ void	child_process(int i, t_cmd *cmd, char *line, t_data *data)
 		exit(0);
 	if (cmd->builtin > 0)
 		execute_builtin(cmd, CHILD, line, data);
-	check_dir(cmd, CHILD, data);
-	if (access(cmd->array_arg[0], F_OK) != 0 && !cmd->path)
-	{
-		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
-		exit(127);
-	}
-	if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
-	{
-		check_permissions_executable(cmd, data);
-		put_strs_fd(3, data, 2, "bash: ", cmd->path, ": command not found\n");
-		exit(127);
-	}
+	check_as_dir(cmd, CHILD, data);
+	/* check non / strings here
+	-if data->paths
+		check for path in the traditional way
+	-if no data->paths
+		check as a directory
+	*/
+	check_as_command(cmd, CHILD, data);
 }
 
 int	exec_one_builtin(t_cmd *cmd, char * line, t_data *data)

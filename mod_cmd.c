@@ -130,11 +130,11 @@ void	get_cmd_path(t_cmd *cmd, t_data *data)
 
 	i = 0;
 	arg = cmd->array_arg[0];
-	if (access(arg, F_OK) == 0 && access(arg, X_OK) == 0 && /* there is a slash*/)
-	{
-		cmd->path = ft_strdup_lim(arg, '\0', data);
-		return ;
-	}
+	// if (access(arg, F_OK) == 0 && access(arg, X_OK) == 0 && /* there is a slash*/)
+	// {
+	// 	cmd->path = ft_strdup_lim(arg, '\0', data);
+	// 	return ;
+	// }
 	if (!data->env_paths)
 		return ;
 	while (data->env_paths[i])

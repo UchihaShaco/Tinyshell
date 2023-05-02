@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/02 21:10:59 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/02 21:35:31 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ typedef struct s_cmd
 	char	**hd_array; //array of heredoc delimiters
 	char	**file; //files for redirection
 	char	*heredoc_str;
-	// char	*path; //path for cmd (execve)
+	char	*path; //path for cmd (execve)
 	int		*redir; //array of redirections in cmd
 	int		*fd_array; //array of open files for redirections
 	int		num_arg;
@@ -260,6 +260,7 @@ void	create_fd_pid_array(t_data *data);
 void	execute(char *line, t_data *data);
 int		check_builtin(t_cmd *cmd, t_data *data);
 int		execute_builtin(t_cmd *cmd, int	proc, char *line, t_data *data);
+void	get_cmd_path(t_cmd *cmd, t_data *data);
 
 /* TESTING */
 void	print_tcmd(t_cmd *cmd, int i);

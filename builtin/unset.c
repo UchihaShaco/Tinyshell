@@ -12,11 +12,11 @@ int	invalid_unset(char *str)
 {
 	int	i;
 
-	if (str[0] && !ft_isalpha(str[0]))
+	if (str[0] && !ft_isalpha(str[0]) && str[0] != '_')
 		return (1);
 	i = 0;
 	while (str[++i])
-		if (!ft_isalnum(str[i]))
+		if (!ft_isalnum(str[i]) && str[i] != '_' && str[i] != '#')
 			return (1);
 	return (0);
 }
