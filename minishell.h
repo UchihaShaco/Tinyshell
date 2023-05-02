@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/02 18:08:03 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/02 21:10:59 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ typedef struct s_cmd
 	char	**hd_array; //array of heredoc delimiters
 	char	**file; //files for redirection
 	char	*heredoc_str;
-	char	*path; //path for cmd (execve)
+	// char	*path; //path for cmd (execve)
 	int		*redir; //array of redirections in cmd
 	int		*fd_array; //array of open files for redirections
 	int		num_arg;

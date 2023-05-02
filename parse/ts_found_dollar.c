@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_found_dollar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 20:48:43 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/30 17:37:09 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/02 20:28:49 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,18 +94,18 @@ void	ts_found_dollar_in_name_file(t_data *data, char **file)
 			qm = 0;
 		if (qm != ONE_Q_MARK)
 		{
-			// if (flag > 100) // hard coding this case (minishell$> thisishell $> $G)
-			// {
-			// i++;
-			// flag = 0;
-			// }
+			if (flag > 100) // hard coding this case (minishell$> thisishell $> $G)
+			{
+			i++;
+			flag = 0;
+			}
 			data->name_file = YES;
 			ts_found_dollar(data, file, qm, &i);
 			data->name_file = NO;
 		}
 		else
 			i++;
-		// flag++;
+		flag++;
 	}
 }
 

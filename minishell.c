@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/02 18:16:16 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/02 20:48:30 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,17 +119,17 @@ int	main(int argc, char **argv, char **env)
 			// print_cmds(&data);
 			if (data.num_cmd > 0)
 			{
-				// for(int i = 0; i < data.num_cmd; i++)
-				// 	print_tcmd(&data.cmd[i], i);
-				// printf("\n ---------------------------------------\n");
+			// 	// for(int i = 0; i < data.num_cmd; i++)
+			// 	// 	print_tcmd(&data.cmd[i], i);
+			// 	// printf("\n ---------------------------------------\n");
 				finalize_cmd(&data);
 				// print_tdata(&data);
 				// print_cmds(&data);
 				execute(line, &data);
-				// for(int i = 0; i < data.num_cmd; i++)
-				// 	print_tcmd(&data.cmd[i], i);
-				// printf("hello world\n");
-				// exit(0);
+			// 	// for(int i = 0; i < data.num_cmd; i++)
+			// 	// 	print_tcmd(&data.cmd[i], i);
+			// 	// printf("hello world\n");
+			// 	// exit(0);
 			}
 		}
 		free_data(&data, line, NO);

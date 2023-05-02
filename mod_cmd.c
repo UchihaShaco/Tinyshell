@@ -130,7 +130,7 @@ void	get_cmd_path(t_cmd *cmd, t_data *data)
 
 	i = 0;
 	arg = cmd->array_arg[0];
-	if ((arg, F_OK) == 0 && access(arg, X_OK) == 0)
+	if (access(arg, F_OK) == 0 && access(arg, X_OK) == 0 && /* there is a slash*/)
 	{
 		cmd->path = ft_strdup_lim(arg, '\0', data);
 		return ;
@@ -167,6 +167,8 @@ void	check_empty(t_cmd *cmd, t_data *data)
 	i = -1;
 	count_empty = 0;
 	new_array_arg = NULL;
+	if (!cmd->array_arg)
+		return ;
 	while (cmd->array_arg[++i])
 		if (cmd->array_arg[i][0] == '\0')
 			count_empty++;
@@ -212,10 +214,8 @@ void	finalize_cmd(t_data *data)
 		/* check cmd->array_arg for $EMPTY */
 		check_empty(&data->cmd[i], data);
 		if (data->cmd[i].num_arg > 0)
-		{
 			data->cmd[i].builtin = check_builtin(&data->cmd[i], data);
-			get_cmd_path(&data->cmd[i], data);
-		}
+			// get_cmd_path(&data->cmd[i], data);
 	}
 }
 

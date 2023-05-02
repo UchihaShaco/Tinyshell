@@ -190,13 +190,13 @@ void	check_dir(t_cmd *cmd, int proc, t_data *data)
 	/* if file doesn't exist */
 	if (stat_res == -1)
 	{
-		put_strs_fd(3, data, 2, "bash: ", cmd->path, ": No such file or directory\n");
+		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": No such file or directory\n");
 		exit(127);
 	}
 	/* if file exists and is a directory */
 	else if (S_ISDIR(file_stat.st_mode))
 	{
-		put_strs_fd(3, data, 2, "bash: ", cmd->path, ": Is a directory\n");
+		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": Is a directory\n");
 		exit (126);
 	}
 	/* file exists and is a regular file , then execute if possible */
@@ -205,17 +205,37 @@ void	check_dir(t_cmd *cmd, int proc, t_data *data)
 		/* check permissions */
 		if (!(file_stat.st_mode & S_IXUSR))
 		{
-			put_strs_fd(3, data, 2, "bash: ", cmd->path, ": Permission denied\n");
+			put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": Permission denied\n");
 			data->num_prev_error = 126;
 			exit (126);
 		}
-		if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
+		if (execve(cmd->array_arg[0], cmd->array_arg, data->our_env) == -1)
 		{
-			put_strs_fd(3, data, 2, "bash: ", cmd->path, ": No such file or directory\n");
+			put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": No such file or directory\n");
 			data->num_prev_error = 127;
 			exit(127);
 		}
 	}
+}
+
+int	check_permissions_executable(t_cmd *cmd, t_data *data)
+{
+	struct stat file_stat;
+	int			stat_res;
+	int			permission;
+
+	stat_res = stat(cmd->array_arg[0], &file_stat);
+	// if (stat_res == -1)
+	// {
+	// 	put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
+	// 	exit(127);
+	// }
+	if (stat_res != -1 && (!(file_stat.st_mode & S_IXUSR)))
+	{
+		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": Permission denied\n");
+		exit(126);
+	}
+	return(0);
 }
 /*
 if there is 0 num arg but some redirections 
@@ -233,13 +253,14 @@ void	child_process(int i, t_cmd *cmd, char *line, t_data *data)
 	if (cmd->builtin > 0)
 		execute_builtin(cmd, CHILD, line, data);
 	check_dir(cmd, CHILD, data);
-	if (!cmd->path)
+	if (access(cmd->array_arg[0], F_OK) != 0 && !cmd->path)
 	{
 		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
 		exit(127);
 	}
 	if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
 	{
+		check_permissions_executable(cmd, data);
 		put_strs_fd(3, data, 2, "bash: ", cmd->path, ": command not found\n");
 		exit(127);
 	}

@@ -77,14 +77,14 @@ void	free_cmd(t_data *data)
 		free_strlist(cmd[i].array_arg);
 		free_strlist(cmd[i].hd_array);
 		free_strlist(cmd[i].file);
-		if (cmd[i].path)
-			free(cmd[i].path);
+		// if (cmd[i].path)
+		// 	free(cmd[i].path);
 		if (cmd[i].redir)
 			free(cmd[i].redir);
 		if (cmd[i].fd_array)
 			free(cmd[i].fd_array);
-		// if (cmd[i].heredoc_str)
-		// 	free(cmd[i].heredoc_str);
+		if (cmd[i].heredoc_str)
+			free(cmd[i].heredoc_str);
 	}
 	free(cmd);
 	data->cmd = NULL;
