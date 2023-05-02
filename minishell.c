@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/02 20:48:30 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/02 22:45:43 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,8 @@ int	main(int argc, char **argv, char **env)
 		free_data(&data, line, NO);
 	}
 	free_data(&data, line, YES);
+	close(data.defin);
+	close(data.defout);
 	// // exit(0);
 	// // ts_free_all(&data, &line); // we will have to free the memory something like this 
 	// // char *str = "";

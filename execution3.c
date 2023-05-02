@@ -243,13 +243,13 @@ void	check_as_command(t_cmd *cmd, int proc, t_data *data)
 	get_cmd_path(cmd, data);
 	if (cmd->path == NULL)
 	{
-		if (access(cmd->array_arg[0], F_OK) == 0)
-			check_permissions_executable(cmd, data); //this will write an error message and exit if permission is denied
-		else
-		{
+		// if (access(cmd->array_arg[0], F_OK) == 0)
+		// 	check_permissions_executable(cmd, data); //this will write an error message and exit if permission is denied
+		// else
+		// {
 			put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
 			exit(127);
-		}
+		// }
 	}
 	if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
 	{

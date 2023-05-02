@@ -123,20 +123,28 @@ int main(int argc, char **argv, char **envp)
 	// else 
 	// 	printf("This is not a directory\n");
 
-	// struct stat file_stat;
-	// int			stat_res;
-	// int			permission; 
+	struct stat file_stat;
+	int			stat_res;
+	int			permission; 
 
-	// stat_res = stat("trash/file.txt", &file_stat);
-	// if (stat_res == -1)
-	// {
-	// 	printf("no such file exists\n");
-	// 	return (0);
-	// }
+	stat_res = stat("l", &file_stat);
+	if (stat_res == -1)
+	{
+		printf("no such file exists\n");
+		return (0);
+	}
+	if (stat_res != -1 && S_ISDIR(file_stat.st_mode))
+		printf("it's a directory\n");
+	if (stat_res != -1 && S_ISREG(file_stat.st_mode))
+		printf("it's a regular file\n");
+	if (stat_res != -1 && S_ISCHR(file_stat.st_mode))
+		printf("it's a special characters file\n");
+	if (stat_res != -1 && S_ISBLK(file_stat.st_mode))
+		printf("it's a block special file\n");
 	// permission = (file_stat.st_mode & S_IRUSR);
 	// // else if (cmd->redir[i] == 3 || cmd->redir == 4)
 	// // 	permission = (file_stat.st_mode && S_IWUSR);
 	// printf("%i\n", permission);
-	char *str = "./file/file";
-	printf("%i\n", open(str, O_CREAT | O_RDWR | O_TRUNC, 0666));
+	// char *str = "./file/file";
+	// printf("%i\n", open(str, O_CREAT | O_RDWR | O_TRUNC, 0666));
 }

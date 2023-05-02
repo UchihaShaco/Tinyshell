@@ -56,9 +56,9 @@ long long	check_exit_val(const char *str, char *line, t_data *data)
 	if ((neg == 1 && num > LLONG_MAX) || (neg == -1 && num > ((unsigned long long)(LLONG_MAX + 1))))
 		{
 			put_strs_fd(3, data, 2, "bash: exit: ", str, ": numeric argument required\n");
-			// free_data(data, line, YES);
-			// close(data->defin);
-			// close(data->defout);
+			free_data(data, line, YES);
+			close(data->defin);
+			close(data->defout);
 			exit (255); //it's seriously not 255????
 		}
 	// if (neg == -1)
@@ -102,6 +102,8 @@ int	ft_exit(t_cmd *cmd,  char *line, t_data *data)
 		put_strs_fd(1, data, 1, "exit\n");
 	}
 	free_data(data, line, YES); // NEED TO EDIT
+	close(data->defin);
+	close(data->defout);
 	exit(i);
 	return (0);
 }
