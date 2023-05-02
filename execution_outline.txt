@@ -51,6 +51,7 @@ CHILD PROCESS
 				No such file or directory
 				exit val: 127
 		-if no -> find path using path variables
+			check permissions when finding path
 			if path is found
 				execute
 				exit val: 0
