@@ -225,3 +225,14 @@ void	open_redir_files(int redir, int i, t_cmd *cmd, t_data *data)
 	else if (redir == 5)
 		cmd->fd_array[i] = -1;
 }
+
+/* write null to pipe */
+void	pipe_null(int index, t_data *data)
+{
+	int	devnull;
+	devnull = open("dev/null", O_WRONLY);
+	if (devnull < 0)
+		error(ERR_OPEN, data);
+	ts_dup2(devnull, data->fd[index][1], data);
+	close(devnull);
+}

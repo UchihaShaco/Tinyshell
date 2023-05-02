@@ -7,7 +7,6 @@ Write exit function that takes care of exit vals and messages
 PARSING
 NOTE: Heredoc is initiated in parsing, not in execution
 
-
 EXECUTE
 If no commands
 	return ;
