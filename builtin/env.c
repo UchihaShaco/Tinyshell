@@ -1,6 +1,16 @@
-#include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 22:03:10 by hbui-vu           #+#    #+#             */
+/*   Updated: 2023/05/03 22:03:10 by hbui-vu          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/* print env using our_env */
+#include "../minishell.h"
 
 int	ft_env(t_data *data)
 {
@@ -11,7 +21,7 @@ int	ft_env(t_data *data)
 	if (!our_env)
 		return (0);
 	i = 0;
-	while(our_env[i])
+	while (our_env[i])
 	{
 		put_strs_fd(2, data, 1, our_env[i], "\n");
 		i++;

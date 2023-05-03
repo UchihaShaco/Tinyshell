@@ -10,6 +10,7 @@
 		"vector": "c",
 		"minishell.h": "c",
 		"__node_handle": "c",
-		"locale": "c"
+		"locale": "c",
+		"sstream": "c"
 	}
 }

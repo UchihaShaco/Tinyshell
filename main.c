@@ -177,26 +177,27 @@
 
 	int main(void)
 	{
-		struct sigaction sa;
+		// struct sigaction sa;
 
-		sa.sa_handler = &handle_hd; //set handler to handler function
-		sigaction(SIGINT, &sa, NULL);
-		sa.sa_flags = SA_RESTART;
+		// sa.sa_handler = &handle_hd; //set handler to handler function
+		// sigaction(SIGINT, &sa, NULL);
+		// sa.sa_flags = SA_RESTART;
 
-		int x;
-		while (1)
-		{
-			printf("Input number: ");
-			if (a == 42)
-				break ;
-			scanf("%d", &x);
-			if (a == 0)
-				printf("digit is: %d\n", x);
-		// 	else if (a == 42)
-		// 	{
-		// 		printf("digit won't print\n");
-		// 		break;
-		// 	}
-		}
-		return (0);
+		// int x;
+		// while (1)
+		// {
+		// 	printf("Input number: ");
+		// 	if (a == 42)
+		// 		break ;
+		// 	scanf("%d", &x);
+		// 	if (a == 0)
+		// 		printf("digit is: %d\n", x);
+		// // 	else if (a == 42)
+		// // 	{
+		// // 		printf("digit won't print\n");
+		// // 		break;
+		// // 	}
+		// }
+		// return (0);
+		
 	}

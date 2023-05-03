@@ -37,17 +37,6 @@ void	get_env_paths(t_data *data)
 	int		i;
 	t_env	*path_node;
 
-	// if (!data->env_list || !*data->env_list)
-	// 	return ;
-	// cur = *data->env_list;
-	// while (cur)
-	// {
-	// 	if (ft_strncmp("PATH", cur->key, 5) == 0)
-	// 		break ;
-	// 	cur = cur->next;
-	// }
-	// if (cur == NULL || cur->val == NULL)
-	// 	return ;
 	if (data->env_paths)
 	{
 		free_strlist(data->env_paths);
@@ -56,8 +45,7 @@ void	get_env_paths(t_data *data)
 	path_node = find_var_envlist("PATH", data);
 	if (!path_node || path_node->val == NULL)
 		return ;
-	//this checks for garbage values in path
-	while (path_node->val && *(path_node->val) != '/')
+	while (*(path_node->val) != '\0' && *(path_node->val) != '/')
 		path_node->val++;
 	if (path_node->val == NULL)
 		return ;

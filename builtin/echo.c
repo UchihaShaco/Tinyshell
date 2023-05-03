@@ -1,14 +1,18 @@
-#include "../minishell.h"
-/* TESTS:
-	echo -nnnnn -na
-	echo -nnnnna -n
-	echo -nnnn -nn -n -na
-	echo --nnnnnn -n -na
-	echo -nnnnnnn -na -n
-*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 22:01:44 by hbui-vu           #+#    #+#             */
+/*   Updated: 2023/05/03 22:02:41 by hbui-vu          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/* returns 0 if not nflag, 1 if it is nflag */
-int		detect_nflag(char *str)
+#include "../minishell.h"
+
+int	detect_nflag(char *str)
 {
 	int	i;
 
@@ -32,28 +36,23 @@ int	ft_echo(t_cmd *cmd, t_data *data)
 	char	**arg;
 
 	i = 1;
-	nflag = 0; 
+	nflag = 0;
 	arg = cmd->array_arg;
-	/* iterate through each arg to detect if flag (see tests above) */
 	while (arg[i])
 	{
 		if (!detect_nflag(arg[i]))
-			break;
+			break ;
 		nflag++;
 		i++;
 	}
-	/* print strings */
 	while (arg[i])
 	{
 		if (arg[i + 1] != NULL && i != 0)
 			put_strs_fd(2, data, 1, arg[i], " ");
-		/* if last string don't print space */
 		else if (arg[i + 1] == NULL)
 			put_strs_fd(1, data, 1, arg[i]);
-		// printf("arg[%d]: (%s)\n", i, arg[i]);
 		i++;
 	}
-	/* if no -n was detected, add newline at end*/
 	if (nflag == 0)
 		put_strs_fd(1, data, 1, "\n");
 	return (0);

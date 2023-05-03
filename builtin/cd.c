@@ -1,22 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 21:52:04 by hbui-vu           #+#    #+#             */
+/*   Updated: 2023/05/03 21:52:04 by hbui-vu          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-/*
-	if no arguments, go to home
-	else, change directories
-		print error message if directory doesn't exist and return
-	update data->cur_dir
-	If oldpwd exists
-		update value
-	if pwd exists
-		update value
-	update our_env
-*/
-
-/* if oldpwd/pwd vars exist, update the value. rewrites our_env if necessary */
 void	change_pwd(t_cmd *cmd, t_data *data)
 {
 	t_env	*pwd;
-	t_env 	*oldpwd;
+	t_env	*oldpwd;
 	int		rewrite;
 
 	rewrite = 0;
@@ -35,7 +34,7 @@ void	change_pwd(t_cmd *cmd, t_data *data)
 		if (oldpwd->val)
 			free(oldpwd->val);
 		oldpwd->equal = 1;
-		oldpwd->val = ft_strdup_lim(data->old_dir, '\0', data);	
+		oldpwd->val = ft_strdup_lim(data->old_dir, '\0', data);
 		rewrite++;
 	}
 	if (rewrite > 0)
@@ -50,42 +49,42 @@ void	update_directory(t_data *data)
 	data->cur_dir = getcwd(NULL, 0);
 }
 
-int	ft_cd(t_cmd *cmd, t_data *data)
+int	cd_home(t_data *data)
 {
 	char	*home;
+
+	home = find_home_dir(data);
+	if (!home)
+	{
+		put_strs_fd(1, data, 2, "TinyShell: cd: HOME not set\n");
+		return (1);
+	}
+	else if (chdir(home) == -1)
+	{
+		put_strs_fd(3, data, 2, "TinyShell: cd: ", home, \
+		" No such file or directory\n");
+		return (1);
+	}
+	return (0);
+}
+
+int	ft_cd(t_cmd *cmd, t_data *data)
+{
 	char	**arg;
 
 	arg = cmd->array_arg;
-	/* if just cd with no args, cd to HOME var */
 	if (!arg[1])
 	{
-		home = find_home_dir(data);
-		if (!home)
-		{
-			put_strs_fd(1, data, 2, "bash: cd: HOME not set\n");
+		if (cd_home(data) == 1)
 			return (1);
-		}
-		else if (chdir(home) == -1)
-		{
-			put_strs_fd(3, data, 2, "bash: cd: ", home, " No such file or directory\n");
-			return (1);
-		}
 	}
-	/* NOTE: in mac bash, cd will actually go to the directory even if there are multiple commands */
-	// if (arg[1] && arg[2])
-	// {
-	// 	put_strs_fd(1, data, 2, "bash: cd: too many arguments\n");
-	// 	return (1);
-	// }
-	/* change directories and return error if dir doesn't exist */
 	else if (chdir(arg[1]) != 0)
 	{
-		put_strs_fd(3, data, 2, "bash: cd: ", arg[1], " No such file or directory\n");
+		put_strs_fd(3, data, 2, "TinyShell: cd: ", arg[1], \
+		" No such file or directory\n");
 		return (1);
 	}
-	/* change old_dir and cur_dir in data struct */
 	update_directory(data);
-	/* change pwd vars in envlist if they exist */
-	change_pwd(cmd, data);	
+	change_pwd(cmd, data);
 	return (0);
 }

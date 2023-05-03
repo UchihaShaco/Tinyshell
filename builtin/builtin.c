@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 21:48:33 by hbui-vu           #+#    #+#             */
+/*   Updated: 2023/05/03 21:48:33 by hbui-vu          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-/* bash can take any case of builtin command. ex: echo vs eCHo both work */
 char	*lower_str(char *str, t_data *data)
 {
 	int		i;
@@ -19,7 +30,6 @@ char	*lower_str(char *str, t_data *data)
 	return (low_str);
 }
 
-/* check first str in array_arg to see if it's a builtin and assign num id */
 int	check_builtin(t_cmd *cmd, t_data *data)
 {
 	char	*str;
@@ -47,7 +57,7 @@ int	check_builtin(t_cmd *cmd, t_data *data)
 	return (i);
 }
 
-int	execute_builtin(t_cmd *cmd, int	proc, char *line, t_data *data)
+int	execute_builtin(t_cmd *cmd, int proc, char *line, t_data *data)
 {
 	char	**arg;
 	int		exit_val;
@@ -67,10 +77,7 @@ int	execute_builtin(t_cmd *cmd, int	proc, char *line, t_data *data)
 		exit_val = ft_env(data);
 	else if (cmd->builtin == 7)
 		exit_val = ft_exit(cmd, line, data);
-	/* if a child process exit with exit value */
 	if (proc == CHILD)
 		exit(exit_val);
-	/* if parent, return exit value */
 	return (exit_val);
-
 }

@@ -191,6 +191,7 @@ void	exp_norm(char *arg, int *rewr, t_data *data)
 	if (ft_strncmp(split_arg[0], "_=", 2) != 0)
 	{
 		env_var = find_var_envlist(split_arg[0], data);
+		// printf("key: %s\n", env_var->key);
 		if (!env_var) // if no var found
 			add_new_var(split_arg, rewr, data);
 		else if (env_var && split_arg[1]) // if var found and there is an equal sign

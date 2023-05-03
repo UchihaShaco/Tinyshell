@@ -1,13 +1,17 @@
-#include "../minishell.h"
-/* NOTES
-	unset a=
-	unset a=a
-	unset =a
-	unset a=1
-	bash: unset: `a=1': not a valid identifier
-*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 22:35:18 by hbui-vu           #+#    #+#             */
+/*   Updated: 2023/05/03 22:35:18 by hbui-vu          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/* return 1 if invalid, 0 if valid */
+#include "../minishell.h"
+
 int	invalid_unset(char *str)
 {
 	int	i;
@@ -36,11 +40,7 @@ int	ft_unset(t_cmd *cmd, t_data *data)
 	exit_val = 0;
 	rewrite_paths = 0;
 	if (!arg[i])
-	{
-		// clear_envlist(data->env_list);
-		// free_strlist(data->our_env);
 		return (0);
-	}
 	while (arg[i])
 	{
 		if (invalid_unset(arg[i]))
@@ -78,6 +78,3 @@ int	ft_unset(t_cmd *cmd, t_data *data)
 		get_env_paths(data);
 	return (exit_val);
 }
-
-
-

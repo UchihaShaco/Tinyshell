@@ -1,15 +1,17 @@
-#include "../minishell.h"
-/* TESTS:
-	exit 5a 5 -> bash: exit: abc: numeric argument required
-	exit a -> bash: exit: abc: numeric argument required
-	exit 5 5a -> bash: exit: too many arguments 255
-	exit 50 -> exit
-	exit 256 -> exit; echo $? = 0
-	bash: exit: 214748364887987987997: numeric argument required - takes maximum of long long
-	9223372036854775807, -9223372036854775808
-*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/03 22:03:45 by hbui-vu           #+#    #+#             */
+/*   Updated: 2023/05/03 22:03:45 by hbui-vu          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/* check if string is numeric only. Returns 1 if numeric, 0 if not */
+#include "../minishell.h"
+
 int	str_isnum(char *str)
 {
 	int	i;
@@ -26,10 +28,18 @@ int	str_isnum(char *str)
 	return (1);
 }
 
-/* check value of num. Max exit can take is llong max and llong min */
+void	exit_error(const char *str, char *line, t_data *data)
+{
+	put_strs_fd(3, data, 2, "TinyShell: exit: ", str, \
+	": numeric argument required\n");
+	free_data(data, line, YES);
+	close(data->defin);
+	close(data->defout);
+	exit (255);
+}
+
 long long	check_exit_val(const char *str, char *line, t_data *data)
 {
-
 	unsigned long long	num;
 	int					neg;
 	int					i;
@@ -38,73 +48,48 @@ long long	check_exit_val(const char *str, char *line, t_data *data)
 	neg = 1;
 	i = 0;
 	if (str[i] == '+' || str[i] == '-')
-	{
-		if (str[i] == '-')
+		if (str[i++] == '-')
 			neg *= -1;
-		i++;
-	}
 	while (str[i])
 	{
 		if (num > ULLONG_MAX / 10)
 		{
-			put_strs_fd(3, data, 2, "bash: exit: ", str, ": numeric argument required\n");
-			return (255); //it's seriously not 255????
+			put_strs_fd(3, data, 2, "TinyShell: exit: ", str, ": \
+			numeric argument required\n");
+			return (255);
 		}
 		num = (num * 10) + (str[i] - 48);
 		i++;
 	}
-	if ((neg == 1 && num > LLONG_MAX) || (neg == -1 && num > ((unsigned long long)(LLONG_MAX + 1))))
-		{
-			put_strs_fd(3, data, 2, "bash: exit: ", str, ": numeric argument required\n");
-			free_data(data, line, YES);
-			close(data->defin);
-			close(data->defout);
-			exit (255); //it's seriously not 255????
-		}
-	// if (neg == -1)
-	// 	return (256-(num % 256));
-	// return (num % 256);
-	// printf("num is : %lli\n", num);
-	// printf("llmax: %lli\n", LLONG_MAX);
+	if ((neg == 1 && num > LLONG_MAX) || (neg == -1 && \
+	num > ((unsigned long long)(LLONG_MAX + 1))))
+		exit_error(str, line, data);
 	return (num * neg);
 }
 
-int	ft_exit(t_cmd *cmd,  char *line, t_data *data)
+int	ft_exit(t_cmd *cmd, char *line, t_data *data)
 {
-	char	**arg;
 	int		i;
 
-	arg = cmd->array_arg;
-	/* if exit and no other args*/
-	if (!arg[1])
+	if (!cmd->array_arg[1])
 	{
 		i = 0;
 		put_strs_fd(1, data, 1, "exit\n");
 	}
-	/* if exit and next arg is not a num. exit checks for nonnumbers first */
-	else if (!str_isnum(arg[1]))
+	else if (!str_isnum(cmd->array_arg[1]))
 	{
-		i = 255; //check this again bc I thought it was 255
-		put_strs_fd(3, data, 2, "bash: exit: ", arg[1], ": numeric argument required\n");
+		i = 255;
+		put_strs_fd(3, data, 2, "TinyShell: exit: ", cmd->array_arg[1], \
+		": numeric argument required\n");
 	}
-	/* if exit and there are multiple args (so arg[2] exists) - does not exit out of shell */
-	else if (arg[2])
-	{
-		i = 1;
-		put_strs_fd(1, data, 2, "bash: exit: too many arguments\n");
-		data->num_prev_error = 1;
-		return (1);
-	}
-	/* exit normally */
+	else if (cmd->array_arg[2])
+		return (put_strs_fd(1, data, 2, "TinyShell: exit:\
+		too many arguments\n"), data->num_prev_error = 1, 1);
 	else
 	{
-		i = check_exit_val(arg[1], line, data);
+		i = check_exit_val(cmd->array_arg[1], line, data);
 		put_strs_fd(1, data, 1, "exit\n");
 	}
-	free_data(data, line, YES); // NEED TO EDIT
-	close(data->defin);
-	close(data->defout);
-	exit(i);
-	return (0);
+	return (close(data->defin), close(data->defout), \
+	free_data(data, line, YES), exit(i), 0);
 }
-

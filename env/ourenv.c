@@ -43,9 +43,7 @@ void	rewrite_ourenv(t_data *data)
 		}
 		cur = cur->next;
 	}
-	printf("before   %d\n",data->num_env);
 	data->num_env = i;
-	printf("num of env %d\n",data->num_env);
 }
 
 
