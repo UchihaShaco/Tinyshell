@@ -16,7 +16,8 @@ t_env	*find_var_envlist(char *key, t_data *data)
 	return (NULL);
 }
 
-char	**split_var_envlist(char *str, t_data *data)
+/* plus = NO or YES*/
+char	**split_var_envlist(char *str, t_data *data, int plus)
 {
 	int		i;
 	char	**split_list; 
@@ -30,7 +31,10 @@ char	**split_var_envlist(char *str, t_data *data)
 	else
 	{
 		split_list = (char **)ts_calloc(4, sizeof(char *), data);
-		split_list[0] = ft_strdup_lim(str, '=', data);
+		if (plus == NO)
+			split_list[0] = ft_strdup_lim(str, '=', data);
+		else if (plus == YES)
+			split_list[0] = ft_strdup_lim(str, '+', data);
 		split_list[1] = ft_strdup_lim("=", '\0', data);
 		str += i + 1;
 		if (str)
@@ -66,7 +70,7 @@ void	init_envlist(t_data *data, char **envp)
 	i = -1;
 	while (envp[++i])
 	{
-		split_var = split_var_envlist(envp[i], data);
+		split_var = split_var_envlist(envp[i], data, NO);
 		node = create_var_envlist(split_var, data);
 		/* don't print out _ var in export */
 		if (ft_strcmp(node->key, "_") == 0)

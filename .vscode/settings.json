@@ -8,6 +8,8 @@
 		"string": "c",
 		"string_view": "c",
 		"vector": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"__node_handle": "c",
+		"locale": "c"
 	}
 }

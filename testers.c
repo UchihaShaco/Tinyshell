@@ -144,24 +144,24 @@ void	print_tcmd(t_cmd *cmd, int i)
 void	print_tdata(t_data *data)
 {	
 
-	printf("\033[1;35m NUM_ERROR: \033[0m%i\n", data->num_error);
-	printf("\033[1;35m NUM_PREV_ERROR: \033[0m%i\n", data->num_prev_error);	
-	printf("\033[1;35m NUM_ENV: \033[0m%i\n", data->num_env);
-	printf("\033[1;35m EMPTY_STR: \033[0m%i\n", data->empty_str);
-	printf("\033[1;35m NAME_FILE: \033[0m%i\n", data->name_file);
-	printf("\033[1;35m NUM_CMD: \033[0m%i\n", data->num_cmd);
-	printf("\033[1;35m OLD_DIR: \033[0m%s\n", data->old_dir);
-	printf("\033[1;35m CUR_DIR: \033[0m%s\n", data->cur_dir);
-	printf("\033[1;35m ENV_LIST: \033[0m\n");
-	print_tenv(data->env_list);
-	printf("\033[1;35m OUR_ENV: \033[0m\n");
+	// printf("\033[1;35m NUM_ERROR: \033[0m%i\n", data->num_error);
+	// printf("\033[1;35m NUM_PREV_ERROR: \033[0m%i\n", data->num_prev_error);	
+	// printf("\033[1;35m NUM_ENV: \033[0m%i\n", data->num_env);
+	// printf("\033[1;35m EMPTY_STR: \033[0m%i\n", data->empty_str);
+	// printf("\033[1;35m NAME_FILE: \033[0m%i\n", data->name_file);
+	// printf("\033[1;35m NUM_CMD: \033[0m%i\n", data->num_cmd);
+	// printf("\033[1;35m OLD_DIR: \033[0m%s\n", data->old_dir);
+	// printf("\033[1;35m CUR_DIR: \033[0m%s\n", data->cur_dir);
+	// printf("\033[1;35m ENV_LIST: \033[0m\n");
+	// print_tenv(data->env_list);
+	// printf("\033[1;35m OUR_ENV: \033[0m\n");
 	print_strlist(data->our_env);
-	printf("\033[1;35m ENV_PATHS: \033[0m\n");
-	print_strlist(data->env_paths);
-	printf("\033[1;35m FD: \033[0m\n");
-	print_fd_array(data->fd, data);
-	printf("\033[1;35m PID: \033[0m\n");
-	print_pidlist(data->pid, data);
+	// printf("\033[1;35m ENV_PATHS: \033[0m\n");
+	// print_strlist(data->env_paths);
+	// printf("\033[1;35m FD: \033[0m\n");
+	// print_fd_array(data->fd, data);
+	// printf("\033[1;35m PID: \033[0m\n");
+	// print_pidlist(data->pid, data);
 }
 
 void	print_cmds(t_data *data)

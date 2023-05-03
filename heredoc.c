@@ -32,8 +32,27 @@ char	*ft_strjoin_hd(char const *s1, char const *s2, t_data *data)
 	return (buffer);
 }
 
+void hqhandle(int sig)
+{
+
+	if (sig == SIGINT)
+	{
+		g_hdsig = 42;
+		close(0);
+		write(1, "\n", 1);
+		// rl_on_new_line();
+		// rl_replace_line("", 1);
+		// rl_redisplay();
+		// write(1, "Press Enter to exit\n", 21);
+		// exit(0);
+	}
+}
+
 void	get_heredoc_str(t_cmd *cmd, t_data *data)
 {
+	struct sigaction s;
+
+
 	char	*input;
 	char	*str;
 	char	*new_str;
@@ -44,14 +63,20 @@ void	get_heredoc_str(t_cmd *cmd, t_data *data)
 	//while i = index of the delimiter, it has not hit the delimiter yet
 	while (i < cmd->count_hd)
 	{
-		// signal(SIGINT, SIG_IGN);
+		signal(SIGINT, hqhandle);
 		input = readline("> ");
-		if(!input) //instead jump to the next delimiter
+		if (g_hdsig == 42)
 		{
-			put_strs_fd(3, data, 1, "bash: warning: here-document delimited by end-of-file (wanted '", cmd->hd_array[i], "')\n");
+			if (str)
+				free(str);
+			return ;
+		}
+		if(!input && g_hdsig == 0) //instead jump to the next delimiter
+		{
+			put_strs_fd(3, data, 1, "TinyShell: warning: here-document delimited by end-of-file (wanted '", cmd->hd_array[i], "')\n");
 			i++;
 		}
-		else
+		else if (input)
 		{
 			if (ft_strcmp(input, cmd->hd_array[i]) == 0)
 				i++;
@@ -63,9 +88,9 @@ void	get_heredoc_str(t_cmd *cmd, t_data *data)
 				str = new_str;
 			}
 		}
-		free(input);
+		if (input)
+			free(input);
 	}
-	cmd->heredoc_str = str;
 }
 
 void	get_heredoc_fd(t_cmd *cmd, t_data *data)

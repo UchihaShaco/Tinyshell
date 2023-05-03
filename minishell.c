@@ -6,11 +6,13 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/02 22:45:43 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/03 19:41:29 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// int g_hdsig;
 
 static void	ts_err_argc_argv(int argc, char **argv, char **env)
 {
@@ -54,7 +56,8 @@ void	ts_parse(t_data *data, char *line)
 	ts_quote_checker(data, line);
 	if (data->num_error != 0 || data->empty_str == YES)
 		return ;
-	ts_count_and_record_cmd(data, line);
+	if (ts_count_and_record_cmd(data, line) == -1)
+		return ;
 	while (i < data->num_cmd)
 	{
 		if (data->num_error == 0)
@@ -87,6 +90,8 @@ void	ts_init_data(t_data *data, char ***env, int first)
 	data->num_error = 0;
 	data->empty_str = NO; // flag to check if the string is empty (YES, NO)
 	data->num_cmd = 0;
+	g_hdsig = 0;
+
 }
 
 int	main(int argc, char **argv, char **env)
@@ -106,7 +111,6 @@ int	main(int argc, char **argv, char **env)
 		ts_get_signal() ;
 		ts_init_data(&data, &env, NO);
 		line = readline("\033[1;35mTinyShell > \033[0m");
-		// line = readline("\033[1;35m%%\033[0m");
 		ts_signal_ctrl_d(&data, &line);
 		ts_parse(&data, line);
 		// print_cmds(&data);
@@ -119,13 +123,15 @@ int	main(int argc, char **argv, char **env)
 			// print_cmds(&data);
 			if (data.num_cmd > 0)
 			{
-			// 	// for(int i = 0; i < data.num_cmd; i++)
-			// 	// 	print_tcmd(&data.cmd[i], i);
+				// for(int i = 0; i < data.num_cmd; i++)
+				// 	print_tcmd(&data.cmd[i], i);
+					
 			// 	// printf("\n ---------------------------------------\n");
 				finalize_cmd(&data);
-				// print_tdata(&data);
 				// print_cmds(&data);
-				execute(line, &data);
+				if( g_hdsig == 0)
+					execute(line, &data);
+				// print_tdata(&data);
 			// 	// for(int i = 0; i < data.num_cmd; i++)
 			// 	// 	print_tcmd(&data.cmd[i], i);
 			// 	// printf("hello world\n");

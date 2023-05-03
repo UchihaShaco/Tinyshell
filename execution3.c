@@ -240,20 +240,36 @@ int	check_permissions_executable(t_cmd *cmd, t_data *data)
 
 void	check_as_command(t_cmd *cmd, int proc, t_data *data)
 {
+	struct stat file_stat;
+	int			stat_res;
+
+	stat_res = stat(cmd->array_arg[0], &file_stat);
+
 	get_cmd_path(cmd, data);
 	if (cmd->path == NULL)
 	{
+		if (access(cmd->array_arg[0], F_OK) || S_ISDIR(file_stat.st_mode)) // if it's not a file or it's a directory
+		{
+			put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
+			exit (127);
+		}
+		else if (access(cmd->array_arg[0], X_OK)) //it's a file but it's not executable
+		{
+			put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": Permission denied\n");
+			exit(126);
+		}
 		// if (access(cmd->array_arg[0], F_OK) == 0)
 		// 	check_permissions_executable(cmd, data); //this will write an error message and exit if permission is denied
 		// else
 		// {
-			put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
-			exit(127);
+			// put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
+			// exit(127);
 		// }
 	}
 	if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
 	{
-		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
+		// put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
+		ft_putstr_fd(strerror(errno), 2);
 		exit(127);
 	}
 	
@@ -276,6 +292,8 @@ run cmd normally
 */
 void	child_process(int i, t_cmd *cmd, char *line, t_data *data)
 {
+	close(data->defin);
+	close(data->defout);
 	open_files(cmd, CHILD, line, data);
 	pipe_cmd(i, cmd, data);
 	close_fd_array(cmd, data);
@@ -292,6 +310,7 @@ void	child_process(int i, t_cmd *cmd, char *line, t_data *data)
 		check as a directory
 	*/
 	check_as_command(cmd, CHILD, data);
+	
 }
 
 int	exec_one_builtin(t_cmd *cmd, char * line, t_data *data)
@@ -328,6 +347,12 @@ int	parent_process(t_data *data)
 	return (status);
 }
 
+void qhandler(int sig)
+{
+	if(sig == SIGQUIT)
+	{
+	}
+}
 /* set exit status here */
 void	execute(char *line, t_data *data)
 {
@@ -351,7 +376,10 @@ void	execute(char *line, t_data *data)
 			if (data->pid[i] == -1)
 				error(ERR_FORK, data);
 			else if (data->pid[i] == 0)
+			{
+				signal(SIGQUIT, qhandler);
 				child_process(i, &data->cmd[i], line, data);
+			}
 		}
 		status = parent_process(data);
 		data->num_prev_error = WEXITSTATUS(status);

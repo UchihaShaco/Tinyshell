@@ -212,6 +212,8 @@ void	finalize_cmd(t_data *data)
 		if (data->cmd[i].count_hd > 0)
 			init_heredoc(&data->cmd[i], data);
 		/* check cmd->array_arg for $EMPTY */
+		if (g_hdsig == 42)
+			break ;
 		check_empty(&data->cmd[i], data);
 		if (data->cmd[i].num_arg > 0)
 			data->cmd[i].builtin = check_builtin(&data->cmd[i], data);

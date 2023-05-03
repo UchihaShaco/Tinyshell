@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/02 21:35:31 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/03 19:39:24 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@
 # include <sys/stat.h>
 # include <errno.h>
 // # define LLMIN 9223372036854775808
+
+// u_int8_t loop_flag = 1;
+
+int g_hdsig;
 
 typedef enum e_value
 {
@@ -229,7 +233,7 @@ void	free_data(t_data *data, char *line, int last);
 /* ENV */
 t_env	*find_var_envlist(char *key, t_data *data);
 void	add_var_envlist(t_env *node, t_data *data);
-char	**split_var_envlist(char *str, t_data *data);
+char	**split_var_envlist(char *str, t_data *data, int plus);
 void	init_envlist(t_data *data, char **envp);
 void	rewrite_ourenv(t_data *data);
 void	clear_envlist(t_env **env_list);

@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 23:56:09 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/02 22:47:07 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/03 21:36:59 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 static void	sighandler(int signum)
 {
 	(void)signum;
+
 	rl_on_new_line();
-	rl_redisplay();
-	write(1, "  \b\b\n", 5);
+	// rl_redisplay();
+	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 1);
 	rl_redisplay();
@@ -29,25 +30,12 @@ void	ts_signal_ctrl_d(t_data *data, char **line)
 	{
 		// printf("\033[1;35m\bTinyshell >\033[0A");
 		// printf("\033[1;0mexit\n\033[0m");
-		// ts_free_all(data, line);
 		free_data(data, *line, YES);
 			close(data->defin);
 			close(data->defout);
-		exit(EXIT_SUCCESS);
+		exit(data->num_prev_error);
 	}
 }
-
-void	ts_signal_ctrl_slash(t_data *data, char **line)
-{
-	if (*line)
-	{
-		printf("\033[1;35m\bTinyshell >\033[0A");
-		printf("\033[1;0m exit\n\033[0m");
-		// ts_free_all(data, line);
-		exit(EXIT_SUCCESS);
-	}
-}
-
 
 int	ts_get_signal(void)
 {

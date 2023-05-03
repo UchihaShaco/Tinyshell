@@ -170,7 +170,7 @@ void	init_envlist(t_data *data, char **envp)
 	i = -1;
 	while (envp[++i])
 	{
-		split_var = split_var_envlist(envp[i], data);
+		split_var = split_var_envlist(envp[i], data, NO);
 		node = create_var_envlist(split_var, data);
 		/* never print out _ var */
 		if (ft_strcmp(node->key, "_") == 0)
