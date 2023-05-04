@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mod_envlist.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/04 02:18:45 by jalwahei          #+#    #+#             */
+/*   Updated: 2023/05/04 02:19:10 by jalwahei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	free_tenv(t_env *node)
@@ -35,7 +47,7 @@ void	delete_var_envlist(char *key, t_data *data)
 
 void	clear_envlist(t_env **env_list)
 {
-	t_env *cur;
+	t_env	*cur;
 
 	if (!env_list)
 		return ;
@@ -61,9 +73,10 @@ void	clear_envlist(t_env **env_list)
 
 t_env	*create_var_envlist(char **var, t_data *data)
 {
-	t_env 	*node;
+	t_env	*node;
+
 	node = (t_env *)ts_calloc(1, sizeof(t_env), data);
-	node->key = ft_strdup_lim(var[0], '\0', data); 
+	node->key = ft_strdup_lim(var[0], '\0', data);
 	if (var[1] && ft_strcmp(var[1], "=") == 0)
 	{
 		node->equal = 1;
@@ -76,12 +89,12 @@ t_env	*create_var_envlist(char **var, t_data *data)
 void	add_var_envlist(t_env *node, t_data *data)
 {
 	t_env	*last;
-	
+
 	if (!*data->env_list)
 		*data->env_list = node;
 	else
 	{
-		last = *data->env_list; 
+		last = *data->env_list;
 		while (last->next)
 			last = last->next;
 		last->next = node;

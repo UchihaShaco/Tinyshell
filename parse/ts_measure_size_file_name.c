@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 08:04:18 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/03/17 22:28:07 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 01:56:15 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,40 @@ int	ts_measure_size_file_name(t_data *d, char *str, int *i)
 	if (qm_o != 1 || qm_d != 1)
 		return (ts_err_name_file(d, qm_o, qm_d));
 	return (size_str);
+}
+
+int	ts_check_quotation_marks(t_cmd *cmd, int i, t_data *data)
+{
+	char	q_m;
+
+	q_m = cmd->str[i];
+	i++;
+	while (cmd->str[i] != q_m && cmd->str[i] != '\0')
+		i++;
+	if (cmd->str[i] == q_m)
+		cmd->num_arg++;
+	else
+	{
+		data->num_error = ERR_TOKEN;
+		cmd->num_arg = 0;
+		cmd->array_empty = YES;
+		return (ts_error_2(data->num_error, q_m));
+	}
+	return (i + 1);
+}
+
+void	ts_check_empty_str(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	if (cmd->str[i] == '\0')
+		ts_free_str(&cmd->str);
+	else if (cmd->str[i] == ' ')
+	{
+		while (cmd->str[i] == ' ' && cmd->str[i] != '\0')
+			i++;
+		if (cmd->str[i] == '\0')
+			ts_free_str(&cmd->str);
+	}
 }

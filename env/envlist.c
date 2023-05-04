@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envlist.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/04 02:16:58 by jalwahei          #+#    #+#             */
+/*   Updated: 2023/05/04 02:18:20 by jalwahei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_env	*find_var_envlist(char *key, t_data *data)
 {
-	t_env *env_key;
+	t_env	*env_key;
 
 	if (!data->env_list || !*data->env_list)
 		return (NULL);
@@ -20,7 +32,7 @@ t_env	*find_var_envlist(char *key, t_data *data)
 char	**split_var_envlist(char *str, t_data *data, int plus)
 {
 	int		i;
-	char	**split_list; 
+	char	**split_list;
 
 	i = detect_char(str, '=');
 	if (i == -1)
@@ -45,7 +57,7 @@ char	**split_var_envlist(char *str, t_data *data, int plus)
 
 void	add_oldpwd(t_data *data, t_env **cur)
 {
-	t_env *node;
+	t_env	*node;
 
 	if (find_var_envlist("OLDPWD", data) == NULL)
 	{
@@ -62,8 +74,8 @@ void	init_envlist(t_data *data, char **envp)
 	t_env	*cur;
 	t_env	*node;
 	char	**split_var;
-	
-	if(!envp || !*envp)
+
+	if (!envp || !*envp)
 		return ;
 	data->env_list = (t_env **)ts_calloc(1, sizeof(t_env *), data);
 	cur = NULL;
@@ -72,7 +84,6 @@ void	init_envlist(t_data *data, char **envp)
 	{
 		split_var = split_var_envlist(envp[i], data, NO);
 		node = create_var_envlist(split_var, data);
-		/* don't print out _ var in export */
 		if (ft_strcmp(node->key, "_") == 0)
 			node->p = 1;
 		node->prev = cur;

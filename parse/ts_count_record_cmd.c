@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_count_record_cmd.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:47:34 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/03 14:46:46 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 01:41:16 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,8 @@ static int	ts_check_empty_and_err_token_pipe(t_data *data, char *line)
 	while (line[i] != '\0')
 		i++;
 	if (line[i - 1] == '|')
-	{
-		data->num_error = ERR_TOKEN;
-		data->num_cmd = 0;
-		return (ts_error(data->num_error, "|"));
-	}
+		return (data->num_error = ERR_TOKEN, data->num_cmd = 0, \
+		ts_error(data->num_error, "|"));
 	return (0);
 }
 
@@ -61,7 +58,7 @@ static int	ts_get_size_one_cmd_str(char *line, int *start, int size)
 	return (size);
 }
 
-static int	ts_record_one_str(char **str, char *line, int *start, int *num, t_data *data)
+static int	ts_record_one_str(char **str, char *line, int *start,int *num, t_data *data)
 {
 	int	size;
 	int	i;
@@ -88,7 +85,6 @@ static int	ts_count_pipe(t_data *data, char *line, int qm_d, int qm_o)
 	int	i;
 
 	i = 0;
-
 	while (line[i] != '\0')
 	{
 		ts_switch_qm(line[i], &qm_o, &qm_d);
@@ -111,7 +107,8 @@ static int	ts_count_pipe(t_data *data, char *line, int qm_d, int qm_o)
 	}
 	return (0);
 }
-// counts the number of commands and records them in the structure each commmand in a separate structure as a string
+
+/*can replace with ts_calloc(&data->cmd, data->num_cmd, data);*/
 int	ts_count_and_record_cmd(t_data *data, char *line)
 {
 	int	i;
@@ -124,7 +121,6 @@ int	ts_count_and_record_cmd(t_data *data, char *line)
 	if (ts_count_pipe(data, line, 1, 1) == -1)
 		return (-1);
 	ts_malloc_cmd(&data->cmd, data->num_cmd, data);
-	//can replace with ts_calloc(&data->cmd, data->num_cmd, data);
 	i = 0;
 	while (data->num_cmd > i)
 	{

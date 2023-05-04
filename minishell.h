@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/03 19:39:24 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 07:23:10 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 
 // u_int8_t loop_flag = 1;
 
-int g_hdsig;
+int	g_hdsig;
 
 typedef enum e_value
 {
@@ -108,9 +108,9 @@ typedef struct s_tmp
 	int		size_str;
 	int		size_cut;		
 	int		count; 
-}				t_tmp; 
+}				t_tmp;
 
-typedef struct	s_env
+typedef struct s_env
 {
 	char			*key;
 	char			*val;
@@ -180,7 +180,6 @@ int		ts_found_env_variable(t_data *data, t_cmd *cmd);
 /* *********************  Signals  ********************* */
 void	ts_signal_ctrl_d(t_data *data, char **line);
 int		ts_get_signal(void);
-void	ts_signal_ctrl_slash(t_data *data, char **line);
 /* *********************  Malloc  ********************* */
 void	ts_malloc_array(char ***array, int size, t_data *data);
 void	ts_malloc_str(char **name, int size, t_data *data);
@@ -191,8 +190,8 @@ void	ts_free_cycle(t_data *data, char **line);
 void	ts_free_all(t_data *data, char **line);
 
 /* ********************* 	signals		  ********************* */
-// apparently i need to include it in the header file to use it otherwise it wont compile  even tho i have its library included
-void	rl_replace_line(const char *text, int clear_undo); 
+void	hqhandle(int sig);
+void	rl_replace_line(const char *text, int clear_undo);
 /* ********************* 	error msgs  ********************* */
 int		ts_error(int error, char *str);
 int		ts_err_token(t_data *data, int pipe);
@@ -209,6 +208,7 @@ void	ts_replace_key_to_value(char **str, int key, char *value, int start, t_data
 int		ts_measure_size_file_name(t_data *d, char *str, int *i);
 /* ********************* 	record arr  ********************* */
 void	ts_record_array(t_data *data);
+
 /* ********************* 	printer of the data to test  ********************* */
 void	print_t_data(struct s_data data);
 // void	print_arg(t_arg *arg);
@@ -223,12 +223,32 @@ char	*ft_strdup_lim(const char *s1, char c, t_data *data);
 char	*ft_strjoin_char(char const *s1, char const *s2, char c, t_data *data);
 int		detect_char(char *str, char c);
 void	print_string(int num_str, ...);
-void	error(int error, t_data *data);
+int		putstr_fd(char *s, int fd);
 void	put_strs_fd(int num_str, ...);
-
+void	error(int error, t_data *data);
+void	ts_err_argc_argv(int argc, char **argv, char **env);
+void	close_fd_array(t_cmd *cmd, t_data *data);
+void	close_pipes(t_data *data);
+int		err(char *str, int errno, int proc, t_data *data);
+int		err_open(t_cmd *cmd, int proc, t_data *data);
+void	redir5(t_cmd *cmd, t_data *data, int i);
+void	mod_redir_doubles(t_cmd *cmd);
+void	redir_utils(char ***new_file, int *new_redir, t_cmd *cmd, int new_count_redir);
+int		find_path_separator(t_cmd *cmd);
+void	check_redir_doubles(t_cmd *cmd, t_data *data);
+void	check_hd_last_redir(t_cmd *cmd, t_data *data);
+void	init_heredoc(t_cmd *cmd, t_data *data);
+void	as_dir_utils(t_cmd *cmd, t_data *data, struct stat file_stat);
+void	check_as_dir(t_cmd *cmd, int proc, t_data *data);
+int		check_permissions_executable(t_cmd *cmd, t_data *data);
+void	chk_cmd_utils(t_cmd *cmd, t_data *data, struct stat file_stat);
+void	check_as_command(t_cmd *cmd, int proc, t_data *data);
 /* FREE */
 void	free_strlist(char **str);
 void	free_data(t_data *data, char *line, int last);
+void	free_util(t_data *data, char *line);
+void	free_fdlist(t_data *data);
+void	free_cmd(t_data *data);
 
 /* ENV */
 t_env	*find_var_envlist(char *key, t_data *data);
@@ -245,10 +265,15 @@ int		ft_echo(t_cmd *cmd, t_data *data);
 int		ft_export(t_cmd *cmd, t_data *data);
 int		ft_env(t_data *data);
 int		ft_pwd(t_data *data);
-int		ft_unset(t_cmd *cmd, t_data *data);
+int		ft_unset(t_cmd *cmd, t_data *data, int i);
 int		ft_cd(t_cmd *cmd, t_data *data);
 int		ft_exit(t_cmd *cmd, char *line, t_data *data);
-
+void	print_export(t_data *data);
+int		check_exp_entry(char *str);
+void	exp_concat(char *str, int *rewr, t_data *data);
+t_env	*find_next_print(t_data *data);
+t_env	*create_pwd_envlist(char **var, t_data *data);
+t_env	*find_next_print(t_data *data);
 /* HEREDOC */
 void	get_heredoc_fd(t_cmd *cmd, t_data *data);
 void	get_heredoc_str(t_cmd *cmd, t_data *data);
@@ -263,7 +288,7 @@ void	create_fd_pid_array(t_data *data);
 /* EXECUTION */
 void	execute(char *line, t_data *data);
 int		check_builtin(t_cmd *cmd, t_data *data);
-int		execute_builtin(t_cmd *cmd, int	proc, char *line, t_data *data);
+int		execute_builtin(t_cmd *cmd, int proc, char *line, t_data *data);
 void	get_cmd_path(t_cmd *cmd, t_data *data);
 
 /* TESTING */

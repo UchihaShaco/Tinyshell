@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 03:29:53 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/03 13:35:14 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 05:10:22 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,48 @@ int	ts_cut_qm_in_name_file(char **file, t_data *data)
 	return (0);
 }
 
-void print_t_data(struct s_data data) 
+void	free_util(t_data *data, char *line)
+{
+	free_cmd(data);
+	free_fdlist(data);
+	if (data->pid)
+	{
+		free(data->pid);
+		data->pid = NULL;
+	}
+	if (line)
+	{
+		free(line);
+		line = NULL;
+	}
+}
+
+char	*ft_strdup_start(const char *s, int start)
+{
+	int		i;
+	char	*str1;
+
+	if (s == NULL)
+		return (NULL);
+	if ((size_t)start >= ft_strlen(s) || start < 0)
+		return (NULL);
+	i = 0;
+	while (s[start + i] != '\0')
+		i++;
+	str1 = (char *)malloc(sizeof(char) * (i + 1));
+	if (str1 == NULL)
+		return (NULL);
+	i = 0;
+	while (s[start + i] != '\0')
+	{
+		str1[i] = s[start + i];
+		i++;
+	}
+	str1[i] = '\0';
+	return (str1);
+}
+
+/* void print_t_data(struct s_data data) 
 {
     printf("t_data {\n");
 	int k=0;
@@ -111,4 +152,4 @@ void print_t_data(struct s_data data)
     // }
 
     printf("}\n");
-}
+}*/

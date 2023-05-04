@@ -6,39 +6,11 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 21:40:55 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/20 06:33:46 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 02:02:21 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
- #include "../minishell.h"
-
-void	ts_init_emum_redir(t_cmd *cmd, int *i_orig, int num_redir)
-{
-	int	i;
-
-	i = (*i_orig);
-	if (cmd->str[i] == '>')
-		cmd->redir[num_redir] = REDIR_W;
-	else if (cmd->str[i] == '<')
-		cmd->redir[num_redir] = REDIR_R;
-	if (cmd->str[i] == '>' && cmd->str[i + 1] == '>')
-	{
-		cmd->redir[num_redir] = REDIR_W_ADD;
-		i++;
-	}
-	else if (cmd->str[i] == '<' && cmd->str[i + 1] == '<')
-	{
-		cmd->redir[num_redir] = HEREDOC;
-		i++;
-	}
-	else if (cmd->str[i] == '<' && cmd->str[i + 1] == '>')
-	{
-		cmd->redir[num_redir] = REDIR_RONG;
-		i++;
-	}
-	i++;
-	(*i_orig) = i;
-}
+#include "../minishell.h"
 
 int	ts_error_parse_redir(t_data *data, char *s, int i)
 {
@@ -82,7 +54,6 @@ int	ts_count_redirect(t_cmd *cmd, t_data *data, int qm_o, int qm_d)
 			if ((cmd->str[i] == '>' && cmd->str[i + 1] == '>')
 				|| (cmd->str[i + 1] == '<' && cmd->str[i] == '<'))
 				i++;
-				// || (cmd->str[i] == '<' && cmd->str[i + 1] == '>'))
 			i++;
 			while (cmd->str[i] == ' ' && cmd->str[i] != '\0')
 				i++;
@@ -94,22 +65,6 @@ int	ts_count_redirect(t_cmd *cmd, t_data *data, int qm_o, int qm_d)
 			i++;
 	}
 	return (cmd->count_redir);
-}
-
-void	ts_check_empty_str(t_cmd *cmd)
-{
-	int	i;
-
-	i = 0;
-	if (cmd->str[i] == '\0')
-		ts_free_str(&cmd->str);
-	else if (cmd->str[i] == ' ')
-	{
-		while (cmd->str[i] == ' ' && cmd->str[i] != '\0')
-			i++;
-		if (cmd->str[i] == '\0')
-			ts_free_str(&cmd->str);
-	}
 }
 
 int	ts_cycle_record_redir(t_cmd *cmd, t_data *data, int qm_o, int qm_d)
@@ -127,7 +82,8 @@ int	ts_cycle_record_redir(t_cmd *cmd, t_data *data, int qm_o, int qm_d)
 		{
 			if (ts_record_redir_and_file(cmd, i, num_redir, data) == -1)
 				return (-1);
-			ts_replace_key_to_value(&cmd->str, data->tmp.size_cut, NULL, i, data);
+			ts_replace_key_to_value(&cmd->str, data->tmp.size_cut, \
+			NULL, i, data);
 			if (cmd->str[i] == '\0' && i > 0)
 				i--;
 			num_redir++;
@@ -140,7 +96,7 @@ int	ts_cycle_record_redir(t_cmd *cmd, t_data *data, int qm_o, int qm_d)
 	return (0);
 }
 
-int	 ts_found_redirect(t_cmd *cmd, t_data *data)
+int	ts_found_redirect(t_cmd *cmd, t_data *data)
 {
 	int	qm_d;
 	int	qm_o;
@@ -156,7 +112,7 @@ int	 ts_found_redirect(t_cmd *cmd, t_data *data)
 	ts_malloc_array(&cmd->file, cmd->count_redir, data);
 	ts_cycle_record_redir(cmd, data, qm_o, qm_d);
 	cmd->file[cmd->count_redir] = NULL;
-	// cmd->redir[cmd->count_redir] = 0;
+	cmd->redir[cmd->count_redir] = 0;
 	return (0);
 }
 
@@ -164,6 +120,7 @@ int	 ts_found_redirect(t_cmd *cmd, t_data *data)
 of the file name(start) andthe size of file name(size_str)to record the
 file name in the array of strings (cmd->file[num_redir]) and record the
 type of redirection in the array of integers (cmd->redir[num_redir]) */
+
 int	ts_record_redir_and_file(t_cmd *cmd, int i, int num_redir, t_data *d)
 {
 	int	start;

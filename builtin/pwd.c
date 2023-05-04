@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/04 02:31:21 by jalwahei          #+#    #+#             */
+/*   Updated: 2023/05/04 06:46:19 by jalwahei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	ft_pwd(t_data *data)
@@ -10,4 +22,23 @@ int	ft_pwd(t_data *data)
 	put_strs_fd(2, data, 1, cwd, "\n");
 	free(cwd);
 	return (0);
+}
+
+void	ts_err_argc_argv(int argc, char **argv, char **env)
+{
+	if (argc != 1 || argv == NULL || env == NULL)
+	{
+		ft_putstr_fd("Tinyshell: this programm complies without arguments\n", 2);
+		exit(127);
+	}
+}
+
+void	hqhandle(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_hdsig = 42;
+		close(0);
+		write(1, "\n", 1);
+	}
 }

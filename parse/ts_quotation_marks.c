@@ -3,22 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ts_quotation_marks.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 18:03:37 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/01 11:43:26 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 01:55:01 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	ts_switch_qm(char c, int *qm_o, int *qm_d)
-{
-	if (c == DOUBLE_Q_MARK && (*qm_o) == 1)
-		(*qm_d) = (*qm_d) * (-1);
-	if (c == ONE_Q_MARK && (*qm_d) == 1)
-		(*qm_o) = (*qm_o) * (-1);
-}
 
 void	ts_search_space_after_arg(char *str, t_arg *arg, int i)
 {
@@ -109,58 +101,11 @@ void	ts_create_struct_without_qm(t_cmd *cmd, t_data *data)
 		{
 			while (cmd->str[i] != 34 && cmd->str[i] != 39
 				&& cmd->str[i] != '\0')
-				{
-				i = ts_record_args_without_qm(cmd->str, &cmd->arg[num_arg], i, &num_arg, data);
-				// print_arg(&cmd->arg[num_arg]);
-				}
+				i = ts_record_args_without_qm(cmd->str, &cmd->arg[num_arg], \
+				i, &num_arg, data);
 		}
 	}
 }
-
-int	ts_check_quotation_marks(t_cmd *cmd, int i, t_data *data)
-{
-	char	q_m;
-
-	q_m = cmd->str[i];
-	i++;
-	while (cmd->str[i] != q_m && cmd->str[i] != '\0')
-		i++;
-	if (cmd->str[i] == q_m)
-		cmd->num_arg++;
-	else
-	{
-		data->num_error = ERR_TOKEN;
-		cmd->num_arg = 0;
-		cmd->array_empty = YES;
-		return (ts_error_2(data->num_error, q_m));
-	}
-	return (i + 1);
-}
-
-int	ts_count_args_without_qm(t_cmd *cmd, int i)
-{
-	if (cmd->str[i] == ' ')
-	{
-		while (cmd->str[i] == ' ')
-			i++;
-	}
-	if (cmd->str[i] != 39 && cmd->str[i] != 34 && cmd->str[i] != '\0')
-		cmd->num_arg++;
-	while (cmd->str[i] != 39 && cmd->str[i] != 34 && cmd->str[i] != '\0')
-	{
-		if (cmd->str[i] == ' ')
-		{
-			while (cmd->str[i] == ' ' && cmd->str[i] != '\0')
-				i++;
-			if (cmd->str[i] != 39 && cmd->str[i] != 34 && cmd->str[i] != '\0')
-				cmd->num_arg++;
-		}
-		else
-			i++;
-	}
-	return (i);
-}
-
 
 int	ts_count_arg_divided_qm(t_cmd *cmd, t_data *data)
 {
@@ -168,7 +113,6 @@ int	ts_count_arg_divided_qm(t_cmd *cmd, t_data *data)
 
 	i = 0;
 	cmd->num_arg = 0;
-
 	while (cmd->str[i] != '\0')
 	{
 		if (cmd->str[i] == 34 || cmd->str[i] == 39)
@@ -178,83 +122,5 @@ int	ts_count_arg_divided_qm(t_cmd *cmd, t_data *data)
 		if (i == -1)
 			return (-1);
 	}
-
-
 	return (0);
 }
-// void print_arg(t_arg *arg) {
-//     printf("str: %s\n", arg->str);
-//     printf("q_m: %d\n", arg->q_m);
-//     printf("space: %d\n", arg->space);
-//     printf("redir: %d\n", arg->redir);
-//     printf("empty_key: %d\n", arg->empty_key);
-// }
-/*
-static int ts_count_pipe(t_data *data, char *line, int qm_d, int qm_o)
-{
-    int i = 0;
-    int cmd_count = 0;
-    while (line[i] != '\0')
-    {
-        ts_switch_qm(line[i], &qm_o, &qm_d);
-        if (line[i] == '|' && qm_o == 1 && qm_d == 1)
-        {
-            i++;
-            if (line[i] == '|') {
-                if (cmd_count == 0) {
-                    return ts_err_token(data, 1);
-                }
-                if (line[i + 1] == '|') {
-                    return ts_err_token(data, 2);
-                }
-            } else if (line[i] == ' ') {
-                while (line[i] == ' ' && line[i] != '\0') {
-                    i++;
-                }
-                if (line[i] == '|' || line[i] == '\0') {
-                    return ts_err_token(data, 1);
-                }
-            }
-            cmd_count++;
-        }
-        i++;
-    }
-    if (cmd_count == 0 && line[0] != '\0') {
-        cmd_count = 1;
-    }
-    data->num_cmd = cmd_count;
-    return 0;
-}
-
-int ts_check_empty_and_err_token_pipe(t_data *data, char *line)
-{
-    int i = 0;
-    int qm_d = 0;
-    int qm_o = 0;
-    while (line[i] == ' ' && line[i] != '\0') {
-        i++;
-    }
-    if (line[i] == '\0') {
-        data->empty_str = YES;
-        return -1;
-    }
-    for (; line[i] != '\0'; i++) {
-        ts_switch_qm(line[i], &qm_o, &qm_d);
-        if (line[i] == '|' && qm_o == 1 && qm_d == 1) {
-            i++;
-            if (line[i] == '|') {
-                return ts_err_token(data, 1);
-            } else if (line[i] == ' ') {
-                while (line[i] == ' ' && line[i] != '\0') {
-                    i++;
-                }
-                if (line[i] == '|' || line[i] == '\0') {
-                    return ts_err_token(data, 1);
-                }
-            }
-        }
-    }
-    return 0;
-}
-
-*/

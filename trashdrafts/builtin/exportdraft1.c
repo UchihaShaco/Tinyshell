@@ -62,7 +62,6 @@ int	invalid_export(char *str)
 	//first char must be alpha or _
 	//second char must be alpha, num, _, =, or null
 	int	i;
-	
 	i = 0;
 	if (!ft_isalpha(str[0]) && str[0] != '_')
 		return (1);

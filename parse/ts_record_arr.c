@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:56:12 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/20 08:43:47 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 01:50:00 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ void	ts_connect_arg_for_array(t_cmd *cmd, t_data *data)
 		if ((cmd->arg[y].space == YES) || (y + 1) == cmd->num_arg)
 		{
 			len = ts_record_arg(cmd, &cmd->array_arg[y_arr], &start, len, data);
-			// printf("array_arg[%d] = %s\n", y_arr, cmd->array_arg[y_arr]);
 			y_arr++;
 		}
 		y++;
@@ -111,6 +110,4 @@ void	ts_record_array(t_data *data)
 		}
 		i++;
 	}
-	// if (data->num_error == 0 && data->cmd[0].str != NULL)
-	// 	ts_found_variable(data);
 }

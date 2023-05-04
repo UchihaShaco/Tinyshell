@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   data.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/04 05:05:36 by jalwahei          #+#    #+#             */
+/*   Updated: 2023/05/04 05:05:36 by jalwahei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*find_home_dir(t_data *data)
@@ -14,12 +26,13 @@ char	*find_home_dir(t_data *data)
 }
 
 /* initiate array of fd and pid in data */
-/* NOTE: must be created after data->num_cmd finalized */
+/* NOTE: must be created after data->num_cmd finalized
+create a pid even if it may not be used
+*/
 void	create_fd_pid_array(t_data *data)
 {
 	int	i;
 
-	//create pipes only if there is more than one cmd
 	if (data->num_cmd > 1)
 	{
 		data->fd = (int **)ts_calloc(data->num_cmd - 1, sizeof(int *), data);
@@ -27,7 +40,6 @@ void	create_fd_pid_array(t_data *data)
 		while (++i < data->num_cmd - 1)
 			data->fd[i] = (int *)ts_calloc(2, sizeof(int), data);
 	}
-	//create a pid even if it may not be used
 	data->pid = (int *)ts_calloc(data->num_cmd, sizeof(int), data);
 }
 

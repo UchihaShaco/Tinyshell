@@ -3,27 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/03 23:35:30 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 05:47:21 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int g_hdsig;
-
-static void	ts_err_argc_argv(int argc, char **argv, char **env)
-{
-	if (argc != 1 || argv == NULL || env == NULL)
-	{
-		ft_putstr_fd("Tinyshell: this programm compiles without arguments\n", 2);
-		exit(127);
-	}
-}
-
-/*Basically this function to return an error if theres an odd number of quotation marks */
 static	int	ts_quote_checker(t_data *data, char *line)
 {
 	int	i;
@@ -33,7 +21,6 @@ static	int	ts_quote_checker(t_data *data, char *line)
 	i = 0;
 	qm_o = 1;
 	qm_d = 1;
-
 	while (line[i] != '\0')
 		ts_switch_qm(line[i++], &qm_o, &qm_d);
 	if (qm_o == -1 || qm_d == -1)
@@ -51,7 +38,7 @@ void	ts_parse(t_data *data, char *line)
 	int	i;
 
 	i = 0;
-	if(!(*line))
+	if (!(*line))
 		return ;
 	ts_quote_checker(data, line);
 	if (data->num_error != 0 || data->empty_str == YES)
@@ -74,7 +61,7 @@ void	ts_parse(t_data *data, char *line)
 	return ;
 }
 
-void	ts_init_data(t_data *data, char ***env, int first)
+void	ts_init_data(t_data *data, char ***env, char **line, int first)
 {
 	if (first == YES)
 	{
@@ -84,71 +71,50 @@ void	ts_init_data(t_data *data, char ***env, int first)
 		get_env_paths(data);
 		data->defin = dup(STDIN_FILENO);
 		data->defout = dup(STDOUT_FILENO);
-		// data->name_file = NO; // flag to check if it's a file (YES, NO)
+		data->name_file = NO;
+		*line = NULL;
 	}
 	// data->num_prev_error = data->num_error;
 	data->num_error = 0;
-	data->empty_str = NO; // flag to check if the string is empty (YES, NO)
+	data->empty_str = NO;
 	data->num_cmd = 0;
 	g_hdsig = 0;
+}
 
+void	rec_finalize(t_data *data, char *line)
+{
+	if (data->empty_str == NO)
+	{
+		ts_record_array(data);
+		if (data->num_cmd > 0)
+		{
+			finalize_cmd(data);
+			if (g_hdsig == 0)
+				execute(line, data);
+		}
+	}
 }
 
 int	main(int argc, char **argv, char **env)
 {
-	// t_data	data;
-	// char	*line;
+	t_data	data;
+	char	*line;
 
-	// ts_err_argc_argv(argc, argv, env);
-	// ft_bzero(&data, sizeof(t_data));
-	// ts_init_data(&data, &env, YES);
-	// line = NULL;
-	// // print_tdata(&data);
-	// while (1)
-	// {
-	// 	dup2(data.defin, STDIN_FILENO);
-	// 	dup2(data.defout, STDOUT_FILENO);
-	// 	ts_get_signal() ;
-	// 	ts_init_data(&data, &env, NO);
-	// 	line = readline("\033[1;35mTinyShell > \033[0m");
-	// 	ts_signal_ctrl_d(&data, &line);
-	// 	ts_parse(&data, line);
-	// 	// print_cmds(&data);
-	// 	// if(line)
-	// 		add_history(line);
-	// 	if (data.empty_str == NO)
-	// 	{
-	// 		ts_record_array(&data);
-	// 		// print_tdata(&data);
-	// 		// print_cmds(&data);
-	// 		if (data.num_cmd > 0)
-	// 		{
-	// 			// for(int i = 0; i < data.num_cmd; i++)
-	// 			// 	print_tcmd(&data.cmd[i], i);
-					
-	// 		// 	// printf("\n ---------------------------------------\n");
-	// 			finalize_cmd(&data);
-	// 			// print_cmds(&data);
-	// 			if( g_hdsig == 0)
-	// 				execute(line, &data);
-	// 			// print_tdata(&data);
-	// 		// 	// for(int i = 0; i < data.num_cmd; i++)
-	// 		// 	// 	print_tcmd(&data.cmd[i], i);
-	// 		// 	// printf("hello world\n");
-	// 		// 	// exit(0);
-	// 		}
-	// 	}
-	// 	free_data(&data, line, NO);
-	// }
-	// free_data(&data, line, YES);
-	// close(data.defin);
-	// close(data.defout);
-	// // // exit(0);
-	// // // ts_free_all(&data, &line); // we will have to free the memory something like this 
-	// // // char *str = "";
-	// // // printf("%i\n", invalid_expor(str));
-	char *str = "::::::::::::";
-	char **list = ft_split(str, ':');
-	print_strlist(list);
+	ts_err_argc_argv(argc, argv, env);
+	ft_bzero(&data, sizeof(t_data));
+	ts_init_data(&data, &env, &line, YES);
+	while (1)
+	{
+		dup2(data.defin, STDIN_FILENO);
+		dup2(data.defout, STDOUT_FILENO);
+		ts_get_signal();
+		ts_init_data(&data, &env, &line, NO);
+		line = readline("\033[1;35mTinyShell > \033[0m");
+		ts_signal_ctrl_d(&data, &line);
+		ts_parse(&data, line);
+		if (line)
+			add_history(line);
+		rec_finalize(&data, line);
+		free_data(&data, line, NO);
+	}
 }
-

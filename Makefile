@@ -3,19 +3,21 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+         #
+#    By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/09 11:48:59 by jalwahei          #+#    #+#              #
-#    Updated: 2023/05/02 22:42:16 by hbui-vu          ###   ########.fr        #
+#    Updated: 2023/05/04 07:21:16 by jalwahei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-SRCS =	minishell.c parse/ts_signals.c parse/ts_malloc.c parse/ts_count_record_cmd.c parse/parse_pipe.c parse/ts_find_redirect.c parse/ts_error.c \
-	parse/ts_free.c parse/ts_record_val.c utils/ts_utils.c parse/ts_quotation_marks.c parse/ts_record_arr.c parse/ts_measure_size_file_name.c parse/ts_init_env.c \
-	parse/ts_found_dollar.c utils/utils.c  \
-	utils/utils_h.c mod_cmd.c utils/free.c testers.c heredoc.c data.c execution3.c \
-	builtin/echo.c builtin/env.c builtin/export.c builtin/builtin.c builtin/pwd.c builtin/unset.c builtin/cd.c builtin/exit.c\
+SRCS =	minishell.c parse/ts_signals.c parse/ts_malloc.c parse/ts_count_record_cmd.c parse/parse_pipe.c \
+	parse/ts_find_redirect.c parse/ts_error.c \
+	parse/ts_free.c parse/ts_record_val.c utils/ts_utils.c parse/ts_quotation_marks.c parse/ts_record_arr.c \
+	parse/ts_measure_size_file_name.c parse/ts_init_env.c parse/ts_found_dollar.c utils/utils.c utils/put_str.c  \
+	utils/utils_h.c mod_cmd.c mod_cmd_utils.c utils/free.c testers.c heredoc.c data.c execution3_utils2.c execution3.c execution3_utils.c\
+	builtin/echo.c builtin/env.c builtin/export_utils.c builtin/export.c builtin/builtin.c \
+	builtin/pwd.c builtin/unset.c builtin/cd.c builtin/exit.c builtin/export_utils2.c\
 	env/ourenv.c env/envlist.c env/mod_envlist.c \
 
 CC = cc

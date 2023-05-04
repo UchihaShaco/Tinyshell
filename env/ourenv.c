@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ourenv.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/04 02:19:25 by jalwahei          #+#    #+#             */
+/*   Updated: 2023/05/04 02:19:25 by jalwahei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*new_entry_ourenv(t_env *env_var, t_data *data)
@@ -37,13 +49,8 @@ void	rewrite_ourenv(t_data *data)
 	while (cur)
 	{
 		if (cur->equal == 1)
-		{
-			data->our_env[i] = new_entry_ourenv(cur, data);
-			i++;
-		}
+			data->our_env[i++] = new_entry_ourenv(cur, data);
 		cur = cur->next;
 	}
 	data->num_env = i;
 }
-
-

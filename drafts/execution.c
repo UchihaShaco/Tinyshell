@@ -161,26 +161,18 @@ if there is 0 num arg but some redirections
 if the command doesn't exist
 run cmd normally
 */
+
 void	child_process(int i, t_cmd *cmd, char *line, t_data *data)
 {
 	open_files(cmd, data, NO);
 	pipe_cmd(i, cmd, data);
 	close_fd_array(cmd, data);
 	close_pipes(data);
-	// int j;
 
-	// j = 0;
-	// while (j < data->num_cmd - 1)
-	// {
-	// 	close(data->fd[j][0]);
-	// 	close(data->fd[j][1]);
-	// 	j++;
-	// }
 	if (cmd->num_arg == 0)
 		exit(0);
 	if (cmd->builtin > 0)
 		execute_builtin(cmd, CHILD, line, data);
-	// check_if_dir(cmd, line, data);
 	if (!cmd->path)
 	{
 		put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
@@ -190,7 +182,6 @@ void	child_process(int i, t_cmd *cmd, char *line, t_data *data)
 	{
 		put_strs_fd(3, data, 2, "bash: ", cmd->path, ": command not found\n");
 		exit(127);
-		// error(ERR_EXEC, data);
 	}
 }
 
@@ -212,7 +203,7 @@ int	parent_process(t_data *data)
 int	exec_one_builtin(t_cmd *cmd, char * line, t_data *data)
 {
 	int status;
-	
+
 	if (open_files(cmd, data, YES) == 1)
 		return (1);
 	if (cmd->last_input > -1)
@@ -235,23 +226,18 @@ void	execute(char *line, t_data *data)
 
 	if (data->num_cmd == 0)
 		data->num_prev_error = 0;
-	/* if there is one cmd and it's a builtin*/
 	else if (data->num_cmd == 1 && data->cmd->builtin > 0)
 	{
 		status = exec_one_builtin(&data->cmd[0], line, data);
-		// return (status);
 		data->num_prev_error = status;
 	}
-	/* create pipes and fork*/
 	else
 	{
 		i = -1;
-		/* create pipes based on number of commands - 1*/
 		while (++i < data->num_cmd - 1)
 			if (pipe(data->fd[i]) == -1)
 				error(ERR_PIPE, data);
 		i = -1;
-		/* fork and run the child process */
 		while (++i < data->num_cmd)
 		{
 			data->pid[i] = fork();
@@ -260,31 +246,7 @@ void	execute(char *line, t_data *data)
 			else if (data->pid[i] == 0)
 				child_process(i, &data->cmd[i], line, data);
 		}
-		/* run the parent process */
 		status = parent_process(data);
 		data->num_prev_error = WEXITSTATUS(status);
-		//in execute, update data->num_prev_error to final exit status
 	}
-	// return (0);
 }
-
-// int	j;
-
-// 	pipe_cmd(i, cmd, data);
-// 	j = 0;
-// 	while (j < data->num_cmd - 1)
-// 	{
-// 		close(data->fd[j][0]);
-// 		close(data->fd[j][1]);
-// 		j++;
-// 	}
-// 	if (cmd->builtin > 0)
-// 		execute_builtin(cmd, NO, data);
-// 	else
-// 	{
-// 		if (execve(cmd->path, cmd->array_arg, data->our_env) == -1)
-// 		{
-// 			put_strs_fd(3, data, 2, "bash: ", cmd->array_arg[0], ": command not found\n");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 	}

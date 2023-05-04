@@ -1,5 +1,16 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   annotated_ourenv.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/04 02:16:44 by jalwahei          #+#    #+#             */
+/*   Updated: 2023/05/04 02:16:44 by jalwahei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "minishell.h"
 
 /* create new entry for our_env: key=value and return the string */
 char	*new_entry_ourenv(t_env *env_var, t_data *data)
@@ -18,7 +29,10 @@ char	*new_entry_ourenv(t_env *env_var, t_data *data)
 	return (new_entry);
 }
 
-/* free our_env and rewrite the whole array */
+/* free our_env and rewrite the whole array
+find number of env_list nodes that have = signs. only those can be added to env
+then create new env array and fill it
+ */
 void	rewrite_ourenv(t_data *data)
 {
 	int		i;
@@ -28,14 +42,12 @@ void	rewrite_ourenv(t_data *data)
 		free_strlist(data->our_env);
 	i = 0;
 	cur = *data->env_list;
-	/* find number of env_list nodes that have = signs. only those can be added to env */
 	while (cur)
 	{
 		if (cur->equal == 1)
 			i++;
 		cur = cur->next;
 	}
-	/* create new env array and fill it */
 	data->our_env = (char **)ts_calloc(i + 1, sizeof(char *), data);
 	i = 0;
 	cur = *data->env_list;
@@ -49,5 +61,3 @@ void	rewrite_ourenv(t_data *data)
 		cur = cur->next;
 	}
 }
-
-

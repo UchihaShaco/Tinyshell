@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/04 03:40:32 by jalwahei          #+#    #+#             */
+/*   Updated: 2023/05/04 03:40:32 by jalwahei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /* free an array of strings */
@@ -13,7 +25,7 @@ void	free_strlist(char **str)
 		return ;
 	}
 	i = -1;
-	while(str[++i])
+	while (str[++i])
 	{
 		free(str[i]);
 	}
@@ -36,7 +48,7 @@ void	free_fdlist(t_data *data)
 		return ;
 	}
 	i = -1;
-	while(++i < num_cmd - 1)
+	while (++i < num_cmd - 1)
 		free(fdlist[i]);
 	free(fdlist);
 	data->fd = NULL;
@@ -44,8 +56,8 @@ void	free_fdlist(t_data *data)
 
 void	free_targ(t_cmd *cmd)
 {
-	int	i;
-	t_arg *arg;
+	t_arg	*arg;
+	int		i;
 
 	arg = cmd->arg;
 	if (!arg)
@@ -62,31 +74,29 @@ void	free_targ(t_cmd *cmd)
 
 void	free_cmd(t_data *data)
 {
-	int	i;
-	t_cmd *cmd;
+	int		i;
 
 	if (!data->cmd)
 		return ;
-	cmd = data->cmd;
 	i = -1;
 	while (++i < data->num_cmd)
 	{
-		if (cmd[i].str)
-			free(cmd[i].str);
-		free_targ(&cmd[i]);
-		free_strlist(cmd[i].array_arg);
-		free_strlist(cmd[i].hd_array);
-		free_strlist(cmd[i].file);
-		if (cmd[i].path)
-			free(cmd[i].path);
-		if (cmd[i].redir)
-			free(cmd[i].redir);
-		if (cmd[i].fd_array)
-			free(cmd[i].fd_array);
-		if (cmd[i].heredoc_str)
-			free(cmd[i].heredoc_str);
+		if (data->cmd[i].str)
+			free(data->cmd[i].str);
+		free_targ(&data->cmd[i]);
+		free_strlist(data->cmd[i].array_arg);
+		free_strlist(data->cmd[i].hd_array);
+		free_strlist(data->cmd[i].file);
+		if (data->cmd[i].path)
+			free(data->cmd[i].path);
+		if (data->cmd[i].redir)
+			free(data->cmd[i].redir);
+		if (data->cmd[i].fd_array)
+			free(data->cmd[i].fd_array);
+		if (data->cmd[i].heredoc_str)
+			free(data->cmd[i].heredoc_str);
 	}
-	free(cmd);
+	free(data->cmd);
 	data->cmd = NULL;
 }
 
@@ -111,18 +121,5 @@ void	free_data(t_data *data, char *line, int last)
 			data->old_dir = NULL;
 		}
 	}
-	free_cmd(data);
-	free_fdlist(data);
-	if (data->pid)
-	{
-		free(data->pid);
-		data->pid = NULL;
-	}
-	if (line)
-	{
-		free(line);
-		line = NULL;
-	}
-	// close(data->defin);
-	// close(data->defout);
+	free_util(data, line);
 }

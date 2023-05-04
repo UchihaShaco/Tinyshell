@@ -25,52 +25,61 @@ int	invalid_unset(char *str)
 	return (0);
 }
 
-int	ft_unset(t_cmd *cmd, t_data *data)
+void	env_var_check(t_data *data, t_env **env_var, \
+int *rewrite_paths, int *rewrite)
 {
-	int		i;
+	if (strcmp((*env_var)->key, "OLDPWD") == 0)
+	{
+		free(data->old_dir);
+		data->old_dir = NULL;
+	}
+	else if (strcmp((*env_var)->key, "PWD") == 0)
+	{
+		free(data->cur_dir);
+		data->cur_dir = NULL;
+	}
+	if ((*env_var)->equal == 1)
+		(*rewrite)++;
+	if (strcmp((*env_var)->key, "PATH") == 0)
+		(*rewrite_paths)++;
+}
+
+void	unset_error(int *exit_val, char *str, t_data *data)
+{
+	*exit_val = 1;
+	put_strs_fd(3, data, 2, "bash: unset :'", \
+	str, "': not a valid identifier\n");
+}
+
+void	unset_init(int *i, int *rewrite, int *exit_val, int *rewrite_paths)
+{
+	*i = 0;
+	*rewrite = 0;
+	*exit_val = 0;
+	*rewrite_paths = 0;
+}
+
+int	ft_unset(t_cmd *cmd, t_data *data, int i)
+{
 	int		rewrite;
-	int		exit_val;
 	int		rewrite_paths;
-	char	**arg;
+	int		exit_val;
 	t_env	*env_var;
 
-	i = 1;
-	rewrite = 0;
-	arg = cmd->array_arg;
-	exit_val = 0;
-	rewrite_paths = 0;
-	if (!arg[i])
-		return (0);
-	while (arg[i])
+	unset_init(&i, &rewrite, &exit_val, &rewrite_paths);
+	while (cmd->array_arg[++i])
 	{
-		if (invalid_unset(arg[i]))
-		{
-			put_strs_fd(3, data, 2, "bash: unset : '", arg[i], "': not a valid identifier\n");
-			exit_val = 1;
-		}
+		if (invalid_unset(cmd->array_arg[i]))
+			unset_error(&exit_val, cmd->array_arg[i], data);
 		else
 		{
-			env_var = find_var_envlist(arg[i], data);
+			env_var = find_var_envlist(cmd->array_arg[i], data);
 			if (env_var)
 			{
-				if (strcmp(env_var->key, "OLDPWD") == 0)
-				{
-					free(data->old_dir);
-					data->old_dir = NULL;
-				}
-				else if (strcmp(env_var->key, "PWD") == 0)
-				{
-					free(data->cur_dir);
-					data->cur_dir = NULL;
-				}
-				if (env_var->equal == 1)
-					rewrite++;
-				if (strcmp(env_var->key, "PATH") == 0)
-					rewrite_paths++;
-				delete_var_envlist(arg[i], data);
+				env_var_check(data, &env_var, &rewrite_paths, &rewrite);
+				delete_var_envlist(cmd->array_arg[i], data);
 			}
 		}
-		i++;
 	}
 	if (rewrite > 0)
 		rewrite_ourenv(data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_init_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 04:13:08 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/28 16:16:29 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 01:50:51 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	ts_check_slvl(char **env, int y, int x)
 	i = 6;
 	while (env[y][i] != '\0')
 	{
-		if (ft_isdigit(env[y][i]) != 1) // if not a digit means it's not a number so we return 7 to add the SHLVL=1
+		if (ft_isdigit(env[y][i]) != 1)
 			return (7);
 		i++;
 	}

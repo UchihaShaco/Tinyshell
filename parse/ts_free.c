@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ts_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 19:09:51 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/28 22:21:39 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 01:52:56 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	ts_free_str(char **str)
-{
-	if (*str)
-	{
-		free(*str);
-		*str = NULL;
-	}
-}
 
 void	ts_free_arr(char ***arr)
 {

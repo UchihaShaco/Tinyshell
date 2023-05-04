@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/04 04:29:03 by jalwahei          #+#    #+#             */
+/*   Updated: 2023/05/04 04:29:03 by jalwahei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*init_str(char *input, t_data *data)
@@ -32,35 +44,23 @@ char	*ft_strjoin_hd(char const *s1, char const *s2, t_data *data)
 	return (buffer);
 }
 
-void hqhandle(int sig)
+void	herdoc_util(char **str, char *input, t_data *data, char **new_str)
 {
-
-	if (sig == SIGINT)
-	{
-		g_hdsig = 42;
-		close(0);
-		write(1, "\n", 1);
-		// rl_on_new_line();
-		// rl_replace_line("", 1);
-		// rl_redisplay();
-		// write(1, "Press Enter to exit\n", 21);
-		// exit(0);
-	}
+	*new_str = ft_strjoin_hd(*str, input, data);
+	if (*str)
+		free(str);
+	*str = *new_str;
 }
 
 void	get_heredoc_str(t_cmd *cmd, t_data *data)
 {
-	struct sigaction s;
-
-
-	char	*input;
-	char	*str;
-	char	*new_str;
-	int		i;
+	char				*input;
+	char				*str;
+	char				*new_str;
+	int					i;
 
 	str = NULL;
 	i = 0;
-	//while i = index of the delimiter, it has not hit the delimiter yet
 	while (i < cmd->count_hd)
 	{
 		signal(SIGINT, hqhandle);
@@ -71,22 +71,15 @@ void	get_heredoc_str(t_cmd *cmd, t_data *data)
 				free(str);
 			return ;
 		}
-		if(!input && g_hdsig == 0) //instead jump to the next delimiter
-		{
-			put_strs_fd(3, data, 1, "TinyShell: warning: here-document delimited by end-of-file (wanted '", cmd->hd_array[i], "')\n");
-			i++;
-		}
+		if (!input && g_hdsig == 0)
+			put_strs_fd(3, data, 1, "TinyShell: warning: herdoc del by'", \
+			cmd->hd_array[i++], "')\n");
 		else if (input)
 		{
 			if (ft_strcmp(input, cmd->hd_array[i]) == 0)
 				i++;
 			else if (cmd->record_hd == 1 && i == cmd->count_hd - 1)
-			{
-				new_str = ft_strjoin_hd(str, input, data);
-				if (str)
-					free(str);
-				str = new_str;
-			}
+				herdoc_util(&str, input, data, &new_str);
 		}
 		if (input)
 			free(input);
@@ -100,7 +93,7 @@ void	get_heredoc_fd(t_cmd *cmd, t_data *data)
 
 	if (pipe(fd) == -1)
 		error(ERR_PIPE, data);
-	write(fd[1], cmd->heredoc_str, ft_strlen(cmd->heredoc_str)); 
+	write(fd[1], cmd->heredoc_str, ft_strlen(cmd->heredoc_str));
 	close(fd[1]);
 	cmd->fd_array[cmd->last_input] = fd[0];
 }

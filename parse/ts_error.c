@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 21:42:24 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/04/27 17:18:08 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 01:55:40 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,36 @@ int	ts_error_2(int error, int qm)
 		ft_putstr_fd("'\n", 2);
 	}
 	return (-1);
+}
+
+void	ts_switch_qm(char c, int *qm_o, int *qm_d)
+{
+	if (c == DOUBLE_Q_MARK && (*qm_o) == 1)
+		(*qm_d) = (*qm_d) * (-1);
+	if (c == ONE_Q_MARK && (*qm_d) == 1)
+		(*qm_o) = (*qm_o) * (-1);
+}
+
+int	ts_count_args_without_qm(t_cmd *cmd, int i)
+{
+	if (cmd->str[i] == ' ')
+	{
+		while (cmd->str[i] == ' ')
+			i++;
+	}
+	if (cmd->str[i] != 39 && cmd->str[i] != 34 && cmd->str[i] != '\0')
+		cmd->num_arg++;
+	while (cmd->str[i] != 39 && cmd->str[i] != 34 && cmd->str[i] != '\0')
+	{
+		if (cmd->str[i] == ' ')
+		{
+			while (cmd->str[i] == ' ' && cmd->str[i] != '\0')
+				i++;
+			if (cmd->str[i] != 39 && cmd->str[i] != 34 && cmd->str[i] != '\0')
+				cmd->num_arg++;
+		}
+		else
+			i++;
+	}
+	return (i);
 }

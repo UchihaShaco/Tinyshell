@@ -33,6 +33,7 @@ int	handle_dir(t_cmd *cmd, int i, t_data *data)
 		put_strs_fd(3, data, 2, "bash: ", cmd->file[i], ": Is a directory\n");
 	return (1);
 }
+
 int	check_one_file_permissions(t_cmd *cmd, int i, t_data *data)
 {
 	struct stat file_stat;
@@ -40,33 +41,22 @@ int	check_one_file_permissions(t_cmd *cmd, int i, t_data *data)
 	int			permission;
 	int			dir_status;
 
-	//if heredoc, return 
 	if (cmd->redir[i] == 5)
 		return (0);
 	stat_res = stat(cmd->file[i], &file_stat);
-	//check if file is a directory
 	if (stat_res != -1 && S_ISDIR(file_stat.st_mode))
 	{
 		dir_status = handle_dir(cmd, i, data);
 		if (dir_status == 1)
 			return (1);
 	}
-	/* if input redir
-	if file doesn't exist, return 1
-	find read permissions
-	*/
 	if (cmd->redir[i] == 2)
 	{
 		if (stat_res == -1)
-		{
-			put_strs_fd(3, data, 2, "bash: ", cmd->file[i], ": No such file or directory\n");
-			return (1);
-		}
+			return (put_strs_fd(3, data, 2, "bash: ", cmd->file[i], \
+			": No such file or directory\n"), 1);
 		permission = (file_stat.st_mode & S_IRUSR);
 	}
-	/* if output redir
-	if file doesn't exist, return 0
-	find write permissions */
 	else if (cmd->redir[i] == 3 || cmd->redir[i] == 4)
 	{
 		if (stat_res == -1)
@@ -76,10 +66,8 @@ int	check_one_file_permissions(t_cmd *cmd, int i, t_data *data)
 	if (permission)
 		return (0);
 	else
-	{
-		put_strs_fd(3, data, 3, "bash: ", cmd->file[i], ": Permission denied\n");
-		return (1);
-	}
+		return (put_strs_fd(3, data, 3, "bash: ", \
+		cmd->file[i], ": Permission denied\n"), 1);
 	return (0);
 }
 
@@ -233,22 +221,18 @@ void	check_dir(t_cmd *cmd, int proc, t_data *data)
 	if (!find_path_separator(cmd))
 		return ;
 	stat_res = stat(cmd->array_arg[0], &file_stat);
-	/* if file doesn't exist */
 	if (stat_res == -1)
 	{
 		put_strs_fd(3, data, 2, "bash: ", cmd->path, ": No such file or directory\n");
 		exit(127);
 	}
-	/* if file exists and is a directory */
 	else if (S_ISDIR(file_stat.st_mode))
 	{
 		put_strs_fd(3, data, 2, "bash: ", cmd->path, ": Is a directory\n");
 		exit (126);
 	}
-	/* file exists and is a regular file , then execute if possible */
 	else if (S_ISREG(file_stat.st_mode))
 	{
-		/* check permissions */
 		if (!(file_stat.st_mode & S_IXUSR))
 		{
 			put_strs_fd(3, data, 2, "bash: ", cmd->path, ": Permission denied\n");

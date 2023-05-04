@@ -1,147 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   annotated_envlist.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/04 02:04:22 by jalwahei          #+#    #+#             */
+/*   Updated: 2023/05/04 02:15:10 by jalwahei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-/* 
-	1. find var function
-	2. Delete functions
-		-free tenv node
-		-delete one node
-		-clear list
-	3. Add var functions
-		-create node
-		-add node
-	4. split string by = function
-	5. Init env_list function
-*/
-
-/* find var in envlist. If it exists, it returns a pointer to the node, if it doesn't returns NULL*/
-t_env	*find_var_envlist(char *key, t_data *data)
-{
-	t_env *env_key;
-
-	if (!data->env_list || !*data->env_list)
-		return (NULL);
-	env_key = *(data->env_list);
-	while (env_key)
-	{
-		if (ft_strncmp(env_key->key, key, ft_strlen(key) + 1) == 0)
-			return (env_key);
-		env_key = env_key->next;
-	}
-	return (NULL);
-}
-
-/* free a node */
-void	free_tenv(t_env *node)
-{
-	if (node->key)
-		free(node->key);
-	if (node->val)
-		free(node->val);
-	free(node);
-}
-
-/* delete a node from the envlist */
-void	delete_var_envlist(char *key, t_data *data)
-{
-	t_env	*delete;
-
-	delete = find_var_envlist(key, data);
-	if (delete == NULL)
-		return ;
-	/* only node */
-	else if (delete->prev == NULL && delete->next == NULL)
-		*data->env_list = NULL;
-	/* first node */
-	else if (delete->prev == NULL)
-	{
-		*data->env_list = delete->next;
-		delete->next->prev = NULL;
-	}
-	/* last node */
-	else if (delete->next == NULL)
-		delete->prev->next = NULL;
-	/* middle node */
-	else
-	{
-		delete->prev->next = delete->next;
-		delete->next->prev = delete->prev;
-	}
-	free_tenv(delete);
-}
-
-/* clear entire envlist */
-void	clear_envlist(t_env **env_list)
-{
-	t_env *cur;
-
-	if (!env_list)
-		return ;
-	if (!*env_list)
-	{
-		free(env_list);
-		return ;
-	}
-	cur = *env_list;
-	while (cur)
-	{
-		if (cur->key)
-			free(cur->key);
-		if (cur->val)
-			free(cur->val);
-		*env_list = cur->next;
-		free(cur);
-		cur = *env_list;
-	}
-	free(env_list);
-	env_list = NULL;
-}
-
-/* create a new node from a char ** */
-t_env	*create_var_envlist(char **var, t_data *data)
-{
-	t_env 	*node;
-	node = (t_env *)ts_calloc(1, sizeof(t_env), data);
-	node->key = ft_strdup_lim(var[0], '\0', data); 
-	if (var[1] && ft_strcmp(var[1], "=") == 0)
-	{
-		node->equal = 1;
-		if (var[2])
-			node->val = ft_strdup_lim(var[2], '\0', data);
-	}
-	return (node);
-}
-
 /* add node to the envlist */
+
 void	add_var_envlist(t_env *node, t_data *data)
 {
 	t_env	*last;
-	
+
 	if (!*data->env_list)
 		*data->env_list = node;
 	else
 	{
-		last = *data->env_list; 
+		last = *data->env_list;
 		while (last->next)
 			last = last->next;
 		last->next = node;
 		node->prev = last;
 	}
 }
+/* split up a given string at = to get 
+[key, =, val]. May not have = and/or val 
+if no = or val, calloc 2 spaces
+else calloc 4 spaces even if there is no value
+*/
 
-/* split up a given string at = to get [key, =, val]. May not have = and/or val */
 char	**split_var_envlist(char *str, t_data *data)
 {
 	int		i;
-	char	**split_list; 
+	char	**split_list;
 
 	i = detect_char(str, '=');
-	/* if no = */
 	if (i == -1)
 	{
 		split_list = (char **)ts_calloc(2, sizeof(char *), data);
 		split_list[0] = ft_strdup_lim(str, '\0', data);
 	}
-	/* calloc 4 spaces even if there is no value */
 	else
 	{
 		split_list = (char **)ts_calloc(4, sizeof(char *), data);
@@ -155,9 +59,10 @@ char	**split_var_envlist(char *str, t_data *data)
 }
 
 /* manually create an oldpwd var with no = or val if one doesn't exist */
+
 void	add_oldpwd(t_data *data, t_env **cur)
 {
-	t_env *node;
+	t_env	*node;
 
 	if (find_var_envlist("OLDPWD", data) == NULL)
 	{
@@ -168,15 +73,32 @@ void	add_oldpwd(t_data *data, t_env **cur)
 	}
 }
 
-/* init envlist*/
+/* init envlist
+the if statement to not print out _ var in export 
+*/
+
+static void	init_while(t_data *data, char ***split_var, \
+t_env **node, t_env **cur)
+{
+	if (ft_strcmp((*node)->key, "_") == 0)
+		(*node)->p = 1;
+	(*node)->prev = *cur;
+	free_strlist(*split_var);
+	if (!*data->env_list)
+		*data->env_list = *node;
+	else
+		(*cur)->next = *node;
+	*cur = *node;
+}
+
 void	init_envlist(t_data *data, char **envp)
 {
 	int		i;
 	t_env	*cur;
 	t_env	*node;
 	char	**split_var;
-	
-	if(!envp || !*envp)
+
+	if (!envp || !*envp)
 		return ;
 	data->env_list = (t_env **)ts_calloc(1, sizeof(t_env *), data);
 	cur = NULL;
@@ -185,16 +107,7 @@ void	init_envlist(t_data *data, char **envp)
 	{
 		split_var = split_var_envlist(envp[i], data);
 		node = create_var_envlist(split_var, data);
-		/* don't print out _ var in export */
-		if (ft_strcmp(node->key, "_") == 0)
-			node->p = 1;
-		node->prev = cur;
-		free_strlist(split_var);
-		if (!*data->env_list)
-			*data->env_list = node;
-		else
-			cur->next = node;
-		cur = node;
+		init_while(data, &split_var, &node, &cur);
 	}
 	add_oldpwd(data, &cur);
 }
