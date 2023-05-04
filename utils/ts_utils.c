@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 03:29:53 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 05:10:22 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 07:36:46 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ int	ts_cut_qm_in_name_file(char **file, t_data *data)
 		qm = (*file)[i];
 		if (qm == 34 || qm == 39)
 		{
-			ts_replace_key_to_value(file, 1, NULL, i, data);
+			ts_replace_key_to_value(file, 1, NULL, i);
 			while ((*file)[i] != qm && (*file)[i] != '\0')
 				i++;
 			if ((*file)[i] != '\0')
-				ts_replace_key_to_value(file, 1, NULL, i, data);
+				ts_replace_key_to_value(file, 1, NULL, i);
 		}
 		else
 			i++;

@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 03:31:14 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 01:54:00 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 07:39:02 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ if the key is empty or the value is empty it will be replaced with
 an empty string it can go to below 0 if the key is longer than the value
 */
 
-void	ts_replace_key_to_value(char **str, int key, char *value, int start, t_data *data)
+void	ts_replace_key_to_value(char **str, int key, char *value, int start)
 {
 	int		s;
 	int		t;
@@ -53,11 +53,11 @@ void	ts_replace_key_to_value(char **str, int key, char *value, int start, t_data
 	if (size <= 0)
 	{
 		ts_free_str(str);
-		ts_malloc_str(str, 0, data);
+		ts_malloc_str(str, 0);
 		(*str)[0] = '\0';
 		return ;
 	}
-	ts_malloc_str(&tmp, size, data);
+	ts_malloc_str(&tmp, size);
 	while (s < start)
 		ts_record_char(&tmp, (*str), &t, &s);
 	s = 0;
@@ -77,7 +77,7 @@ the length of the key
  * if the key is a digit it does not malloc the key string
 */
 
-int	ts_record_key(char *s, int i, char **key, int *digit_key, t_data *data)
+int	ts_record_key(char *s, int i, char **key, int *digit_key)
 {
 	int	n;
 
@@ -94,7 +94,7 @@ int	ts_record_key(char *s, int i, char **key, int *digit_key, t_data *data)
 		i++;
 		n++;
 	}
-	ts_malloc_str(key, n, data);
+	ts_malloc_str(key, n);
 	i = (i - n);
 	n = 0;
 	while (s[i] != '\0' && s[i] != ' ' && s[i] != 34
@@ -146,7 +146,7 @@ int	ts_record_value(t_data *data, char **str, int i)
 	n = 1;
 	digit_key = NO;
 	value = NULL;
-	n = ts_record_key(*str, i, &key, &digit_key, data);
+	n = ts_record_key(*str, i, &key, &digit_key);
 	if (digit_key == NO)
 	{
 		ts_search_var(data, &value, key);
@@ -154,8 +154,8 @@ int	ts_record_value(t_data *data, char **str, int i)
 	}
 	if (value == NULL && data->name_file == YES)
 		return (i);
-	ts_replace_key_to_value(str, 1, NULL, (i - 1), data);
-	ts_replace_key_to_value(str, n, value, (i - 1), data);
+	ts_replace_key_to_value(str, 1, NULL, (i - 1));
+	ts_replace_key_to_value(str, n, value, (i - 1));
 	ts_free_str(&value);
 	return (i);
 }

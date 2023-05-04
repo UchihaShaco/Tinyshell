@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 04:13:08 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 01:50:51 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 07:40:18 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	ts_shell_lvl(char ***env, int y, t_data *data)
 	while ((*env)[y][x] != '\0')
 		x++;
 	len_str_lvl = x - 6;
-	ts_malloc_str(&str_lvl, len_str_lvl, data);
+	ts_malloc_str(&str_lvl, len_str_lvl);
 	x = 0;
 	while ((*env)[y][x + 6] != '\0')
 	{
@@ -81,7 +81,7 @@ static int	ts_record_env(t_data *data, char ***env, int y, int shell_lvl)
 		size++;
 	if (shell_lvl == YES)
 		size = ts_check_slvl(*env, y, size);
-	ts_malloc_str(&data->our_env[y], size, data);
+	ts_malloc_str(&data->our_env[y], size);
 	while ((*env)[y][x] != '\0')
 	{
 		if (x == 6 && shell_lvl == YES)
@@ -106,7 +106,7 @@ void	ts_init_env(t_data *data, char ***env)
 	data->num_env = y;
 	if (data->num_env > 0)
 	{
-		ts_malloc_array(&data->our_env, y, data);
+		ts_malloc_array(&data->our_env, y);
 		y = 0;
 		while ((*env)[y] != 0)
 		{

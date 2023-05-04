@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 18:03:37 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 01:55:01 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 07:36:07 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ts_search_space_after_arg(char *str, t_arg *arg, int i)
 	}
 }
 
-int	ts_cut_quotation_marks(char *str, t_arg *arg, int i, t_data *data)
+int	ts_cut_quotation_marks(char *str, t_arg *arg, int i)
 {
 	int		c;
 	char	q_m;
@@ -41,7 +41,7 @@ int	ts_cut_quotation_marks(char *str, t_arg *arg, int i, t_data *data)
 		c++;
 		i++;
 	}
-	ts_malloc_str(&arg->str, c, data);
+	ts_malloc_str(&arg->str, c);
 	i = i - c;
 	c = 0;
 	while (str[i] != q_m && str[i] != '\0')
@@ -55,7 +55,7 @@ int	ts_cut_quotation_marks(char *str, t_arg *arg, int i, t_data *data)
 	return (i);
 }
 
-int	ts_record_args_without_qm(char *str, t_arg *arg, int i, int *num_arg, t_data *data)
+int	ts_record_args_without_qm(char *str, t_arg *arg, int i, int *num_arg)
 {
 	int	c;
 
@@ -68,7 +68,7 @@ int	ts_record_args_without_qm(char *str, t_arg *arg, int i, int *num_arg, t_data
 			c++;
 			i++;
 		}
-		ts_malloc_str(&arg->str, c, data);
+		ts_malloc_str(&arg->str, c);
 		i = i - c;
 		c = 0;
 		while (str[i] != 39 && str[i] != 34 && str[i] != '\0' && str[i] != ' ')
@@ -88,13 +88,13 @@ void	ts_create_struct_without_qm(t_cmd *cmd, t_data *data)
 
 	i = 0;
 	num_arg = 0;
-	ts_malloc_arg(&cmd->arg, cmd->num_arg, data);
+	ts_malloc_arg(&cmd->arg, cmd->num_arg);
 	while (cmd->str[i] != '\0')
 	{
 		cmd->arg[num_arg].space = NO;
 		if (cmd->str[i] == 34 || cmd->str[i] == 39)
 		{
-			i = ts_cut_quotation_marks(cmd->str, &cmd->arg[num_arg], i, data);
+			i = ts_cut_quotation_marks(cmd->str, &cmd->arg[num_arg], i);
 			num_arg++;
 		}
 		else
@@ -102,7 +102,7 @@ void	ts_create_struct_without_qm(t_cmd *cmd, t_data *data)
 			while (cmd->str[i] != 34 && cmd->str[i] != 39
 				&& cmd->str[i] != '\0')
 				i = ts_record_args_without_qm(cmd->str, &cmd->arg[num_arg], \
-				i, &num_arg, data);
+				i, &num_arg);
 		}
 	}
 }

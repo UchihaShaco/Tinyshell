@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 20:48:43 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 02:01:20 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 07:40:29 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ts_put_num_error(int err, char **str, int *start, t_data *data)
 
 	i = *start;
 	str_err = ft_itoa(err);
-	ts_replace_key_to_value(str, 2, str_err, i, data);
+	ts_replace_key_to_value(str, 2, str_err, i);
 	ts_free_str(&str_err);
 	(*start)++;
 }

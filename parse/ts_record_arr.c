@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:56:12 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 01:50:00 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 07:39:40 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ void	ts_count_arg_for_array(t_cmd *cmd)
 	}
 }
 
-int	ts_record_arg(t_cmd *cmd, char **str, int *i, int size_str, t_data *data)
+int	ts_record_arg(t_cmd *cmd, char **str, int *i, int size_str)
 {
 	int	x;
 	int	size_copy;
 
 	x = 0;
 	size_copy = 0;
-	ts_malloc_str(str, size_str, data);
+	ts_malloc_str(str, size_str);
 	while (size_copy < size_str)
 	{
 		while (cmd->arg[(*i)].str[x] != '\0')
@@ -71,14 +71,14 @@ void	ts_connect_arg_for_array(t_cmd *cmd, t_data *data)
 	y = 0;
 	len = 0;
 	start = 0;
-	ts_malloc_array(&cmd->array_arg, cmd->num_array_arg, data);
+	ts_malloc_array(&cmd->array_arg, cmd->num_array_arg);
 	cmd->array_empty = NO;
 	while (y < cmd->num_arg)
 	{
 		len = ts_len_arg_in_array(cmd, y, len);
 		if ((cmd->arg[y].space == YES) || (y + 1) == cmd->num_arg)
 		{
-			len = ts_record_arg(cmd, &cmd->array_arg[y_arr], &start, len, data);
+			len = ts_record_arg(cmd, &cmd->array_arg[y_arr], &start, len);
 			y_arr++;
 		}
 		y++;

@@ -6,7 +6,7 @@
 /*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:47:34 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 01:41:16 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 07:37:43 by jalwahei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	ts_record_one_str(char **str, char *line, int *start,int *num, t_data
 	size = 0;
 	i = 0;
 	size = ts_get_size_one_cmd_str(line, start, size);
-	ts_malloc_str(str, size, data);
+	ts_malloc_str(str, size);
 	while (i < size)
 	{
 		(*str)[i] = line[(*start) + i];
@@ -120,7 +120,7 @@ int	ts_count_and_record_cmd(t_data *data, char *line)
 		return (-1);
 	if (ts_count_pipe(data, line, 1, 1) == -1)
 		return (-1);
-	ts_malloc_cmd(&data->cmd, data->num_cmd, data);
+	ts_malloc_cmd(&data->cmd, data->num_cmd);
 	i = 0;
 	while (data->num_cmd > i)
 	{
