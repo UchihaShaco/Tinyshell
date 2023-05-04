@@ -6,7 +6,7 @@
 #    By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/09 11:48:59 by jalwahei          #+#    #+#              #
-#    Updated: 2023/05/04 11:48:40 by hbui-vu          ###   ########.fr        #
+#    Updated: 2023/05/04 12:19:11 by hbui-vu          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SRCS =	minishell.c parse/ts_signals.c parse/ts_malloc.c parse/ts_count_record_cm
 
 CC = cc
 
-CFLAGS = -I. -Wall -Wextra -Werror
+CFLAGS = -I. -Wall -Werror -Wextra
 
 OBJS = $(SRCS:.c=.o)
 

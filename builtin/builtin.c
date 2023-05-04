@@ -60,7 +60,6 @@ int	check_builtin(t_cmd *cmd, t_data *data)
 int	execute_builtin(t_cmd *cmd, int proc, char *line, t_data *data)
 {
 	int		exit_val;
-	int		i;
 
 	if (cmd->builtin == 1)
 		exit_val = ft_echo(cmd, data);

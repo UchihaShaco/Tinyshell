@@ -16,7 +16,7 @@ void	child_process(int i, t_cmd *cmd, char *line, t_data *data)
 {
 	close(data->defin);
 	close(data->defout);
-	open_files(cmd, CHILD, line, data);
+	open_files(cmd, CHILD, data);
 	pipe_cmd(i, cmd, data);
 	close_fd_array(cmd, data);
 	close_pipes(data);
@@ -32,7 +32,7 @@ int	exec_one_builtin(t_cmd *cmd, char *line, t_data *data)
 {
 	int	status;
 
-	if (open_files(cmd, PARENT, line, data) == 1)
+	if (open_files(cmd, PARENT, data) == 1)
 		return (1);
 	if (cmd->last_input > -1)
 	{
