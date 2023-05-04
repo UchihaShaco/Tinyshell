@@ -61,8 +61,8 @@ long long	check_exit_val(const char *str, char *line, t_data *data)
 		num = (num * 10) + (str[i] - 48);
 		i++;
 	}
-	if ((neg == 1 && num > LLONG_MAX) || (neg == -1 && \
-	num > ((unsigned long long)(LLONG_MAX + 1))))
+	if ((neg == 1 && num > __LONG_MAX__) || (neg == -1 && \
+	num - 1 > (__LONG_MAX__)))
 		exit_error(str, line, data);
 	return (num * neg);
 }

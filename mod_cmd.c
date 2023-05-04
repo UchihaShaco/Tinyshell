@@ -114,7 +114,7 @@ void	finalize_cmd(t_data *data)
 	{
 		if (data->cmd[i].count_redir > 1)
 			check_redir_doubles(&data->cmd[i], data);
-		check_hd_last_redir(&data->cmd[i], data);
+		check_hd_last_redir(&data->cmd[i]);
 		if (data->cmd[i].count_hd > 0)
 			init_heredoc(&data->cmd[i], data);
 		if (g_hdsig == 42)

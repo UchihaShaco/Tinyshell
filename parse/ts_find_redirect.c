@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 21:40:55 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 08:49:35 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 11:49:29 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ int	ts_record_redir_and_file(t_cmd *cmd, int i, int num_redir, t_data *d)
 	ts_malloc_str(&cmd->file[num_redir], size_str);
 	ts_record_str(&cmd->file[num_redir], cmd->str, start, size_str);
 	ts_found_dollar_in_name_file(d, &cmd->file[num_redir]);
-	ts_cut_qm_in_name_file(&cmd->file[num_redir], d);
+	ts_cut_qm_in_name_file(&cmd->file[num_redir]);
 	d->tmp.size_cut = i - d->tmp.size_cut;
 	return (0);
 }

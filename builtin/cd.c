@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void	change_pwd(t_cmd *cmd, t_data *data)
+void	change_pwd(t_data *data)
 {
 	t_env	*pwd;
 	t_env	*oldpwd;
@@ -85,6 +85,6 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		return (1);
 	}
 	update_directory(data);
-	change_pwd(cmd, data);
+	change_pwd(data);
 	return (0);
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ts_found_dollar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 20:48:43 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 07:40:29 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 11:51:49 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ts_put_num_error(int err, char **str, int *start, t_data *data)
+void	ts_put_num_error(int err, char **str, int *start)
 {
 	int		i;
 	char	*str_err;
@@ -49,14 +49,13 @@ int	ts_found_env_variable(t_data *data, t_cmd *cmd)
 void	ts_found_dollar(t_data *data, char **str, int q_m, int *i_orig)
 {
 	int		i;
-	char	*home;
 
 	i = (*i_orig);
 	if ((*str)[i] == '$' && (*str)[i + 1] == '$')
 		i += 2;
 	else if ((*str)[i] == '$' && (*str)[i + 1] == '?' && \
 	(*str)[i + 1] != '\0' && q_m != 39)
-		ts_put_num_error(data->num_prev_error, str, &i, data);
+		ts_put_num_error(data->num_prev_error, str, &i);
 	else if ((*str)[i] == '$' && (*str)[i + 1] != ' '
 		&& ((*str)[i + 1] != '\0' && q_m != 39))
 	{

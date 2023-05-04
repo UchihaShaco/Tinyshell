@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 02:29:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 02:34:39 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 11:55:41 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	reset_prints(t_data *data)
 
 void	print_export(t_data *data)
 {
-	t_env	*cur;
 	t_env	*to_print;
 
 	if (!data->env_list)

@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 03:29:53 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 08:53:35 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 11:48:54 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ts_record_str(char **file, char *str, int start, int size_str)
 	(*file)[i] = '\0';
 }
 
-int	ts_cut_qm_in_name_file(char **file, t_data *data)
+int	ts_cut_qm_in_name_file(char **file)
 {
 	int		i;
 	char	qm;

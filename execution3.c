@@ -24,8 +24,8 @@ void	child_process(int i, t_cmd *cmd, char *line, t_data *data)
 		exit(0);
 	if (cmd->builtin > 0)
 		execute_builtin(cmd, CHILD, line, data);
-	check_as_dir(cmd, CHILD, data);
-	check_as_command(cmd, CHILD, data);
+	check_as_dir(cmd, data);
+	check_as_command(cmd, data);
 }
 
 int	exec_one_builtin(t_cmd *cmd, char *line, t_data *data)
@@ -90,7 +90,6 @@ int	run_command(char *line, t_data *data)
 /* set exit status here */
 void	execute(char *line, t_data *data)
 {
-	int	i;
 	int	status;
 
 	if (data->num_cmd == 0)

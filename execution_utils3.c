@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 08:15:36 by hbui-vu           #+#    #+#             */
-/*   Updated: 2023/05/04 08:19:28 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 12:02:06 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	open_one_file(t_cmd *cmd, int i, int proc, t_data *data)
 /* proc is either CHILD or PARENT. returns 1 if there is restriction, 
 0 if there isn't check file permissions already change exit value num*/
 
-int	open_files(t_cmd *cmd, int proc, char *line, t_data *data)
+int	open_files(t_cmd *cmd, int proc, t_data *data)
 {
 	int	i;
 	int	exit_val;

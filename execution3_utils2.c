@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 07:17:27 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 11:34:32 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 11:55:08 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	as_dir_utils(t_cmd *cmd, t_data *data, struct stat file_stat)
 	}
 }
 
-void	check_as_dir(t_cmd *cmd, int proc, t_data *data)
+void	check_as_dir(t_cmd *cmd, t_data *data)
 {
 	struct stat	file_stat;
 	int			stat_res;
@@ -60,7 +60,6 @@ int	check_permissions_executable(t_cmd *cmd, t_data *data)
 {
 	struct stat	file_stat;
 	int			stat_res;
-	int			permission;
 
 	stat_res = stat(cmd->array_arg[0], &file_stat);
 	if (stat_res != -1 && (!(file_stat.st_mode & S_IXUSR)))
@@ -76,7 +75,7 @@ void	chk_cmd_utils(t_cmd *cmd, t_data *data, struct stat file_stat)
 {
 	if (cmd->path == NULL)
 	{
-		if (access(cmd->array_arg[0], F_OK)|| S_ISDIR(file_stat.st_mode))
+		if (access(cmd->array_arg[0], F_OK) || S_ISDIR(file_stat.st_mode))
 		{
 			put_strs_fd(3, data, 2, "TinyShell: ", \
 			cmd->array_arg[0], ": command not found\n");
@@ -93,7 +92,7 @@ void	chk_cmd_utils(t_cmd *cmd, t_data *data, struct stat file_stat)
 	}
 }
 
-void	check_as_command(t_cmd *cmd, int proc, t_data *data)
+void	check_as_command(t_cmd *cmd, t_data *data)
 {
 	struct stat	file_stat;
 	int			stat_res;

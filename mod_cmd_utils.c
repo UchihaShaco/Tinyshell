@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 07:06:33 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 08:31:50 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 11:52:36 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void	make_new_arrays(t_cmd *cmd, char ***new_f, int **new_rdir, t_data *data)
 void	check_redir_doubles(t_cmd *cmd, t_data *data)
 {
 	int		i;
-	int		j;
 	int		new_count_redir;
 	char	**new_file;
 	int		*new_redir;
@@ -94,7 +93,7 @@ void	check_redir_doubles(t_cmd *cmd, t_data *data)
 
 /* populates last_input, last_output, count_hd */
 
-void	check_hd_last_redir(t_cmd *cmd, t_data *data)
+void	check_hd_last_redir(t_cmd *cmd)
 {
 	int	i;
 

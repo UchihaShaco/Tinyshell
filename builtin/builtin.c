@@ -75,7 +75,7 @@ int	execute_builtin(t_cmd *cmd, int proc, char *line, t_data *data)
 		if (!cmd->array_arg[1])
 			exit_val = 0;
 		else
-			exit_val = ft_unset(cmd, data, i);
+			exit_val = ft_unset(cmd, data, 0);
 	}
 	else if (cmd->builtin == 6)
 		exit_val = ft_env(data);

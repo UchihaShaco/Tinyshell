@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_quotation_marks.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 18:03:37 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 07:36:07 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 11:50:04 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	ts_record_args_without_qm(char *str, t_arg *arg, int i, int *num_arg)
 	return (i + 1);
 }
 
-void	ts_create_struct_without_qm(t_cmd *cmd, t_data *data)
+void	ts_create_struct_without_qm(t_cmd *cmd)
 {
 	int	i;
 	int	num_arg;

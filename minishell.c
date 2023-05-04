@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 09:08:04 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 11:50:16 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	ts_parse(t_data *data, char *line)
 		if (data->num_error == 0 && data->cmd[i].str != NULL)
 			ts_count_arg_divided_qm(&data->cmd[i], data);
 		if (data->num_error == 0 && data->cmd[i].str != NULL)
-			ts_create_struct_without_qm(&data->cmd[i], data);
+			ts_create_struct_without_qm(&data->cmd[i]);
 		if (data->num_error == 0 && data->cmd[i].str != NULL)
 			ts_found_env_variable(data, &data->cmd[i]);
 		i++;

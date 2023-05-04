@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 02:24:22 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 10:50:58 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 11:55:48 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	update_var(char **split_arg, t_env *env_var, int *rewr, t_data *data)
 void	exp_norm(char *arg, int *rewr, t_data *data)
 {
 	t_env	*env_var;
-	t_env	*node;
 	char	**split_arg;
 
 	split_arg = split_var_envlist(arg, data, NO);

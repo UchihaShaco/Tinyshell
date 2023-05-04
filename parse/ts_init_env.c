@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_init_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 04:13:08 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 07:40:18 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 11:51:10 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	ts_record_lvl(char **str_lvl, char ***env, int y)
 	ts_free_str(str_lvl);
 }
 
-static int	ts_shell_lvl(char ***env, int y, t_data *data)
+static int	ts_shell_lvl(char ***env, int y)
 {
 	char	*str_lvl;
 	int		len_str_lvl;
@@ -85,7 +85,7 @@ static int	ts_record_env(t_data *data, char ***env, int y, int shell_lvl)
 	while ((*env)[y][x] != '\0')
 	{
 		if (x == 6 && shell_lvl == YES)
-			ts_shell_lvl(env, y, data);
+			ts_shell_lvl(env, y);
 		data->our_env[y][x] = (*env)[y][x];
 		x++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_record_arr.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:56:12 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 07:39:40 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 11:50:50 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	ts_len_arg_in_array(t_cmd *cmd, int y, int len)
 	return (len);
 }
 
-void	ts_connect_arg_for_array(t_cmd *cmd, t_data *data)
+void	ts_connect_arg_for_array(t_cmd *cmd)
 {
 	int	y_arr;
 	int	y;
@@ -106,7 +106,7 @@ void	ts_record_array(t_data *data)
 		if (data->cmd[i].str != NULL)
 		{
 			ts_count_arg_for_array(&data->cmd[i]);
-			ts_connect_arg_for_array(&data->cmd[i], data);
+			ts_connect_arg_for_array(&data->cmd[i]);
 		}
 		i++;
 	}

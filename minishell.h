@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 10:22:49 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 12:03:13 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@
 # include <limits.h>
 # include <sys/stat.h>
 # include <errno.h>
-// # define LLMIN 9223372036854775808
-
-// u_int8_t loop_flag = 1;
 
 int	g_hdsig;
 
@@ -39,17 +36,12 @@ typedef enum e_value
 {
 	NO,
 	YES,
-	REDIR_R, // redirect read '<'
-	REDIR_W, // redirect write '>'
-	REDIR_W_ADD, // redirect add (append) '>>'
-	HEREDOC, // heredoc '<<'
+	REDIR_R,
+	REDIR_W,
+	REDIR_W_ADD,
+	HEREDOC,
 	REDIR_RONG,
-	// YES_AFTER_PARSER, // unsused so far
-	ERR_PIPE, 
-	// ERR_MEMORY, // unsused so far 
-	// ERR_Q_MARK, // unsused so far
-	// ADD_TO_OLD, //might be helpful for exporting
-	// ADD_NEW, // might be helpful for exporting
+	ERR_PIPE,
 	ERR_MALLOC,
 	ERR_OPEN,
 	ERR_DUP,
@@ -62,43 +54,41 @@ typedef enum e_value
 	CHILD,
 	DOUBLE_Q_MARK = 34,
 	ONE_Q_MARK = 39,
-	ERR_CMD = 127, // typically indicates that the specified command could not be found or executed by the shell.
-	ERR_TOKEN = 258, // is not a standard exit code in bash, but some applications may use it to indicate a syntax error or unexpected token in the command line.
-	ERR_NUM_ONE = 1, // can be used to indicate a generic error or failure.
-	ERR_FILE_OR_DIR = 126, //126 typically indicates that the specified file or directory cannot be found or accessed by the shell.
+	ERR_CMD = 127,
+	ERR_TOKEN = 258,
+	ERR_NUM_ONE = 1,
+	ERR_FILE_OR_DIR = 126,
 }				t_value;
 
 typedef struct s_arg
 {
 	char	*str;
-	int		q_m; // flag to know if theres qm if its a NO it means it cleared 
-	int		space; // flag to know if there was a space after the arg but i removed them all  so it might be useless i didnt need it  but thought might be helpful  dont judge me :( 
-	int		redir;  // idk might be usefl later for parsing
-	int		empty_key; // idk why i did this but i think it was for the envp and $ sign maybe
+	int		q_m;
+	int		space;
+	int		redir;
+	int		empty_key;
 
 }				t_arg;
 
 typedef struct s_cmd
 {
-	/* parsing only */
-	char	*str; // saving command as a string
-	t_arg	*arg; 
+	char	*str;
+	t_arg	*arg;
 	int		num_array_arg;
 	int		array_empty;
-	/* execution */
-	char	**array_arg; //arg array
-	char	**hd_array; //array of heredoc delimiters
-	char	**file; //files for redirection
+	char	**array_arg;
+	char	**hd_array;
+	char	**file;
 	char	*heredoc_str;
-	char	*path; //path for cmd (execve)
-	int		*redir; //array of redirections in cmd
-	int		*fd_array; //array of open files for redirections
+	char	*path;
+	int		*redir;
+	int		*fd_array;
 	int		num_arg;
 	int		old_num_arg;
 	int		count_redir;
 	int		count_hd;
 	int		record_hd;
-	int		last_output; // last redir in the command
+	int		last_output;
 	int		last_input;
 	int		builtin;
 }				t_cmd;
@@ -107,53 +97,50 @@ typedef struct s_tmp
 {
 	int		size_str;
 	int		size_cut;		
-	int		count; 
+	int		count;
 }				t_tmp;
 
 typedef struct s_env
 {
 	char			*key;
 	char			*val;
-	int				p; //printed: 1, not printed: 0
-	int				equal; // =: 1, no=: 0 
+	int				p;
+	int				equal;
 	struct s_env	*next;
 	struct s_env	*prev;
 }	t_env;
 
 typedef struct s_data
 {
-	/* parsing only */
-	t_tmp	tmp;     // tmp struct to help with parsing and cutting file names
-	int		num_error;  // error token ERR_TOKEN / DOUBLE_Q_MARK etc..
-	int		num_prev_error; // to give exit value a number
+	t_tmp	tmp;
+	int		num_error;
+	int		num_prev_error;
 	int		num_env;
-	int		empty_str; // flag for main function to know o execute or no
-	int		name_file; // used to check if file name is empty
-	/* execution */
+	int		empty_str;
+	int		name_file;
 	t_cmd	*cmd;
 	t_env	**env_list;
 	char	**our_env;
 	char	**env_paths;
 	char	*old_dir;
 	char	*cur_dir;
-	char	*line; //line for read_line
-	int		**fd; //for pipes
-	int		*pid; //for child processes
+	char	*line;
+	int		**fd;
+	int		*pid;
 	int		num_cmd;
 	int		defin;
 	int		defout;
-	// char	*home_dir; //I think home_dir should be found from t_env 
 }				t_data;
 
 /* *********************  Quotation parse  ********************* */
 
-void	ts_create_struct_without_qm(t_cmd *cmd, t_data *data);
+void	ts_create_struct_without_qm(t_cmd *cmd);
 int		ts_count_arg_divided_qm(t_cmd *cmd, t_data *data);
 int		ts_record_args_without_qm(char *str, t_arg *arg, int i, int *num_arg);
 int		ts_cut_quotation_marks(char *str, t_arg *arg, int i);
 void	ts_search_space_after_arg(char *str, t_arg *arg, int i);
 void	ts_switch_qm(char c, int *qm_o, int *qm_d);
-int		ts_cut_qm_in_name_file(char **file, t_data *data);
+int		ts_cut_qm_in_name_file(char **file);
 int		ts_count_args_without_qm(t_cmd *cmd, int i);
 int		ts_check_quotation_marks(t_cmd *cmd, int i, t_data *data);
 // void ts_quote_check(char *line);
@@ -209,11 +196,6 @@ int		ts_measure_size_file_name(t_data *d, char *str, int *i);
 /* ********************* 	record arr  ********************* */
 void	ts_record_array(t_data *data);
 
-/* ********************* 	printer of the data to test  ********************* */
-void	print_t_data(struct s_data data);
-// void	print_arg(t_arg *arg);
-void	print_t_cmd(t_cmd *cmd);
-
 /* UTILS */
 int		ft_strcmp(const char *s1, const char *s2);
 void	*ts_calloc(size_t count, size_t size, t_data *data);
@@ -233,16 +215,16 @@ int		err(char *str, int errno, int proc, t_data *data);
 int		err_open(t_cmd *cmd, int proc, t_data *data);
 void	redir5(t_cmd *cmd, t_data *data, int i);
 void	mod_redir_doubles(t_cmd *cmd);
-void	redir_utils(char ***new_file, int *new_redir, t_cmd *cmd, int new_count_redir);
+void	redir_utils(char ***new_file, int *new_redir, t_cmd *cmd, \
+	int new_count_redir);
 int		find_path_separator(t_cmd *cmd);
 void	check_redir_doubles(t_cmd *cmd, t_data *data);
-void	check_hd_last_redir(t_cmd *cmd, t_data *data);
 void	init_heredoc(t_cmd *cmd, t_data *data);
 void	as_dir_utils(t_cmd *cmd, t_data *data, struct stat file_stat);
-void	check_as_dir(t_cmd *cmd, int proc, t_data *data);
+void	check_as_dir(t_cmd *cmd, t_data *data);
 int		check_permissions_executable(t_cmd *cmd, t_data *data);
 void	chk_cmd_utils(t_cmd *cmd, t_data *data, struct stat file_stat);
-void	check_as_command(t_cmd *cmd, int proc, t_data *data);
+void	check_as_command(t_cmd *cmd, t_data *data);
 /* FREE */
 void	free_strlist(char **str);
 void	free_data(t_data *data, char *line, int last);
@@ -290,7 +272,7 @@ void	execute(char *line, t_data *data);
 int		check_builtin(t_cmd *cmd, t_data *data);
 int		execute_builtin(t_cmd *cmd, int proc, char *line, t_data *data);
 void	get_cmd_path(t_cmd *cmd, t_data *data);
-int		open_files(t_cmd *cmd, int proc, char *line, t_data *data);
+int		open_files(t_cmd *cmd, int proc, t_data *data);
 void	pipe_cmd(int index, t_cmd *cmd, t_data *data);
 int		find_path_separator(t_cmd *cmd);
 void	qhandler(int sig);
@@ -298,16 +280,9 @@ void	qhandler(int sig);
 /* PARSING */
 void	mod_redir_doubles(t_cmd *cmd);
 void	redir_utils(char ***new_f, int *new_r, t_cmd *cmd, int new_ct_redir);
-void	make_new_arrays(t_cmd *cmd, char ***new_f, int **new_rdir, t_data *data);
+void	make_new_arrays(t_cmd *cmd, char ***new_f, int **new_rdir, \
+	t_data *data);
 void	check_redir_doubles(t_cmd *cmd, t_data *data);
-void	check_hd_last_redir(t_cmd *cmd, t_data *data);
-
-/* TESTING */
-void	print_tcmd(t_cmd *cmd, int i);
-void	print_tdata(t_data *data);
-void	print_strlist(char **str);
-void	print_tenv(t_env **list);
-void	print_envlist_node(t_env *node);
-void	print_cmds(t_data *data);
+void	check_hd_last_redir(t_cmd *cmd);
 
 #endif
