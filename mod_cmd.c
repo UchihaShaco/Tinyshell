@@ -25,7 +25,7 @@ void	init_heredoc(t_cmd *cmd, t_data *data)
 	while (++i < cmd->count_redir)
 		if (cmd->redir[i] == 5)
 			cmd->hd_array[++j] = ft_strdup_lim(cmd->file[i], '\0', data);
-	get_heredoc_str(cmd, data);
+	get_heredoc_str(cmd, data, 0);
 }
 
 /* iterates through redir array and if there is a double, 

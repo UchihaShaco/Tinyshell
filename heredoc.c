@@ -59,15 +59,13 @@ int	exit_signal(char *str)
 	return (1);
 }
 
-void	get_heredoc_str(t_cmd *cmd, t_data *data)
+void	get_heredoc_str(t_cmd *cmd, t_data *data, int i)
 {
 	char				*input;
 	char				*str;
 	char				*new_str;
-	int					i;
 
 	str = NULL;
-	i = 0;
 	while (i < cmd->count_hd)
 	{
 		signal(SIGINT, hqhandle);
@@ -86,4 +84,5 @@ void	get_heredoc_str(t_cmd *cmd, t_data *data)
 		if (input)
 			free(input);
 	}
+	cmd->heredoc_str = str;
 }

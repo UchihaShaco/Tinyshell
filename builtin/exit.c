@@ -83,8 +83,9 @@ int	ft_exit(t_cmd *cmd, char *line, t_data *data)
 		": numeric argument required\n");
 	}
 	else if (cmd->array_arg[2])
-		return (put_strs_fd(1, data, 2, "TinyShell: exit:\
-		too many arguments\n"), data->num_prev_error = 1, 1);
+		return (put_strs_fd(1, data, 2, \
+		"TinyShell: exit: too many arguments\n"), \
+		data->num_error = 1, 1);
 	else
 	{
 		i = check_exit_val(cmd->array_arg[1], line, data);

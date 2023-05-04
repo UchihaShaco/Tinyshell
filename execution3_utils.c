@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution3_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 06:42:29 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 06:45:06 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 10:03:55 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	err(char *str, int errno, int proc, t_data *data)
 int	err_open(t_cmd *cmd, int proc, t_data *data)
 {
 	ft_putstr_fd(strerror(errno), 2);
+	ft_putstr_fd("\n", 2);
 	close_fd_array(cmd, data);
 	close_pipes(data);
 	if (proc == CHILD)

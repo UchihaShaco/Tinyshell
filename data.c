@@ -49,6 +49,7 @@ void	get_env_paths(t_data *data)
 	int		i;
 	t_env	*path_node;
 
+	i = 0;
 	if (data->env_paths)
 	{
 		free_strlist(data->env_paths);
@@ -57,9 +58,9 @@ void	get_env_paths(t_data *data)
 	path_node = find_var_envlist("PATH", data);
 	if (!path_node || path_node->val == NULL)
 		return ;
-	while (*(path_node->val) != '\0' && *(path_node->val) != '/')
-		path_node->val++;
-	if (path_node->val == NULL)
+	while (path_node->val[i] != '\0' && path_node->val[i] != '/')
+		i++;
+	if (path_node->val[i] == '\0')
 		return ;
 	data->env_paths = ts_split(path_node->val, ':', data);
 }

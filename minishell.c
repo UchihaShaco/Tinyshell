@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:33:56 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 08:55:23 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 09:08:04 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	ts_init_data(t_data *data, char ***env, char **line, int first)
 		data->name_file = NO;
 		*line = NULL;
 	}
-	// data->num_prev_error = data->num_error;
+	data->num_prev_error = data->num_error;
 	data->num_error = 0;
 	data->empty_str = NO;
 	data->num_cmd = 0;

@@ -6,7 +6,7 @@
 /*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 08:51:26 by hbui-vu          ###   ########.fr       */
+/*   Updated: 2023/05/04 10:22:49 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,7 +276,7 @@ t_env	*create_pwd_envlist(char **var, t_data *data);
 t_env	*find_next_print(t_data *data);
 /* HEREDOC */
 void	get_heredoc_fd(t_cmd *cmd, t_data *data);
-void	get_heredoc_str(t_cmd *cmd, t_data *data);
+void	get_heredoc_str(t_cmd *cmd, t_data *data, int i);
 
 /* DATA & CMD*/
 void	finalize_cmd(t_data *data);

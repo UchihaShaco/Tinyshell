@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 02:24:22 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 02:49:19 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 10:50:58 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	add_new_var(char **split_arg, int *rewr, t_data *data)
 	add_var_envlist(node, data);
 	if (split_arg[1])
 		rewr[0]++;
+	if (ft_strcmp(split_arg[0], "PATH"))
+		rewr[1]++;
 }
 
 void	update_var(char **split_arg, t_env *env_var, int *rewr, t_data *data)
@@ -53,7 +55,7 @@ void	exp_norm(char *arg, int *rewr, t_data *data)
 	char	**split_arg;
 
 	split_arg = split_var_envlist(arg, data, NO);
-	if (ft_strncmp(split_arg[0], "_=", 2) != 0)
+	if (ft_strcmp(split_arg[0], "_") != 0)
 	{
 		env_var = find_var_envlist(split_arg[0], data);
 		if (!env_var)
@@ -81,7 +83,7 @@ int	ft_export(t_cmd *cmd, t_data *data)
 	exit_val = 0;
 	rewr = ts_calloc(2, sizeof(int), data);
 	if (!cmd->array_arg[1])
-		return (print_export(data), 0);
+		return (free(rewr), print_export(data), 0);
 	i = 0;
 	while (cmd->array_arg[++i])
 	{

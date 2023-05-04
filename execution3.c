@@ -94,12 +94,12 @@ void	execute(char *line, t_data *data)
 	int	status;
 
 	if (data->num_cmd == 0)
-		data->num_prev_error = 0;
+		data->num_error = 0;
 	else if (data->num_cmd == 1 && data->cmd->builtin > 0)
-		data->num_prev_error = exec_one_builtin(&data->cmd[0], line, data);
+		data->num_error = exec_one_builtin(&data->cmd[0], line, data);
 	else
 	{
 		status = run_command(line, data);
-		data->num_prev_error = WEXITSTATUS(status);
+		data->num_error = WEXITSTATUS(status);
 	}
 }
