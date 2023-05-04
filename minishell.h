@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:52:58 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 07:37:24 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 08:51:26 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,6 @@ void	ts_malloc_str(char **name, int size);
 void	ts_malloc_arg(t_arg **arg, int size);
 void	ts_malloc_cmd(t_cmd **cmd, int size);
 void	ts_malloc_arr_int(int **arr_int, int size);
-void	ts_free_cycle(t_data *data, char **line);
-void	ts_free_all(t_data *data, char **line);
 
 /* ********************* 	signals		  ********************* */
 void	hqhandle(int sig);
@@ -292,6 +290,17 @@ void	execute(char *line, t_data *data);
 int		check_builtin(t_cmd *cmd, t_data *data);
 int		execute_builtin(t_cmd *cmd, int proc, char *line, t_data *data);
 void	get_cmd_path(t_cmd *cmd, t_data *data);
+int		open_files(t_cmd *cmd, int proc, char *line, t_data *data);
+void	pipe_cmd(int index, t_cmd *cmd, t_data *data);
+int		find_path_separator(t_cmd *cmd);
+void	qhandler(int sig);
+
+/* PARSING */
+void	mod_redir_doubles(t_cmd *cmd);
+void	redir_utils(char ***new_f, int *new_r, t_cmd *cmd, int new_ct_redir);
+void	make_new_arrays(t_cmd *cmd, char ***new_f, int **new_rdir, t_data *data);
+void	check_redir_doubles(t_cmd *cmd, t_data *data);
+void	check_hd_last_redir(t_cmd *cmd, t_data *data);
 
 /* TESTING */
 void	print_tcmd(t_cmd *cmd, int i);

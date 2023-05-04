@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 02:31:21 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 06:46:19 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 08:20:12 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,12 @@ void	hqhandle(int sig)
 		g_hdsig = 42;
 		close(0);
 		write(1, "\n", 1);
+	}
+}
+
+void	qhandler(int sig)
+{
+	if (sig == SIGQUIT)
+	{
 	}
 }

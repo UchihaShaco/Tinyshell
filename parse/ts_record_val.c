@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_record_val.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 03:31:14 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 07:39:02 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 08:53:58 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,6 @@ void	ts_replace_key_to_value(char **str, int key, char *value, int start)
 	}
 	ts_record_tail(&tmp, str, t, start + key);
 }
-
-/*records the key  in seperate string and returns
-the length of the key
- * if the key is a digit it returns 1 and sets digit_key to YES
- * if the key is a string it returns the length of the key and sets digit_key to NO
- * if the key is a string it also mallocs the key string
- * if the key is a digit it does not malloc the key string
-*/
 
 int	ts_record_key(char *s, int i, char **key, int *digit_key)
 {

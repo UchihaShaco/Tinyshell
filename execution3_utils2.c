@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution3_utils2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 07:17:27 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 07:18:39 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 08:58:36 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,13 @@ void	chk_cmd_utils(t_cmd *cmd, t_data *data, struct stat file_stat)
 	{
 		if (access(cmd->array_arg[0], F_OK) || S_ISDIR(file_stat.st_mode))
 		{
-			put_strs_fd(3, data, 2, "bash: ",\
+			put_strs_fd(3, data, 2, "bash: ", \
 			cmd->array_arg[0], ": command not found\n");
 			exit (127);
 		}
 		else if (access(cmd->array_arg[0], X_OK))
 		{
-			put_strs_fd(3, data, 2, "bash: ",\
+			put_strs_fd(3, data, 2, "bash: ", \
 			cmd->array_arg[0], ": Permission denied\n");
 			exit(126);
 		}

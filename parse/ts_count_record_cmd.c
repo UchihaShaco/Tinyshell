@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_count_record_cmd.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 09:47:34 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 07:37:43 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 08:51:12 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	ts_get_size_one_cmd_str(char *line, int *start, int size)
 	return (size);
 }
 
-static int	ts_record_one_str(char **str, char *line, int *start,int *num, t_data *data)
+static int	ts_record_one_str(char **str, char *line, int *start, int *num)
 {
 	int	size;
 	int	i;
@@ -130,6 +130,6 @@ int	ts_count_and_record_cmd(t_data *data, char *line)
 	i = 0;
 	num = 0;
 	while (line[i] != '\0')
-		ts_record_one_str(&data->cmd[num].str, line, &i, &num, data);
+		ts_record_one_str(&data->cmd[num].str, line, &i, &num);
 	return (0);
 }

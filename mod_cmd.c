@@ -12,24 +12,24 @@
 
 #include "minishell.h"
 
-/*
-In this function, char **file and int *redir are potentially modified (if doubles are found)
-1. Iterate through file and redir using count_redir
-	if double detected, change redir number to -1
-		doubles = < and same file name;
-				  > or >> with same file name; > will take precedence
-2. iterate through redir using count_redir
-	count redir without doubles (-1 value)
-3. Compare number to int count_redir
-	if same number, return ;
-	if ! same number, calloc new char **file and int *redir
-4. Copy over filenames and redir values. Use redir -1 value as indicator to skip doubles
-5. Free old char **file and int *redir
-6. Set cmd->file = new_file, cmd->redir = new_redir, cmd->count_redir = new_count;
-*/
+/* modifies hd_array, record_hd, fd_array (if last input is hd); 
+inits hd in terminal */
+void	init_heredoc(t_cmd *cmd, t_data *data)
+{
+	int	i;
+	int	j;
 
-/* iterates through redir array and if there is a double, turns the redir # to -1 */
+	cmd->hd_array = ts_calloc(cmd->count_hd + 1, sizeof(char *), data);
+	i = -1;
+	j = -1;
+	while (++i < cmd->count_redir)
+		if (cmd->redir[i] == 5)
+			cmd->hd_array[++j] = ft_strdup_lim(cmd->file[i], '\0', data);
+	get_heredoc_str(cmd, data);
+}
 
+/* iterates through redir array and if there is a double, 
+turns the redir # to -1 */
 void	get_cmd_path(t_cmd *cmd, t_data *data)
 {
 	int		i;
@@ -56,19 +56,34 @@ void	get_cmd_path(t_cmd *cmd, t_data *data)
 	}
 }
 
+char	**make_new_array_arg(int new_num_arg, t_cmd *cmd, t_data *data)
+{
+	char	**new_array_arg;
+	int		i;
+	int		j;
+
+	new_array_arg = (char **)ts_calloc(new_num_arg + 1, \
+	sizeof(char *), data);
+	i = -1;
+	j = 0;
+	while (cmd->array_arg[++i])
+	{
+		if (cmd->array_arg[i][0] != '\0')
+		{
+			new_array_arg[j] = ft_strdup_lim(cmd->array_arg[i], '\0', data);
+			j++;
+		}
+	}
+	return (new_array_arg);
+}
 /* check if there is $EMPTY in cmd->array_arg 
 if nothing remains in array_arg, */
 
-void	check_empty(t_cmd *cmd, t_data *data)
+void	check_empty(t_cmd *cmd, t_data *data, int i, int count_empty)
 {
-	int		i;
-	int		j;
-	int		count_empty;
 	int		new_num_arg;
 	char	**new_array_arg;
 
-	i = -1;
-	count_empty = 0;
 	new_array_arg = NULL;
 	if (!cmd->array_arg)
 		return ;
@@ -82,19 +97,7 @@ void	check_empty(t_cmd *cmd, t_data *data)
 	}
 	new_num_arg = cmd->num_arg - count_empty;
 	if (new_num_arg > 0)
-	{
-		new_array_arg = (char **)ts_calloc(new_num_arg + 1, sizeof(char *), data);
-		i = -1;
-		j = 0;
-		while (cmd->array_arg[++i])
-		{
-			if (cmd->array_arg[i][0] != '\0')
-			{
-				new_array_arg[j] = ft_strdup_lim(cmd->array_arg[i], '\0', data);
-				j++;
-			}
-		}
-	}
+		new_array_arg = make_new_array_arg(new_num_arg, cmd, data);
 	free_strlist(cmd->array_arg);
 	cmd->array_arg = NULL;
 	cmd->array_arg = new_array_arg;
@@ -116,7 +119,7 @@ void	finalize_cmd(t_data *data)
 			init_heredoc(&data->cmd[i], data);
 		if (g_hdsig == 42)
 			break ;
-		check_empty(&data->cmd[i], data);
+		check_empty(&data->cmd[i], data, -1, 0);
 		if (data->cmd[i].num_arg > 0)
 			data->cmd[i].builtin = check_builtin(&data->cmd[i], data);
 	}

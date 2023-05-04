@@ -48,8 +48,15 @@ void	herdoc_util(char **str, char *input, t_data *data, char **new_str)
 {
 	*new_str = ft_strjoin_hd(*str, input, data);
 	if (*str)
-		free(str);
+		free(*str);
 	*str = *new_str;
+}
+
+int	exit_signal(char *str)
+{
+	if (str)
+		free(str);
+	return (1);
 }
 
 void	get_heredoc_str(t_cmd *cmd, t_data *data)
@@ -65,15 +72,10 @@ void	get_heredoc_str(t_cmd *cmd, t_data *data)
 	{
 		signal(SIGINT, hqhandle);
 		input = readline("> ");
-		if (g_hdsig == 42)
-		{
-			if (str)
-				free(str);
+		if (g_hdsig == 42 && exit_signal(str) == 1)
 			return ;
-		}
 		if (!input && g_hdsig == 0)
-			put_strs_fd(3, data, 1, "TinyShell: warning: herdoc del by'", \
-			cmd->hd_array[i++], "')\n");
+			put_strs_fd(3, data, 1, "Wanted: '", cmd->hd_array[i++], "')\n");
 		else if (input)
 		{
 			if (ft_strcmp(input, cmd->hd_array[i]) == 0)
@@ -84,16 +86,4 @@ void	get_heredoc_str(t_cmd *cmd, t_data *data)
 		if (input)
 			free(input);
 	}
-}
-
-void	get_heredoc_fd(t_cmd *cmd, t_data *data)
-{
-	int		fd[2];
-	char	*str;
-
-	if (pipe(fd) == -1)
-		error(ERR_PIPE, data);
-	write(fd[1], cmd->heredoc_str, ft_strlen(cmd->heredoc_str));
-	close(fd[1]);
-	cmd->fd_array[cmd->last_input] = fd[0];
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mod_cmd_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 07:06:33 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 07:07:50 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 08:31:50 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,31 @@ void	mod_redir_doubles(t_cmd *cmd)
 
 /* modifies cmd->file and cmd->redir - potential re-calloc*/
 
-void	redir_utils(char ***new_file, int *new_redir, t_cmd *cmd, int new_count_redir)
+void	redir_utils(char ***new_f, int *new_r, t_cmd *cmd, int new_ct_redir)
 {
 	free_strlist(cmd->file);
 	free(cmd->redir);
-	cmd->file = *new_file;
-	cmd->redir = new_redir;
-	cmd->count_redir = new_count_redir;
+	cmd->file = *new_f;
+	cmd->redir = new_r;
+	cmd->count_redir = new_ct_redir;
+}
+
+void	make_new_arrays(t_cmd *cmd, char ***new_f, int **new_rdir, t_data *data)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	j = 0;
+	while (++i < cmd->count_redir)
+	{
+		if (cmd->redir[i] != -1)
+		{
+			(*new_f)[j] = ft_strdup_lim(cmd->file[i], '\0', data);
+			(*new_rdir)[j] = cmd->redir[i];
+			j++;
+		}
+	}
 }
 
 void	check_redir_doubles(t_cmd *cmd, t_data *data)
@@ -70,17 +88,7 @@ void	check_redir_doubles(t_cmd *cmd, t_data *data)
 		return ;
 	new_file = (char **)ts_calloc(new_count_redir + 1, sizeof(char *), data);
 	new_redir = (int *)ts_calloc(new_count_redir, sizeof(int), data);
-	i = -1;
-	j = 0;
-	while (++i < cmd->count_redir)
-	{
-		if (cmd->redir[i] != -1)
-		{
-			new_file[j] = ft_strdup_lim(cmd->file[i], '\0', data);
-			new_redir[j] = cmd->redir[i];
-			j++;
-		}
-	}
+	make_new_arrays(cmd, &new_file, &new_redir, data);
 	redir_utils(&new_file, new_redir, cmd, new_count_redir);
 }
 
@@ -109,19 +117,4 @@ void	check_hd_last_redir(t_cmd *cmd, t_data *data)
 	}
 	if (cmd->last_input > -1 && cmd->redir[cmd->last_input] == 5)
 		cmd->record_hd = 1;
-}
-
-/* modifies hd_array, record_hd, fd_array (if last input is hd); inits hd in terminal */
-void	init_heredoc(t_cmd *cmd, t_data *data)
-{
-	int	i;
-	int	j;
-
-	cmd->hd_array = ts_calloc(cmd->count_hd + 1, sizeof(char *), data);
-	i = -1;
-	j = -1;
-	while (++i < cmd->count_redir)
-		if (cmd->redir[i] == 5)
-			cmd->hd_array[++j] = ft_strdup_lim(cmd->file[i], '\0', data);
-	get_heredoc_str(cmd, data);
 }

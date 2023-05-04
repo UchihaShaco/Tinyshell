@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ts_find_redirect.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jalwahei <jalwahei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 21:40:55 by jalwahei          #+#    #+#             */
-/*   Updated: 2023/05/04 07:38:26 by jalwahei         ###   ########.fr       */
+/*   Updated: 2023/05/04 08:49:35 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ int	ts_found_redirect(t_cmd *cmd, t_data *data)
 	ts_malloc_array(&cmd->file, cmd->count_redir);
 	ts_cycle_record_redir(cmd, data, qm_o, qm_d);
 	cmd->file[cmd->count_redir] = NULL;
-	cmd->redir[cmd->count_redir] = 0;
 	return (0);
 }
 
