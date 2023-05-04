@@ -37,6 +37,33 @@ int	detect_char(char *str, char c)
 	return (-1);
 }
 
+void	free_err_data(t_data *data)
+{
+	clear_envlist(data->env_list);
+	data->env_list = NULL;
+	free_strlist(data->our_env);
+	data->our_env = NULL;
+	free_strlist(data->env_paths);
+	data->env_paths = NULL;
+	if (data->cur_dir)
+	{
+		free(data->cur_dir);
+		data->cur_dir = NULL;
+	}
+	if (data->old_dir)
+	{
+		free(data->old_dir);
+		data->old_dir = NULL;
+	}
+	free_cmd(data);
+	free_fdlist(data);
+	if (data->pid)
+	{
+		free(data->pid);
+		data->pid = NULL;
+	}
+}
+
 /* placeholder error function*/
 void	error(int error, t_data *data)
 {
@@ -59,6 +86,7 @@ void	error(int error, t_data *data)
 		write(2, "TinyShell: close function error\n", 32);
 	close(data->defin);
 	close(data->defout);
+	free_err_data(data);
 	write(2, "Exiting TinyShell\n", 19);
 	exit(data->num_prev_error);
 }
