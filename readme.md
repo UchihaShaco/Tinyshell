@@ -1,5 +1,8 @@
+# Thank you Huong (hbui-vu) <br>
+I just wanted to take a moment to thank Huong for being such an amazing partner throughout our project. Your hard work, dedication, and expertise were essential to achieving our goals. I truly appreciated your positive<br> attitude, collaborative spirit, and your ability to make me laugh with your hilarious reactions whenever we faced a challenge :D.<br>
+
 # Tinyshell  <br>
-Minishell is a small shell program that provides a command-line interface to interact with the underlying operating system. It is designed to meet the following requirements: <br>
+Tinyshell is a small shell program that provides a command-line interface to interact with the underlying operating system. It is designed to meet the following requirements: <br>
 
 # Requirements <br>
 Prompt <br>
